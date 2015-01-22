@@ -32,7 +32,21 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula)
         {
-            String test = GetTokens(formula);
+            // Split formula up into tokens 
+            IEnumerable<String> tokens = GetTokens(formula);
+
+            //String = temp;
+            // Loop through tokens to make sure there are no invalid tokens 
+            foreach (String temp in tokens)
+            {
+                if (temp.Equals("."))
+                {
+                   // Console.Write(FormulaFormatException("Wrong!"));
+                    throw new FormulaFormatException("Wrong!");
+                }
+            }
+
+
         }
 
         /// <summary>

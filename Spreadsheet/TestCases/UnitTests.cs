@@ -16,7 +16,8 @@ namespace TestCases
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct1()
         {
-            Formula f = new Formula("x");
+            //Formula f = new Formula("x");
+            Formula f = new Formula(".");
         }
 
         [TestMethod]
