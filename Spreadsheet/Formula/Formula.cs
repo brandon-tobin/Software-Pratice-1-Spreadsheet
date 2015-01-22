@@ -32,6 +32,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula)
         {
+            String test = GetTokens(formula);
         }
 
         /// <summary>
