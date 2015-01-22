@@ -37,15 +37,40 @@ namespace SpreadsheetUtilities
 
             //String = temp;
             // Loop through tokens to make sure there are no invalid tokens 
+            int totalTokens = 0;
+            int rightParen = 0;
+            int leftParen = 0;
             foreach (String temp in tokens)
             {
+                // Token Variables 
+                totalTokens++;
+
+
+
+
+                if (temp.Equals("("))
+                    leftParen++;
+                if (temp.Equals(")"))
+                    rightParen++;
+
                 if (temp.Equals("."))
                 {
                    // Console.Write(FormulaFormatException("Wrong!"));
-                    throw new FormulaFormatException("Wrong!");
+                    throw new FormulaFormatException("Invalid character in formula");
                 }
+
+                // Rightparen should not be greater than leftparen 
+                if (rightParen > leftParen)
+                    throw new FormatException("Closing paren greater than opening paren");
             }
 
+            // There must be at least one token 
+            if (totalTokens == 0)
+                throw new FormatException("There are no tokens");
+
+            // Total number of leftparens should equal total number of rightparens 
+            if (!(leftParen == rightParen))
+                throw new FormatException("Leftparen does not equal rightparen"); 
 
         }
 

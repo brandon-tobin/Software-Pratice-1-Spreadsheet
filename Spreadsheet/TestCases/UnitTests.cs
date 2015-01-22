@@ -17,7 +17,8 @@ namespace TestCases
         public void Construct1()
         {
             //Formula f = new Formula("x");
-            Formula f = new Formula(".");
+            //Formula f = new Formula(".");
+            Formula f = new Formula("1 - 5");
         }
 
         [TestMethod]
