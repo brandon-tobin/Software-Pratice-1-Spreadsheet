@@ -40,11 +40,15 @@ namespace SpreadsheetUtilities
             int totalTokens = 0;
             int rightParen = 0;
             int leftParen = 0;
+            String firstToken = "";
             foreach (String temp in tokens)
             {
+                // Grab first token 
+                if (totalTokens == 0)
+                    firstToken = temp;
+
                 // Token Variables 
                 totalTokens++;
-
 
 
 
@@ -53,25 +57,26 @@ namespace SpreadsheetUtilities
                 if (temp.Equals(")"))
                     rightParen++;
 
-                if (temp.Equals("."))
-                {
-                   // Console.Write(FormulaFormatException("Wrong!"));
-                    throw new FormulaFormatException("Invalid character in formula");
-                }
+              
 
                 // Rightparen should not be greater than leftparen 
                 if (rightParen > leftParen)
-                    throw new FormatException("Closing paren greater than opening paren");
+                    throw new FormulaFormatException("Closing paren greater than opening paren");
             }
 
             // There must be at least one token 
             if (totalTokens == 0)
-                throw new FormatException("There are no tokens");
+                throw new FormulaFormatException("There are no tokens");
 
             // Total number of leftparens should equal total number of rightparens 
-            if (!(leftParen == rightParen))
-                throw new FormatException("Leftparen does not equal rightparen"); 
+            if ((leftParen != rightParen))
+                throw new FormulaFormatException("Leftparen does not equal rightparen"); 
 
+            // First token must be a number, a variable, or an opening paren
+            // Create Regex 
+            Regex rgx = new Regex(@"^[a-zA-Z0-9\(\)]$");
+            if (!rgx.IsMatch(firstToken))
+                throw new FormulaFormatException("Formula does not start with a valid char");
         }
 
         /// <summary>

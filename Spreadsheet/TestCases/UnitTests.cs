@@ -16,9 +16,9 @@ namespace TestCases
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct1()
         {
-            //Formula f = new Formula("x");
+            Formula f = new Formula("num1");
             //Formula f = new Formula(".");
-            Formula f = new Formula("1 - 5");
+            //Formula f = new Formula("1 - 5");
         }
 
         [TestMethod]
@@ -34,6 +34,23 @@ namespace TestCases
         {
             Formula f = new Formula("2 3");
         }
+
+        // Test point 2 
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct4()
+        {
+            Formula f = new Formula("");
+        }
+
+        // Test point 3
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct5()
+        {
+            Formula f = new Formula("(x3)) + 2");
+        }
+
 
         [TestMethod]
         public void Evaluate1()
