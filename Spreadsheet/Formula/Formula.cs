@@ -35,23 +35,25 @@ namespace SpreadsheetUtilities
             // Split formula up into tokens 
             IEnumerable<String> tokens = GetTokens(formula);
 
-            //String = temp;
             // Loop through tokens to make sure there are no invalid tokens 
             int totalTokens = 0;
             int rightParen = 0;
             int leftParen = 0;
             String firstToken = "";
+            String lastToken = "";
             foreach (String temp in tokens)
             {
                 // Grab first token 
                 if (totalTokens == 0)
                     firstToken = temp;
 
+                // Grab last token 
+                lastToken = temp;
                 // Token Variables 
                 totalTokens++;
 
 
-
+                // Count parens in the formula 
                 if (temp.Equals("("))
                     leftParen++;
                 if (temp.Equals(")"))
@@ -74,9 +76,14 @@ namespace SpreadsheetUtilities
 
             // First token must be a number, a variable, or an opening paren
             // Create Regex 
-            Regex rgx = new Regex(@"^[a-zA-Z0-9\(\)]$");
-            if (!rgx.IsMatch(firstToken))
+            Regex openToken = new Regex(@"^[a-zA-Z0-9\(]$");
+            if (!openToken.IsMatch(firstToken))
                 throw new FormulaFormatException("Formula does not start with a valid char");
+
+            // Last token must be a number, a vairable, or closing paren 
+            Regex closeToken = new Regex(@"^[a-zA-Z0-9\)]$");
+            if (!closeToken.IsMatch(lastToken))
+                throw new FormulaFormatException("Formula does not end with a valid char");
         }
 
         /// <summary>
