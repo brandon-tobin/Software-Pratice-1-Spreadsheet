@@ -81,8 +81,6 @@ namespace SpreadsheetUtilities
                 if (temp.Equals(")"))
                     rightParen++;
 
-              
-
                 // Rightparen should not be greater than leftparen 
                 if (rightParen > leftParen)
                     throw new FormulaFormatException("Closing paren greater than opening paren");
@@ -137,6 +135,29 @@ namespace SpreadsheetUtilities
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
+           Stack<string> values = new Stack<string>();
+           Stack<string> operators = new Stack<string>();
+
+           
+            
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             return 0;
         }
 
