@@ -32,6 +32,23 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula)
         {
+            // Regex Patterns 
+            String varPattern = @"[a-zA-Z]+\d+";
+            String lpPattern = @"\(";
+            String rpPattern = @"\)";
+            String numbers = @"[0-9]";
+            String opPattern = @"[\+\-*/]";
+            String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
+
+            // Pattern finds ( or operators 
+             String lpOpersPattern = String.Format("({0}) | ({1})", lpPattern, opPattern);
+            // Pattern finds opening paren, a variable, a number 
+             String lpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
+            // Pattern finds a closing paren, a variable, a number  
+             String cpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", rpPattern, varPattern, numbers, doublePattern);
+            // Pattern finds a closing paren or an operator 
+             String cpOpers = String.Format("({0}) | ({1})", rpPattern, opPattern);
+
             // Split formula up into tokens 
             IEnumerable<String> tokens = GetTokens(formula);
 
@@ -41,8 +58,13 @@ namespace SpreadsheetUtilities
             int leftParen = 0;
             String firstToken = "";
             String lastToken = "";
+            String previousTemp = "";
+            String currentTemp = "";
             foreach (String temp in tokens)
             {
+                previousTemp = currentTemp;
+                currentTemp = temp;
+
                 // Grab first token 
                 if (totalTokens == 0)
                     firstToken = temp;
@@ -64,6 +86,16 @@ namespace SpreadsheetUtilities
                 // Rightparen should not be greater than leftparen 
                 if (rightParen > leftParen)
                     throw new FormulaFormatException("Closing paren greater than opening paren");
+
+                // Token following ( or operator must be a number, a variable, or an opening paren 
+                if (Regex.IsMatch(previousTemp, lpOpersPattern, RegexOptions.IgnorePatternWhitespace))
+                    if (!Regex.IsMatch(currentTemp, lpVarsNums, RegexOptions.IgnorePatternWhitespace))
+                          throw new FormulaFormatException("Token following ( or operator is invalid");
+
+                // Token following a number, a variable, or ) must be an operator or ) 
+                if (Regex.IsMatch(previousTemp, cpVarsNums, RegexOptions.IgnorePatternWhitespace))
+                    if (!Regex.IsMatch(currentTemp, cpOpers, RegexOptions.IgnorePatternWhitespace))
+                        throw new FormulaFormatException("Token following ) or operator is invalid");
             }
 
             // There must be at least one token 
@@ -75,15 +107,16 @@ namespace SpreadsheetUtilities
                 throw new FormulaFormatException("Leftparen does not equal rightparen"); 
 
             // First token must be a number, a variable, or an opening paren
-            // Create Regex 
-            Regex openToken = new Regex(@"^[a-zA-Z0-9\(]$");
-            if (!openToken.IsMatch(firstToken))
+            String openingPattern = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
+            if (!Regex.IsMatch(firstToken, openingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not start with a valid char");
 
             // Last token must be a number, a vairable, or closing paren 
-            Regex closeToken = new Regex(@"^[a-zA-Z0-9\)]$");
-            if (!closeToken.IsMatch(lastToken))
+            String closingPattern = String.Format("({0}) | ({1}) | ({2}) | ({3})", rpPattern, varPattern, numbers, doublePattern);
+            if (!Regex.IsMatch(lastToken, closingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not end with a valid char");
+
+
         }
 
         /// <summary>

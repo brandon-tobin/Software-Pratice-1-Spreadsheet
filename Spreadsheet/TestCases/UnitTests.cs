@@ -62,7 +62,7 @@ namespace TestCases
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct7()
         {
-
+            Formula f = new Formula("2e10*");
         }
 
         // Test point 6 
@@ -78,7 +78,7 @@ namespace TestCases
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct9()
         {
-
+            Formula f = new Formula("(*)");
         }
 
         // Test point 8 
@@ -86,7 +86,7 @@ namespace TestCases
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct10()
         {
-
+            Formula f = new Formula("2.5e9 + x5 / 17*");
         }
 
         [TestMethod]
