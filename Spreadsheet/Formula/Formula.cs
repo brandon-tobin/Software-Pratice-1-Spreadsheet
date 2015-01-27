@@ -17,7 +17,6 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class Formula
     {
-
         String evaluateFormula;
 
         /// <summary>

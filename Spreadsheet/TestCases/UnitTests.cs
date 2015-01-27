@@ -89,20 +89,6 @@ namespace TestCases
             Formula f = new Formula("2.5e9 + x5 / 17*");
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(FormulaFormatException))]
-        //public void Construct11()
-        //{
-        //    Formula f = new Formula("2.5e9 + x512 / 17");
-        //}
-
-        //[TestMethod]
-        //[ExpectedException(typeof(FormulaFormatException))]
-        //public void Construct12()
-        //{
-        //    Formula f = new Formula("2.5e9 + x5 / 17*");
-        //}
-
         [TestMethod]
         public void Evaluate1()
         {
@@ -174,7 +160,5 @@ namespace TestCases
             Formula f = new Formula("20 - (x3 / 2)");
             Assert.AreEqual(f.Evaluate(s => 40), 0, 1e-6);
         }
-
-
     }
 }
