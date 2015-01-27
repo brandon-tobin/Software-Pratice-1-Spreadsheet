@@ -114,8 +114,11 @@ namespace SpreadsheetUtilities
             if (!Regex.IsMatch(lastToken, closingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not end with a valid char");
 
-
+            evalFormula = formula;
+            
         }
+
+        public String evalFormula { get; private set; }
 
         /// <summary>
         /// A Lookup function is one that maps some strings to double values.  Given a string,
@@ -135,10 +138,184 @@ namespace SpreadsheetUtilities
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
+           String test = evalFormula;
            Stack<string> values = new Stack<string>();
            Stack<string> operators = new Stack<string>();
+           // Regex Patterns 
+           String varPattern = @"[a-zA-Z]+\d+";
+           String lpPattern = @"\(";
+           String rpPattern = @"\)";
+           String numbers = @"[0-9]";
+           String opPlusMinus = @"[\+\-]";
+           String opMultDivide = @"[*/]";
+           String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
+           String doubleNumPattern = String.Format("({0}) | ({1})", doublePattern, numbers);
 
-           
+           IEnumerable<String> tokens = GetTokens(evalFormula);
+           foreach (String temp in tokens)
+           {
+               // First condition 
+               // Need to implement error 
+               if (Regex.IsMatch(temp, doubleNumPattern, RegexOptions.IgnorePatternWhitespace))
+               {
+                   if (operators.Count != 0 && operators.Peek().Equals("*")) 
+                   {
+                       // Pop operator stack and apply popped operator to t and the popped number
+                       double value = Double.Parse(values.Pop());
+                       double tempvalue = Double.Parse(temp);
+                       operators.Pop();
+                       tempvalue = tempvalue * value;
+                       values.Push(tempvalue.ToString());
+                   }
+                   else if (operators.Count != 0 && operators.Peek().Equals("/"))
+                   {
+                       double value = Double.Parse(values.Pop());
+                       double tempvalue = Double.Parse(temp);
+                       operators.Pop();
+                       // Might need to reverse this 
+                       tempvalue = tempvalue / value;
+                       values.Push(tempvalue.ToString());
+                   }
+                   else
+                   {
+                       values.Push(temp);
+                   }
+               }
+
+               // Second condition 
+               // Need to implement error 
+               if (Regex.IsMatch(temp, varPattern, RegexOptions.IgnorePatternWhitespace))
+               {
+                   if (operators.Count != 0 && operators.Peek().Equals("*"))
+                   {
+                       // Pop operator stack and apply popped operator to t and the popped number
+                       double value = Double.Parse(values.Pop());
+                       double tempvalue = lookup(temp);
+                       operators.Pop();
+                       tempvalue = tempvalue * value;
+                       values.Push(tempvalue.ToString());
+                   }
+                   else if (operators.Count != 0 && operators.Peek().Equals("/"))
+                   {
+                       double value = Double.Parse(values.Pop());
+                       double tempvalue = lookup(temp);
+                       operators.Pop();
+                       // Might need to reverse this 
+                       tempvalue = tempvalue / value;
+                       values.Push(tempvalue.ToString());
+                   }
+                   else
+                   {
+                       values.Push(lookup(temp).ToString());
+                   }
+               }
+
+               // Third condition 
+               if (Regex.IsMatch(temp, opPlusMinus, RegexOptions.IgnorePatternWhitespace))
+               {
+                   // Might need to \+
+                   if (operators.Count != 0 && operators.Peek().Equals("+"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       double tempValue = val1 + val2;
+                       values.Push(tempValue.ToString());
+                       operators.Push(temp);
+                   }
+                       // Might need to \- 
+                   else if (operators.Count != 0 && operators.Peek().Equals("-"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       // Might need to reverse 
+                       double tempValue = val1 - val2;
+                       values.Push(tempValue.ToString());
+                       operators.Push(temp);
+                   }
+       
+                       operators.Push(temp);
+                   
+               }
+
+               // Fourth condition 
+               if (Regex.IsMatch(temp, opMultDivide, RegexOptions.IgnorePatternWhitespace))
+               {
+                   operators.Push(temp);
+               }
+
+               // Fifth condition 
+               if (Regex.IsMatch(temp, lpPattern, RegexOptions.IgnorePatternWhitespace))
+               {
+                   operators.Push(temp);
+               }
+
+               // Sixth condition 
+               if (Regex.IsMatch(temp, rpPattern, RegexOptions.IgnorePatternWhitespace))
+               {
+                   // Might need to \+
+                   if (operators.Count != 0 && operators.Peek().Equals("+"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       double tempValue = val1 + val2;
+                       values.Push(tempValue.ToString());
+                       operators.Push(temp);
+                   }
+                   // Might need to \- 
+                   else if (operators.Count != 0 && operators.Peek().Equals("-"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       // Might need to reverse 
+                       double tempValue = val1 - val2;
+                       values.Push(tempValue.ToString());
+                       operators.Push(temp);
+                   }
+
+                   operators.Pop();
+
+                   if (operators.Count != 0 && operators.Peek().Equals("*"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       double tempVal = val1 * val2;
+                       values.Push(tempVal.ToString());
+                   }
+                   if (operators.Count != 0 &&operators.Peek().Equals("/"))
+                   {
+                       double val1 = Double.Parse(values.Pop());
+                       double val2 = Double.Parse(values.Pop());
+                       operators.Pop();
+                       double tempVal = val1 / val2;
+                       values.Push(tempVal.ToString());
+                   }
+               }
+           }
+
+           if (operators.Count == 0)
+           {
+               return Double.Parse(values.Pop());
+           }
+           else
+           {
+               if (operators.Peek().Equals("+"))
+               {
+                   double val1 = Double.Parse(values.Pop());
+                   double val2 = Double.Parse(values.Pop());
+                   return val1 + val2;
+               }
+               else
+               {
+                   double val1 = Double.Parse(values.Pop());
+                   double val2 = Double.Parse(values.Pop());
+                   return val1 - val2;
+               }
+           }
             
 
             
