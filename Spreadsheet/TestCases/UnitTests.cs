@@ -89,6 +89,20 @@ namespace TestCases
             Formula f = new Formula("2.5e9 + x5 / 17*");
         }
 
+        //[TestMethod]
+        //[ExpectedException(typeof(FormulaFormatException))]
+        //public void Construct11()
+        //{
+        //    Formula f = new Formula("2.5e9 + x512 / 17");
+        //}
+
+        //[TestMethod]
+        //[ExpectedException(typeof(FormulaFormatException))]
+        //public void Construct12()
+        //{
+        //    Formula f = new Formula("2.5e9 + x5 / 17*");
+        //}
+
         [TestMethod]
         public void Evaluate1()
         {
@@ -125,5 +139,42 @@ namespace TestCases
             Formula f = new Formula("20/0");
             f.Evaluate(s => { throw new ArgumentException(); });
         }
+
+        [TestMethod]
+        public void Evaluate6()
+        {
+            Formula f = new Formula("25-5");
+            Assert.AreEqual(f.Evaluate(s => 0), 20.0, 1e-6);
+        }
+
+        [TestMethod]
+        public void Evaluate7()
+        {
+            Formula f = new Formula("2.5 + 15 / 17");
+            Assert.AreEqual(f.Evaluate(s => 0), 3.3823529412, 1e-6);
+        }
+
+        [TestMethod]
+        public void Evaluate8()
+        {
+            Formula f = new Formula("20 - 15 / 17");
+            Assert.AreEqual(f.Evaluate(s => 0), 19.1176471, 1e-6);
+        }
+
+        [TestMethod]
+        public void Evaluate9()
+        {
+            Formula f = new Formula("20 - (40/2)");
+            Assert.AreEqual(f.Evaluate(s => 0), 0, 1e-6);
+        }
+
+        [TestMethod]
+        public void Evaluate10()
+        {
+            Formula f = new Formula("20 - (x3 / 2)");
+            Assert.AreEqual(f.Evaluate(s => 40), 0, 1e-6);
+        }
+
+
     }
 }

@@ -17,6 +17,9 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class Formula
     {
+        // Instance variables 
+        String evaluateFormula;
+
         /// <summary>
         /// Creates a Formula from a string that consists of a standard infix expression composed
         /// from non-negative floating-point numbers (using standard C# syntax for double/int literals), 
@@ -114,11 +117,9 @@ namespace SpreadsheetUtilities
             if (!Regex.IsMatch(lastToken, closingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not end with a valid char");
 
-            evalFormula = formula;
+            evaluateFormula = formula;
             
         }
-
-        public String evalFormula { get; private set; }
 
         /// <summary>
         /// A Lookup function is one that maps some strings to double values.  Given a string,
@@ -138,7 +139,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
-           String test = evalFormula;
+           String test = evaluateFormula;
            Stack<string> values = new Stack<string>();
            Stack<string> operators = new Stack<string>();
            // Regex Patterns 
@@ -151,7 +152,7 @@ namespace SpreadsheetUtilities
            String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
            String doubleNumPattern = String.Format("({0}) | ({1})", doublePattern, numbers);
 
-           IEnumerable<String> tokens = GetTokens(evalFormula);
+           IEnumerable<String> tokens = GetTokens(evaluateFormula);
            foreach (String temp in tokens)
            {
                // First condition 
@@ -196,6 +197,7 @@ namespace SpreadsheetUtilities
                    {
                        // Pop operator stack and apply popped operator to t and the popped number
                        double value = Double.Parse(values.Pop());
+                       // Need lookup error 
                        double tempvalue = lookup(temp);
                        operators.Pop();
                        tempvalue = tempvalue * value;
@@ -204,14 +206,30 @@ namespace SpreadsheetUtilities
                    else if (operators.Count != 0 && operators.Peek().Equals("/"))
                    {
                        double value = Double.Parse(values.Pop());
+                       // Need lookup error 
                        double tempvalue = lookup(temp);
                        operators.Pop();
-                       // Might need to reverse this 
-                       tempvalue = tempvalue / value;
-                       values.Push(tempvalue.ToString());
+                       if (tempvalue.Equals(0))
+                       {
+                           throw new FormulaEvaluationException("Cannot divide by 0");
+                       }
+                       else
+                       {
+                           tempvalue = value / tempvalue;
+                           values.Push(tempvalue.ToString());
+                       }
                    }
                    else
                    {
+                       try
+                       {
+                           lookup(temp);
+                       }
+                       catch (ArgumentException)
+                       {
+                           throw new FormulaEvaluationException("Empty variables");
+                       }
+                           
                        values.Push(lookup(temp).ToString());
                    }
                }
@@ -236,7 +254,7 @@ namespace SpreadsheetUtilities
                        double val2 = Double.Parse(values.Pop());
                        operators.Pop();
                        // Might need to reverse 
-                       double tempValue = val1 - val2;
+                       double tempValue = val2 - val1;
                        values.Push(tempValue.ToString());
                        operators.Push(temp);
                    }
@@ -277,7 +295,7 @@ namespace SpreadsheetUtilities
                        double val2 = Double.Parse(values.Pop());
                        operators.Pop();
                        // Might need to reverse 
-                       double tempValue = val1 - val2;
+                       double tempValue = val2 - val1;
                        values.Push(tempValue.ToString());
                        operators.Push(temp);
                    }
@@ -319,7 +337,7 @@ namespace SpreadsheetUtilities
                {
                    double val1 = Double.Parse(values.Pop());
                    double val2 = Double.Parse(values.Pop());
-                   return val1 - val2;
+                   return val2 - val1;
                }
            }
             
