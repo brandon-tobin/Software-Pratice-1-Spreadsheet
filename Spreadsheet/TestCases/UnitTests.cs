@@ -110,5 +110,20 @@ namespace TestCases
             Formula f = new Formula("x5 + y6");
             f.Evaluate(s => { throw new ArgumentException(); });
         }
+
+        [TestMethod]
+        public void Evaluate4()
+        {
+            Formula f = new Formula("25/5");
+            Assert.AreEqual(f.Evaluate(s => 0), 5.0, 1e-6);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaEvaluationException))]
+        public void Evaluate5()
+        {
+            Formula f = new Formula("20/0");
+            f.Evaluate(s => { throw new ArgumentException(); });
+        }
     }
 }

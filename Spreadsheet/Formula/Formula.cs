@@ -172,9 +172,15 @@ namespace SpreadsheetUtilities
                        double value = Double.Parse(values.Pop());
                        double tempvalue = Double.Parse(temp);
                        operators.Pop();
-                       // Might need to reverse this 
-                       tempvalue = tempvalue / value;
-                       values.Push(tempvalue.ToString());
+                       if (tempvalue.Equals(0))
+                       {
+                           throw new FormulaEvaluationException("Cannot divide by 0");
+                       }
+                       else
+                       {
+                           tempvalue = value / tempvalue;
+                           values.Push(tempvalue.ToString());
+                        }
                    }
                    else
                    {
