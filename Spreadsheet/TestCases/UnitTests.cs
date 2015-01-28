@@ -33,7 +33,6 @@ namespace TestCases
             Formula f = new Formula("2 3");
         }
 
-        // Test point 2 
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct4()
@@ -41,7 +40,6 @@ namespace TestCases
             Formula f = new Formula("");
         }
 
-        // Test point 3
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct5()
@@ -49,7 +47,6 @@ namespace TestCases
             Formula f = new Formula("(x3)) + 2");
         }
 
-        // Test point 4
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct6()
@@ -57,7 +54,6 @@ namespace TestCases
             Formula f = new Formula("((x3) + 2");
         }
 
-        // Test point 5 
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct7()
@@ -65,7 +61,6 @@ namespace TestCases
             Formula f = new Formula("2e10*");
         }
 
-        // Test point 6 
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct8()
@@ -73,7 +68,6 @@ namespace TestCases
             Formula f = new Formula("((x3) + 2)*");
         }
 
-        // Test point 7
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct9()
@@ -81,7 +75,6 @@ namespace TestCases
             Formula f = new Formula("(*)");
         }
 
-        // Test point 8 
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void Construct10()
