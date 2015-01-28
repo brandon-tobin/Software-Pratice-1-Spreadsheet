@@ -17,6 +17,7 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class Formula
     {
+        // Instance variables 
         String evaluateFormula;
 
         /// <summary>
@@ -44,17 +45,17 @@ namespace SpreadsheetUtilities
 
             // Pattern finds ( or operators 
             String lpOpersPattern = String.Format("({0}) | ({1})", lpPattern, opPattern);
-            // Pattern finds opening paren, a variable, a number 
+            // Pattern finds (, a variable, a number 
             String lpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
-            // Pattern finds a closing paren, a variable, a number  
+            // Pattern finds a ), a variable, a number  
             String cpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", rpPattern, varPattern, numbers, doublePattern);
-            // Pattern finds a closing paren or an operator 
+            // Pattern finds a ) or an operator 
             String cpOpers = String.Format("({0}) | ({1})", rpPattern, opPattern);
 
             // Split formula up into tokens 
             IEnumerable<String> tokens = GetTokens(formula);
 
-            // Loop through tokens to make sure there are no invalid tokens 
+            // Variables for keeping track of certain aspects of the formula  
             int totalTokens = 0;
             int rightParen = 0;
             int leftParen = 0;
@@ -62,8 +63,11 @@ namespace SpreadsheetUtilities
             String lastToken = "";
             String previousTemp = "";
             String currentTemp = "";
+            
+            // Loop through tokens to make sure there are no invalid tokens 
             foreach (String temp in tokens)
             {
+                // Keep track of previous and current tokens 
                 previousTemp = currentTemp;
                 currentTemp = temp;
 
@@ -73,7 +77,8 @@ namespace SpreadsheetUtilities
 
                 // Grab last token 
                 lastToken = temp;
-                // Token Variables 
+                
+                // Increment token counter 
                 totalTokens++;
 
 
@@ -83,9 +88,9 @@ namespace SpreadsheetUtilities
                 if (temp.Equals(")"))
                     rightParen++;
 
-                // Rightparen should not be greater than leftparen 
+                // ( should not be greater than ) 
                 if (rightParen > leftParen)
-                    throw new FormulaFormatException("Closing paren greater than opening paren");
+                    throw new FormulaFormatException("Closing paren greater than opening paren -- not enough opening parens");
 
                 // Token following ( or operator must be a number, a variable, or an opening paren 
                 if (Regex.IsMatch(previousTemp, lpOpersPattern, RegexOptions.IgnorePatternWhitespace))
@@ -102,20 +107,21 @@ namespace SpreadsheetUtilities
             if (totalTokens == 0)
                 throw new FormulaFormatException("There are no tokens");
 
-            // Total number of leftparens should equal total number of rightparens 
+            // Total number of ( should equal total number of ) 
             if ((leftParen != rightParen))
-                throw new FormulaFormatException("Leftparen does not equal rightparen");
+                throw new FormulaFormatException("Number of left parens does not equal number of right parens");
 
-            // First token must be a number, a variable, or an opening paren
+            // First token must be a number, a variable, or (
             String openingPattern = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
             if (!Regex.IsMatch(firstToken, openingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not start with a valid char");
 
-            // Last token must be a number, a vairable, or closing paren 
+            // Last token must be a number, a vairable, or ) 
             String closingPattern = String.Format("({0}) | ({1}) | ({2}) | ({3})", rpPattern, varPattern, numbers, doublePattern);
             if (!Regex.IsMatch(lastToken, closingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not end with a valid char");
 
+            // If the formula satisfies all requirements, store it in instance variable 
             evaluateFormula = formula;
 
         }
@@ -138,208 +144,302 @@ namespace SpreadsheetUtilities
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
+            // Create value stack 
             Stack<string> values = new Stack<string>();
+            // Create operator stack 
             Stack<string> operators = new Stack<string>();
+
             // Regex Patterns 
             String varPattern = @"[a-zA-Z]+\d+";
             String lpPattern = @"\(";
             String rpPattern = @"\)";
-           // String numbers = @"[0-9]";
             String opPlusMinus = @"[\+\-]";
             String opMultDivide = @"[*/]";
-           // String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
-            //String doubleNumPattern = String.Format("({0}) | ({1})", doublePattern, numbers);
 
+            // Split formula up into tokens 
             IEnumerable<String> tokens = GetTokens(evaluateFormula);
+
+            // Loop through each token
             foreach (String temp in tokens)
             {
-                // First condition 
-                double outval;
-                if (Double.TryParse(temp, out outval))
+                // If token temp is a double
+                double outVal;
+                if (Double.TryParse(temp, out outVal))
                 {
+                    // If the first entry on the operator stack is a *
                     if (operators.Count != 0 && operators.Peek().Equals("*"))
                     {
-                        // Pop operator stack and apply popped operator to t and the popped number
+                        // Pop value stack 
                         double value = Double.Parse(values.Pop());
-                        double tempvalue = Double.Parse(temp);
+                        // Parse temp into a double 
+                        double tempValue = Double.Parse(temp);
+                        // Pop operator stack 
                         operators.Pop();
-                        tempvalue = tempvalue * value;
-                        values.Push(tempvalue.ToString());
+                        // Apply popped operator to temp and the popped value
+                        tempValue = tempValue * value;
+                        // Push the result back onto the value stack 
+                        values.Push(tempValue.ToString());
                     }
+                    // If the first entry on the operator stack is a /
                     else if (operators.Count != 0 && operators.Peek().Equals("/"))
                     {
+                        // Pop value stack
                         double value = Double.Parse(values.Pop());
-                        double tempvalue = Double.Parse(temp);
+                        // Parse temp into a double 
+                        double tempValue = Double.Parse(temp);
+                        // Pop operator stack 
                         operators.Pop();
-                        if (tempvalue.Equals(0))
+                        // Check to see if tempValue = 0
+                        if (tempValue.Equals(0))
                         {
+                            // If tempValue = 0, throw FormulaEvaluationException -- Division by 0
                             throw new FormulaEvaluationException("Cannot divide by 0");
                         }
                         else
                         {
-                            tempvalue = value / tempvalue;
-                            values.Push(tempvalue.ToString());
+                            // If tempValue != 0, apply popped operator to temp and the popped value 
+                            tempValue = value / tempValue;
+                            // Push the result back onto the value stack 
+                            values.Push(tempValue.ToString());
                         }
                     }
+                    // If the first entry on the operator stack is not * or /, just push the temp value onto the values stack 
                     else
                     {
                         values.Push(temp);
                     }
                 }
 
-                // Second condition 
+                // If token temp is a variable 
                 else if (Regex.IsMatch(temp, varPattern, RegexOptions.IgnorePatternWhitespace))
                 {
+                    // If the first entry on the operator stack is a *
                     if (operators.Count != 0 && operators.Peek().Equals("*"))
                     {
-                        // Pop operator stack and apply popped operator to t and the popped number
+                        // Pop the value stack 
                         double value = Double.Parse(values.Pop());
                         double tempValue;
+                       // Try to look up the value of the token temp 
                         try
                         {
                             tempValue = lookup(temp);
                         }
+                        // If the token temp doesn't have a value, throw FormulaEvaluationException -- Empty variables 
                         catch (ArgumentException)
                         {
                             throw new FormulaEvaluationException("Empty variables");
                         }
+                        // Pop the operator stack 
                         operators.Pop();
+                        // Apply the popped operator to temp and the popped value 
                         tempValue = tempValue * value;
+                        // Push result back onto the values stack 
                         values.Push(tempValue.ToString());
                     }
+                    // If the first entry on the operator stack is a /
                     else if (operators.Count != 0 && operators.Peek().Equals("/"))
                     {
+                        // Pop the value stack 
                         double value = Double.Parse(values.Pop());
                         double tempVal;
+                        // Try to look up the value of the token temp 
                         try
                         {
                             tempVal = lookup(temp);
                         }
+                        // If the token temp doesn't have a value, throw FormulaEvaluationException -- Empty variables 
                         catch (ArgumentException)
                         {
                             throw new FormulaEvaluationException("Empty variables");
                         }
+                        // Pop the operator stack 
                         operators.Pop();
+                        // Check to see if tempVal = 0
                         if (tempVal.Equals(0))
                         {
+                            // If tempVal = 0, throw FormulaEvaluationException -- Division by 0
                             throw new FormulaEvaluationException("Cannot divide by 0");
                         }
+                        // If tempVal != 0
                         else
                         {
+                            // Apply the popped operator to temp and the popped value 
                             tempVal = value / tempVal;
+                            // Push the result back onto the values stack 
                             values.Push(tempVal.ToString());
                         }
                     }
+                    // If the first entry on the operator stack is not * or /, just push the temp value onto the values stack 
                     else
                     {
+                        // Look up the value for temp and push it onto the values stack 
                         try
                         {
                             values.Push(lookup(temp).ToString());
                         }
                         catch (ArgumentException)
                         {
+                            // If temp doesn't have a value throw FormulaEvaluationException -- Empty variables 
                             throw new FormulaEvaluationException("Empty variables");
                         }
                     }
                 }
 
-                // Third condition 
+                // If token is a + or - 
                 else if (Regex.IsMatch(temp, opPlusMinus, RegexOptions.IgnorePatternWhitespace))
                 {
+                    // If the top value of the operator stack is +
                     if (operators.Count != 0 && operators.Peek().Equals("+"))
                     {
+                        // Pop the values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop the values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop the operators stack 
                         operators.Pop();
+                        // Apply the operator to the two popped values 
                         double tempValue = val1 + val2;
+                        // Push result back onto values stack 
                         values.Push(tempValue.ToString());
+                        // Push temp onto operator stack 
                         operators.Push(temp);
                     }
+                    // If the top value of the operator stack is -
                     else if (operators.Count != 0 && operators.Peek().Equals("-"))
                     {
+                        // Pop the values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop the values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop the operators stack 
                         operators.Pop();
+                        // Apply the operator to the two popped values
                         double tempValue = val2 - val1;
+                        // Push result back onto values stack 
                         values.Push(tempValue.ToString());
+                        // Push temp onto operator stack 
                         operators.Push(temp);
                     }
 
+                    // Push temp onto operator stack 
                     operators.Push(temp);
-
                 }
 
-                // Fourth condition 
+                // If token is a * or / 
                 else if (Regex.IsMatch(temp, opMultDivide, RegexOptions.IgnorePatternWhitespace))
                 {
+                    // Push temp onto operator stack 
                     operators.Push(temp);
                 }
 
-                // Fifth condition 
+                // If token is a (
                 else if (Regex.IsMatch(temp, lpPattern, RegexOptions.IgnorePatternWhitespace))
                 {
+                    // Push temp onto operator stack 
                     operators.Push(temp);
                 }
 
-                // Sixth condition 
+                // If toekn is a ) 
                 else if (Regex.IsMatch(temp, rpPattern, RegexOptions.IgnorePatternWhitespace))
                 {
+                    // If top value of operator stack is + 
                     if (operators.Count != 0 && operators.Peek().Equals("+"))
                     {
+                        // Pop the values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop the values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop the operators stack 
                         operators.Pop();
+                        // Apply the operator to the two values 
                         double tempValue = val1 + val2;
+                        // Push result back onto values stack
                         values.Push(tempValue.ToString());
-                        //operators.Push(temp);
                     }
+                    // If top value of operator stack is - 
                     else if (operators.Count != 0 && operators.Peek().Equals("-"))
                     {
+                        // Pop the values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop the values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop the operators stack 
                         operators.Pop();
+                        // Apply the operator to the two values 
                         double tempValue = val2 - val1;
+                        // Push result back onto values stack 
                         values.Push(tempValue.ToString());
-                       // operators.Push(temp);
                     }
 
+                    // Pop operator stack 
                     operators.Pop();
 
+                    // If top value of operator stack is * 
                     if (operators.Count != 0 && operators.Peek().Equals("*"))
                     {
+                        // Pop the values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop the values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop the operators stack 
                         operators.Pop();
+                        // Apply the operator to the two values 
                         double tempVal = val1 * val2;
+                        // Push result back onto values stack 
                         values.Push(tempVal.ToString());
                     }
+                    // If top value of operator stack is / 
                     if (operators.Count != 0 && operators.Peek().Equals("/"))
                     {
+                        // Pop values stack 
                         double val1 = Double.Parse(values.Pop());
+                        // Pop values stack 
                         double val2 = Double.Parse(values.Pop());
+                        // Pop operators stack 
                         operators.Pop();
-                        double tempVal = val2 / val1;
-                        values.Push(tempVal.ToString());
+
+                        // Check to see if val2 = 0
+                        if (val2.Equals(0))
+                        {
+                            // If val2 = 0, throw FormulaEvaluationException -- Division by 0
+                            throw new FormulaEvaluationException("Cannot divide by 0");
+                        }
+                        else
+                        {
+                            // If val2 != 0, apply popped operator to temp and the popped value 
+                            double tempVal = val2 / val1;
+                            // Push the result back onto the value stack 
+                            values.Push(tempVal.ToString());
+                        }
                     }
                 }
             }
 
+            // If the operators stack is empty 
             if (operators.Count == 0)
             {
+                // Pop and return the last value on the values stack 
                 return Double.Parse(values.Pop());
             }
             else
             {
+                // If top value of operator stack is + 
                 if (operators.Peek().Equals("+"))
                 {
+                    // Pop values stack 
                     double val1 = Double.Parse(values.Pop());
+                    // Pop values stack 
                     double val2 = Double.Parse(values.Pop());
+                    // Apply operator to both values and return value 
                     return val1 + val2;
                 }
                 else
                 {
+                    // Pop values stack 
                     double val1 = Double.Parse(values.Pop());
+                    // Pop values stack 
                     double val2 = Double.Parse(values.Pop());
+                    // Apply operator to both values and return value 
                     return val2 - val1;
                 }
             }
