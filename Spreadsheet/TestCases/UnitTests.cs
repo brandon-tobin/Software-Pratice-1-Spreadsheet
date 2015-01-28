@@ -136,8 +136,8 @@ namespace TestCases
         [TestMethod]
         public void Evaluate7()
         {
-            Formula f = new Formula("2.5 + 15 / 17");
-            Assert.AreEqual(f.Evaluate(s => 0), 3.3823529412, 1e-6);
+            Formula f = new Formula("2.5e2 + 15 / 17");
+            Assert.AreEqual(f.Evaluate(s => 0), 250.882353, 1e-6);
         }
 
         [TestMethod]
@@ -159,6 +159,117 @@ namespace TestCases
         {
             Formula f = new Formula("20 - (x3 / 2)");
             Assert.AreEqual(f.Evaluate(s => 40), 0, 1e-6);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct11()
+        {
+            Formula f = new Formula(")");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct12()
+        {
+            Formula f = new Formula("(2-3))");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct13()
+        {
+            Formula f = new Formula("");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct14()
+        {
+            Formula f = new Formula("+7");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct15()
+        {
+            Formula f = new Formula("((7-2)");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct16()
+        {
+            Formula f = new Formula("2 / 1 + 5-");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct17()
+        {
+            Formula f = new Formula("x");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct18()
+        {
+            Formula f = new Formula("-33");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct19()
+        {
+            Formula f = new Formula("-a1");
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Construct20()
+        {
+            Formula f = new Formula("( 2 + 4) ( 5 -2 )");
+        }
+        
+        [TestMethod]
+        public void Evaluate11()
+        {
+            Formula f = new Formula("2-3");
+            Assert.AreEqual(f.Evaluate(s => 0), -1.0, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate12()
+        {
+            Formula f = new Formula("2*3");
+            Assert.AreEqual(f.Evaluate(s => 0), 6.0, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate13()
+        {
+            Formula f = new Formula("3/2");
+            Assert.AreEqual(f.Evaluate(s => 0), 1.5, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate14()
+        {
+            Formula f = new Formula("3e3");
+            Assert.AreEqual(f.Evaluate(s => 0), 3000, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate15()
+        {
+            Formula f = new Formula("(3 + 3) - 7 * (6/2)");
+            Assert.AreEqual(f.Evaluate(s => 0), -15, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate16()
+        {
+            Formula f = new Formula("(((aa1 + bb23) - cc3) * de19)");
+            Assert.AreEqual(f.Evaluate(s => 1), 1, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate17()
+        {
+            Formula f = new Formula("a2 + 4 - a8+ 3");
+            Assert.AreEqual(f.Evaluate(s => 1), 7, 1e-6);
+        }
+        [TestMethod]
+        public void Evaluate18()
+        {
+            Formula f = new Formula("600 / (4e2 - 2e2)");
+            Assert.AreEqual(f.Evaluate(s => 1), 3, 1e-6);
         }
     }
 }
