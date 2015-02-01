@@ -399,14 +399,14 @@ namespace SpreadsheetUtilities
                         operators.Pop();
 
                         // Check to see if val2 = 0
-                        if (val2.Equals(0))
+                        if (val1.Equals(0))
                         {
                             // If val2 = 0, throw FormulaEvaluationException -- Division by 0
                             throw new FormulaEvaluationException("Cannot divide by 0");
                         }
                         else
                         {
-                            // If val2 != 0, apply popped operator to temp and the popped value 
+                            // If val1 != 0, apply popped operator to temp and the popped value 
                             double tempVal = val2 / val1;
                             // Push the result back onto the value stack 
                             values.Push(tempVal.ToString());
