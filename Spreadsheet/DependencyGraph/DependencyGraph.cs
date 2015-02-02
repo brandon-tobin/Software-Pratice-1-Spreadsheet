@@ -41,16 +41,14 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
-        
-        //Hashtable test;
         Dictionary<String, List<String>> dependentToDependee;
         Dictionary<String, List<String>> dependeeToDependent;
+
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
         /// </summary>
         public DependencyGraph()
         {
-            // HashTable hashtable = new HashTable();
             dependentToDependee = new Dictionary<String, List<String>>();
             dependeeToDependent = new Dictionary<String, List<String>>();
         }
@@ -60,7 +58,7 @@ namespace Dependencies
         /// </summary>
         public int Size
         {
-            get { return 0; }
+            get { return dependeeToDependent.Count; }
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace Dependencies
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -94,12 +92,13 @@ namespace Dependencies
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            List<String> test;
-            if (!dependentToDependee.TryGetValue(s, out test))
+            List<String> dependents;
+            if (!dependeeToDependent.TryGetValue(s, out dependents))
             {
-
+                List<String> emptyDependents = new List<String>();
+                return emptyDependents;
             }
-            return test;
+            return dependents;
         }
 
         /// <summary>
@@ -107,17 +106,13 @@ namespace Dependencies
         /// </summary>
         public IEnumerable<string> GetDependees(string s)
         {
-            // IEnumerable<string> dependees;
-              //dict.TryGetValue(s, out dependees);
-             //return dict.TryGetValue(s, out value) ;
-            //return null;
-          //  IEnumerable<String> dependees;
-            List<String> test;
-            if (!dependentToDependee.TryGetValue(s, out test))
+            List<String> dependees;
+            if (!dependentToDependee.TryGetValue(s, out dependees))
             {
-               
+                List<String> emptyDependees = new List<String>();
+                return emptyDependees;
             }
-            return test;
+            return dependees;
         }
 
         /// <summary>
@@ -126,6 +121,7 @@ namespace Dependencies
         /// </summary>
         public void AddDependency(string s, string t)
         {
+            // Add dependentToDependee
             if (dependentToDependee.ContainsKey(s))
             {
                 dependentToDependee[s].Add(t);
@@ -135,7 +131,19 @@ namespace Dependencies
                 List<String> temp = new List<String>();
                 temp.Add(t);
                 dependentToDependee.Add(s, temp);
-            }  
+            }
+
+            // Add dependeeToDependent
+            if (dependeeToDependent.ContainsKey(t))
+            {
+                dependeeToDependent[s].Add(s);
+            }
+            else
+            {
+                List<String> temp = new List<String>();
+                temp.Add(s);
+                dependeeToDependent.Add(t, temp);
+            }
         }
 
         /// <summary>
@@ -161,10 +169,5 @@ namespace Dependencies
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
         }
-
-        //public TValue this[ 
-        //  TKey key
-        //] { get; set; }
-        //  }    
     }
 }
