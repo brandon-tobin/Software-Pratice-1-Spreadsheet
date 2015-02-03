@@ -178,7 +178,7 @@ namespace Dependencies
         /// </summary>
         public void RemoveDependency(string s, string t)
         {
-            // Remove dependentToDependee
+            // Remove dependeeToDependent
             List<String> dependents;
             // If the dependency does not exist, do nothing 
             if (dependeeToDependent.TryGetValue(s, out dependents))
@@ -198,7 +198,7 @@ namespace Dependencies
                 } 
             }
 
-            // Remove dependeeToDependent
+            // Remove dependentToDependee
             List<String> dependees; 
             // If the dependency does not exist, do nothing 
             if (dependentToDependee.TryGetValue(t, out dependees))
@@ -208,7 +208,7 @@ namespace Dependencies
                 {
                     dependentToDependee.Remove(t);
                 }
-                // If dependee t has more than one dependent, remove the dependent from the list 
+                // If dependent t has more than one dependee, remove the dependent from the list 
                 // and readd the list 
                 else
                 {

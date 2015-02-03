@@ -264,6 +264,23 @@ namespace DependecyGraphTestCases
         }
 
         [TestMethod]
+        public void RemoveDependecy6()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.AddDependency("mountain", "you");
+            test.RemoveDependency("hello", "you");
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("world", temp);
+        }
+
+        [TestMethod]
         public void Replace1()
         {
             DependencyGraph test = new DependencyGraph();
@@ -420,25 +437,26 @@ namespace DependecyGraphTestCases
             }
             Assert.AreEqual("tomscottbrendanutah", dependents);
         }
-        //[TestMethod]
-        //public void StressTest1()
-        //{
-        //    DependencyGraph test = new DependencyGraph();
-        //        String i = "hello";
-        //        String temp = "";
-        //        for (int j = 100000; j > 0; j--)
-        //        {
-        //            temp += j;
-        //            test.AddDependency(i, j.ToString());
-        //        }
-        //    String dependents = "";
-        //    IEnumerable values = test.GetDependents("hello");
-        //    foreach (String s in values) 
-        //    {
-        //        dependents += s;
-        //    }
-        //    Assert.AreEqual(temp, dependents);
-            
-        //}
+
+        [TestMethod]
+        public void StressTest1()
+        {
+            DependencyGraph test = new DependencyGraph();
+            String i = "hello";
+            String temp = "";
+            for (int j = 100000; j > 0; j--)
+            {
+                temp += j;
+                test.AddDependency(i, j.ToString());
+            }
+            String dependents = "";
+            IEnumerable values = test.GetDependents("hello");
+            foreach (String s in values)
+            {
+                dependents += s;
+            }
+            Assert.AreEqual(temp, dependents);
+
+        }
     }
 }
