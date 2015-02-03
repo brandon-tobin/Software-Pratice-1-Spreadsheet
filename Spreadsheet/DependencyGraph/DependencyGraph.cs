@@ -41,16 +41,16 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
-        Dictionary<String, List<String>> dependentToDependee;
         Dictionary<String, List<String>> dependeeToDependent;
+        Dictionary<String, List<String>> dependentToDependee;
 
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
         /// </summary>
         public DependencyGraph()
         {
-            dependentToDependee = new Dictionary<String, List<String>>();
             dependeeToDependent = new Dictionary<String, List<String>>();
+            dependentToDependee = new Dictionary<String, List<String>>();
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Dependencies
         /// </summary>
         public int Size
         {
-            get { return dependeeToDependent.Count; }
+            get { return dependentToDependee.Count; }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
-            if (dependentToDependee.ContainsKey(s))
+            if (dependeeToDependent.ContainsKey(s))
             {
                 return true;
             }
@@ -122,27 +122,27 @@ namespace Dependencies
         public void AddDependency(string s, string t)
         {
             // Add dependentToDependee
-            if (dependentToDependee.ContainsKey(s))
+            if (dependeeToDependent.ContainsKey(s))
             {
-                dependentToDependee[s].Add(t);
+                dependeeToDependent[s].Add(t);
             }
             else
             {
                 List<String> temp = new List<String>();
                 temp.Add(t);
-                dependentToDependee.Add(s, temp);
+                dependeeToDependent.Add(s, temp);
             }
 
             // Add dependeeToDependent
-            if (dependeeToDependent.ContainsKey(t))
+            if (dependentToDependee.ContainsKey(t))
             {
-                dependeeToDependent[s].Add(s);
+                dependentToDependee[s].Add(s);
             }
             else
             {
                 List<String> temp = new List<String>();
                 temp.Add(s);
-                dependeeToDependent.Add(t, temp);
+                dependentToDependee.Add(t, temp);
             }
         }
 
@@ -152,6 +152,33 @@ namespace Dependencies
         /// </summary>
         public void RemoveDependency(string s, string t)
         {
+            // Remove dependentToDependee
+            List<String> dependents;
+            if (dependeeToDependent.TryGetValue(s, out dependents))
+            {
+                if (dependents.Count - 1 == 0) 
+                {
+                    dependeeToDependent.Remove(s);
+                }
+
+                dependents.Remove(t);
+                dependeeToDependent.Remove(s);
+                dependeeToDependent.Add(s, dependents);
+            }
+
+            // Remove dependeeToDependent
+            List<String> dependees; 
+            if (dependentToDependee.TryGetValue(t, out dependees))
+            {
+                if (dependees.Count - 1 == 0)
+                {
+                    dependentToDependee.Remove(t);
+                }
+
+                dependees.Remove(s);
+                dependentToDependee.Remove(t);
+                dependentToDependee.Add(t, dependees);
+            }
         }
 
         /// <summary>
@@ -160,6 +187,19 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            List<String> values = new List<String>();
+            foreach (String temp in newDependents)
+            {
+                values.Add(temp);
+            }
+            // Replace dependeeToDependent 
+            dependeeToDependent.Remove(s);
+            dependeeToDependent.Add(s, values);
+
+            // Replace dependentToDependee 
+            
+
+            
         }
 
         /// <summary>

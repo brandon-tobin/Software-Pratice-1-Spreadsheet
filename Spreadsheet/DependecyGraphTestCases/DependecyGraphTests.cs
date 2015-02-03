@@ -14,7 +14,7 @@ namespace DependecyGraphTestCases
             DependencyGraph test = new DependencyGraph();
             test.AddDependency("hello", "world");
             test.AddDependency("hello", "you");
-            IEnumerable values = test.GetDependees("hello");
+            IEnumerable values = test.GetDependents("hello");
             String temp = "";
             foreach (String s in values)
             {
@@ -29,7 +29,7 @@ namespace DependecyGraphTestCases
             DependencyGraph test = new DependencyGraph();
             test.AddDependency("hello", "world");
             test.AddDependency("hello", "you");
-            IEnumerable values = test.GetDependents("world");
+            IEnumerable values = test.GetDependees("world");
             String temp = "";
             foreach (String s in values)
             {
@@ -88,7 +88,7 @@ namespace DependecyGraphTestCases
             test.AddDependency("hello", "you");
             test.AddDependency("cs", "3500");
             test.AddDependency("cs", "3810");
-            Assert.AreEqual(test.HasDependents("hello"), true);
+            Assert.AreEqual(true, test.HasDependents("hello"));
         }
 
         [TestMethod]
@@ -99,7 +99,83 @@ namespace DependecyGraphTestCases
             test.AddDependency("hello", "you");
             test.AddDependency("cs", "3500");
             test.AddDependency("cs", "3810");
-            Assert.AreEqual(test.HasDependents("visual"), false);
+            Assert.AreEqual(false, test.HasDependents("visual"));
+        }
+
+        [TestMethod]
+        public void HasDependees1()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("cs", "3810");
+            Assert.AreEqual(true, test.HasDependees("world"));
+        }
+
+        [TestMethod]
+        public void HasDependees2()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("cs", "3810");
+            Assert.AreEqual(false, test.HasDependees("visual"));
+        }
+
+        [TestMethod]
+        public void RemoveDependecy1()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.RemoveDependency("hello", "world");
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("you", temp);
+        }
+
+        [TestMethod]
+        public void RemoveDependecy2()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+            test.RemoveDependency("cs", "3500");
+            IEnumerable values = test.GetDependents("cs");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("38102420", temp);
+        }
+
+        [TestMethod]
+        public void RemoveDependecy3()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+            test.RemoveDependency("cs", "3500");
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("worldyou", temp);
         }
     }
 }
