@@ -124,7 +124,17 @@ namespace Dependencies
             // Add dependentToDependee
             if (dependeeToDependent.ContainsKey(s))
             {
-                dependeeToDependent[s].Add(t);
+                // If dependency is already in the  graph, return without adding  
+                List<String> dependents = new List<String>();
+                dependeeToDependent.TryGetValue(s, out dependents);
+                for (int i = 0; i < dependents.Count; i++)
+                {
+                    if (dependents[i].Equals(t))
+                    {
+                        return;
+                    }
+                }
+                    dependeeToDependent[s].Add(t);
             }
             else
             {
@@ -133,10 +143,10 @@ namespace Dependencies
                 dependeeToDependent.Add(s, temp);
             }
 
-            // Add dependeeToDependent
+            // Add dependentToDependee 
             if (dependentToDependee.ContainsKey(t))
             {
-                dependentToDependee[s].Add(s);
+                dependentToDependee[t].Add(s);
             }
             else
             {
@@ -209,6 +219,13 @@ namespace Dependencies
            
             // Add new dependecies 
             dependeeToDependent.Add(s, values);
+
+            List<String> param = new List<String>();
+            param.Add(s);
+            for (int i = 0; i < values.Count; i++)
+            {
+                dependentToDependee.Add(values[i], param);
+            }
             
         }
 
@@ -237,6 +254,7 @@ namespace Dependencies
             {
                 values.Add(temp);
             }
+
             // Add new dependencies
             List<String> param = new List<String>();
             param.Add(s);

@@ -21,7 +21,7 @@ namespace DependecyGraphTestCases
             {
                 temp += s;
             }
-            Assert.AreEqual(temp, "worldyou");
+            Assert.AreEqual("worldyou", temp);
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace DependecyGraphTestCases
             {
                 temp += s;
             }
-            Assert.AreEqual(temp, "hello");
+            Assert.AreEqual("hello", temp);
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace DependecyGraphTestCases
             {
                 temp += s;
             }
-            Assert.AreEqual(temp, "");
+            Assert.AreEqual("", temp);
         }
 
         [TestMethod]
@@ -66,11 +66,29 @@ namespace DependecyGraphTestCases
             {
                 temp += s;
             }
-            Assert.AreEqual(temp, "");
+            Assert.AreEqual("", temp);
+        }
+
+        // Test addDependency if the dependency already exists 
+        [TestMethod]
+        public void AddDependency5()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.AddDependency("hello", "world");
+
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("worldyou", temp);
         }
 
         [TestMethod]
-        public void AddDependency5()
+        public void Size1()
         {
             DependencyGraph test = new DependencyGraph();
             test.AddDependency("hello", "world");
@@ -78,7 +96,20 @@ namespace DependecyGraphTestCases
             test.AddDependency("cs", "3500");
             test.AddDependency("cs", "3810");
             
-            Assert.AreEqual(test.Size, 4);
+            Assert.AreEqual(4, test.Size);
+        }
+
+        [TestMethod]
+        public void Size2()
+        {
+            DependencyGraph test = new DependencyGraph();
+            for (int i = 0; i < 50; i++)
+            {
+                String temp = i.ToString();
+                test.AddDependency(temp, temp);
+            }
+
+            Assert.AreEqual(50, test.Size);
         }
 
         [TestMethod]
@@ -177,6 +208,26 @@ namespace DependecyGraphTestCases
                 temp += s;
             }
             Assert.AreEqual("worldyou", temp);
+        }
+
+        // Test to see if remove does anything if the dependency is not there
+        [TestMethod]
+        public void RemoveDependecy4()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+            test.RemoveDependency("cs", "4540");
+            IEnumerable values = test.GetDependents("cs");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("350038102420", temp);
         }
 
         [TestMethod]
