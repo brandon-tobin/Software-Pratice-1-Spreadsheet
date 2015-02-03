@@ -88,6 +88,22 @@ namespace DependecyGraphTestCases
         }
 
         [TestMethod]
+        public void AddDependency6()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "world");
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("worldyou", temp);
+        }
+
+        [TestMethod]
         public void Size1()
         {
             DependencyGraph test = new DependencyGraph();
@@ -231,6 +247,23 @@ namespace DependecyGraphTestCases
         }
 
         [TestMethod]
+        public void RemoveDependecy5()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("hello", "you");
+            test.RemoveDependency("hello", "world");
+            test.RemoveDependency("hello", "you");
+            IEnumerable values = test.GetDependents("hello");
+            String temp = "";
+            foreach (String s in values)
+            {
+                temp += s;
+            }
+            Assert.AreEqual("", temp);
+        }
+
+        [TestMethod]
         public void Replace1()
         {
             DependencyGraph test = new DependencyGraph();
@@ -334,25 +367,78 @@ namespace DependecyGraphTestCases
             Assert.AreEqual("350038102420", dependents);
         }
 
+        // Call replace and send in a dependent that is not in the graph 
         [TestMethod]
-        public void StressTest1()
+        public void Replace5()
         {
             DependencyGraph test = new DependencyGraph();
-                String i = "hello";
-                String temp = "";
-                for (int j = 100000; j > 0; j--)
-                {
-                    temp += j;
-                    test.AddDependency(i, j.ToString());
-                }
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependees("mountain", temp);
+
             String dependents = "";
-            IEnumerable values = test.GetDependents("hello");
-            foreach (String s in values) 
+            IEnumerable values = test.GetDependees("mountain");
+            foreach (String s in values)
             {
                 dependents += s;
             }
-            Assert.AreEqual(temp, dependents);
-            
+            Assert.AreEqual("tomscottbrendanutah", dependents);
         }
+
+        // Call replace and send in a dependee that is not in the graph 
+        [TestMethod]
+        public void Replace6()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependents("mountain", temp);
+
+            String dependents = "";
+            IEnumerable values = test.GetDependents("mountain");
+            foreach (String s in values)
+            {
+                dependents += s;
+            }
+            Assert.AreEqual("tomscottbrendanutah", dependents);
+        }
+        //[TestMethod]
+        //public void StressTest1()
+        //{
+        //    DependencyGraph test = new DependencyGraph();
+        //        String i = "hello";
+        //        String temp = "";
+        //        for (int j = 100000; j > 0; j--)
+        //        {
+        //            temp += j;
+        //            test.AddDependency(i, j.ToString());
+        //        }
+        //    String dependents = "";
+        //    IEnumerable values = test.GetDependents("hello");
+        //    foreach (String s in values) 
+        //    {
+        //        dependents += s;
+        //    }
+        //    Assert.AreEqual(temp, dependents);
+            
+        //}
     }
 }

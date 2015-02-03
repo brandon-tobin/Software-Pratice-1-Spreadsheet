@@ -41,6 +41,7 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
+        // Instance variable for holding the two dictionaries that will make up the dependency graph 
         Dictionary<String, List<String>> dependeeToDependent;
         Dictionary<String, List<String>> dependentToDependee;
 
@@ -49,6 +50,8 @@ namespace Dependencies
         /// </summary>
         public DependencyGraph()
         {
+            // Initialize dictionaries taking parameters (string, List<String>)
+            // A Dictionary represents the dependency between the string and it's dependents which are stored in the List 
             dependeeToDependent = new Dictionary<String, List<String>>();
             dependentToDependee = new Dictionary<String, List<String>>();
         }
@@ -58,6 +61,7 @@ namespace Dependencies
         /// </summary>
         public int Size
         {
+            // Count the number of entries in dependentToDependee dictionary 
             get { return dependentToDependee.Count; }
         }
 
@@ -66,6 +70,8 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
+            // If the key s exists in dependeeToDependent dictionary, 
+            // s will have dependents so return true 
             if (dependeeToDependent.ContainsKey(s))
             {
                 return true;
@@ -79,6 +85,8 @@ namespace Dependencies
         /// </summary>
         public bool HasDependees(string s)
         {
+            // If the key s exists in dependentToDependee dictionary, 
+            // s will have dependees so return true 
             if (dependentToDependee.ContainsKey(s))
             {
                 return true;
@@ -93,6 +101,8 @@ namespace Dependencies
         public IEnumerable<string> GetDependents(string s)
         {
             List<String> dependents;
+            // If the TryGetValue fails, there are no dependents, therefore return empty list 
+            // If TryGetValue passes, return the output of that value 
             if (!dependeeToDependent.TryGetValue(s, out dependents))
             {
                 List<String> emptyDependents = new List<String>();
@@ -107,6 +117,8 @@ namespace Dependencies
         public IEnumerable<string> GetDependees(string s)
         {
             List<String> dependees;
+            // If the TryGetValue fails, there are no dependees, therefore return empty list 
+            // If TryGetValue passes, return the output of that value 
             if (!dependentToDependee.TryGetValue(s, out dependees))
             {
                 List<String> emptyDependees = new List<String>();
@@ -122,6 +134,7 @@ namespace Dependencies
         public void AddDependency(string s, string t)
         {
             // Add dependentToDependee
+            // If dependee s already exists
             if (dependeeToDependent.ContainsKey(s))
             {
                 // If dependency is already in the  graph, return without adding  
@@ -136,6 +149,7 @@ namespace Dependencies
                 }
                     dependeeToDependent[s].Add(t);
             }
+            // If dependee s doesn't exist already
             else
             {
                 List<String> temp = new List<String>();
@@ -144,10 +158,12 @@ namespace Dependencies
             }
 
             // Add dependentToDependee 
+            // If dependee t already exists 
             if (dependentToDependee.ContainsKey(t))
             {
                 dependentToDependee[t].Add(s);
             }
+            // If dependee t doesn't already exist 
             else
             {
                 List<String> temp = new List<String>();
@@ -164,30 +180,43 @@ namespace Dependencies
         {
             // Remove dependentToDependee
             List<String> dependents;
+            // If the dependency does not exist, do nothing 
             if (dependeeToDependent.TryGetValue(s, out dependents))
             {
+                // If dependee s only has one dependent, remove it from the graph 
                 if (dependents.Count - 1 == 0) 
                 {
                     dependeeToDependent.Remove(s);
                 }
-
-                dependents.Remove(t);
-                dependeeToDependent.Remove(s);
-                dependeeToDependent.Add(s, dependents);
+                // If dependee s has more than one dependent, remove the dependent from the list 
+                // and readd the list 
+                else
+                {
+                    dependents.Remove(t);
+                    dependeeToDependent.Remove(s);
+                    dependeeToDependent.Add(s, dependents);
+                } 
             }
 
             // Remove dependeeToDependent
             List<String> dependees; 
+            // If the dependency does not exist, do nothing 
             if (dependentToDependee.TryGetValue(t, out dependees))
             {
+                // If dependee t only has one dependent, remove it from the graph 
                 if (dependees.Count - 1 == 0)
                 {
                     dependentToDependee.Remove(t);
                 }
-
-                dependees.Remove(s);
-                dependentToDependee.Remove(t);
-                dependentToDependee.Add(t, dependees);
+                // If dependee t has more than one dependent, remove the dependent from the list 
+                // and readd the list 
+                else
+                {
+                    dependees.Remove(s);
+                    dependentToDependee.Remove(t);
+                    dependentToDependee.Add(t, dependees);
+                }
+              
             }
         }
 
@@ -206,15 +235,17 @@ namespace Dependencies
 
             // Get dependents of s 
             List<String> dependents = new List<String>();
-            dependeeToDependent.TryGetValue(s, out dependents);
-
-            // Remove dependencies from dependeeToDependent  
-            dependeeToDependent.Remove(s);
-
-            // Remove dependencies from dependentToDependee
-            for (int i = 0; i < dependents.Count; i++)
+            if (dependeeToDependent.TryGetValue(s, out dependents))
             {
-                dependentToDependee.Remove(dependents[i]);
+
+                // Remove dependencies from dependeeToDependent  
+                dependeeToDependent.Remove(s);
+
+                // Remove dependencies from dependentToDependee
+                for (int i = 0; i < dependents.Count; i++)
+                {
+                    dependentToDependee.Remove(dependents[i]);
+                }
             }
            
             // Add new dependecies 
@@ -237,33 +268,35 @@ namespace Dependencies
         {
             // Add dependees that need to be deleted to List dependees 
             List<String> dependees = new List<String>();
-            dependentToDependee.TryGetValue(s, out dependees);
+            if (dependentToDependee.TryGetValue(s, out dependees))
+            {
+
+                // Remove dependencies from dependeeToDependent 
+                for (int i = 0; i < dependees.Count; i++)
+                {
+                    dependeeToDependent.Remove(dependees[i]);
+                }
+
+                // Remove dependencies from dependentToDependee 
+                dependentToDependee.Remove(s);
+            }
+                // Add newDependees to List values 
+                List<String> values = new List<String>();
+                foreach (String temp in newDependees)
+                {
+                    values.Add(temp);
+                }
+
+                // Add new dependencies
+                List<String> param = new List<String>();
+                param.Add(s);
+                for (int i = 0; i < values.Count; i++)
+                {
+                    dependeeToDependent.Add(values[i], param);
+                }
+
+                dependentToDependee.Add(s, values);
             
-            // Remove dependencies from dependeeToDependent 
-            for (int i = 0; i < dependees.Count; i++)
-            {
-                dependeeToDependent.Remove(dependees[i]);
-            }
-
-            // Remove dependencies from dependentToDependee 
-            dependentToDependee.Remove(s);
-
-            // Add newDependees to List values 
-            List<String> values = new List<String>();
-            foreach (String temp in newDependees)
-            {
-                values.Add(temp);
-            }
-
-            // Add new dependencies
-            List<String> param = new List<String>();
-            param.Add(s);
-            for (int i = 0; i < values.Count; i++)
-            {
-                dependeeToDependent.Add(values[i], param);
-            }
-
-            dependentToDependee.Add(s, values);
         }
     }
 }
