@@ -287,13 +287,20 @@ namespace DependecyGraphTestCases
         public void StressTest1()
         {
             DependencyGraph test = new DependencyGraph();
-            //for (int i = 0; i < 10000000; i++)
-          //  {
                 String i = "hello";
-                for (int j = 10000000; j > 0; j++)
+                String temp = "";
+                for (int j = 100000; j > 0; j--)
                 {
-                    test.AddDependency(i, j.ToString);
+                    temp += j;
+                    test.AddDependency(i, j.ToString());
                 }
+            String dependents = "";
+            IEnumerable values = test.GetDependents("hello");
+            foreach (String s in values) 
+            {
+                dependents += s;
+            }
+            Assert.AreEqual(temp, dependents);
             
         }
     }
