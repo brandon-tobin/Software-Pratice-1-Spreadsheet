@@ -187,32 +187,28 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            // Add newDependents to List values 
             List<String> values = new List<String>();
             foreach (String temp in newDependents)
             {
                 values.Add(temp);
             }
 
-            // Get values from s 
+            // Get dependents of s 
             List<String> dependents = new List<String>();
             dependeeToDependent.TryGetValue(s, out dependents);
 
-            // Replace dependeeToDependent 
+            // Remove dependencies from dependeeToDependent  
             dependeeToDependent.Remove(s);
-            dependeeToDependent.Add(s, values);
 
-            // Replace dependentToDependee 
+            // Remove dependencies from dependentToDependee
             for (int i = 0; i < dependents.Count; i++)
             {
                 dependentToDependee.Remove(dependents[i]);
             }
-            List<String> dependee = new List<String>();
-            dependee.Add(s);
-            foreach (String t in newDependents)
-            {
-                dependentToDependee.Add(t, dependee);
-            }
-
+           
+            // Add new dependecies 
+            dependeeToDependent.Add(s, values);
             
         }
 
@@ -222,38 +218,34 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            // Replacing in dependeeToDependent 
+            // Add dependees that need to be deleted to List dependees 
             List<String> dependees = new List<String>();
             dependentToDependee.TryGetValue(s, out dependees);
-
-            for (int i = 0; i < dependees.Count; i++ )
+            
+            // Remove dependencies from dependeeToDependent 
+            for (int i = 0; i < dependees.Count; i++)
             {
                 dependeeToDependent.Remove(dependees[i]);
             }
 
+            // Remove dependencies from dependentToDependee 
+            dependentToDependee.Remove(s);
 
-            List<String> dependent = new List<String>();
-            dependent.Add(s);
-            foreach (String t in newDependees)
-            {
-                dependeeToDependent.Add(t, dependent);
-            }
-
-            // Replacing in dependentToDependee 
+            // Add newDependees to List values 
             List<String> values = new List<String>();
             foreach (String temp in newDependees)
             {
                 values.Add(temp);
             }
+            // Add new dependencies
+            List<String> param = new List<String>();
+            param.Add(s);
+            for (int i = 0; i < values.Count; i++)
+            {
+                dependeeToDependent.Add(values[i], param);
+            }
 
-            // Get values from t 
-          //  List<String> dependee = new List<String>();
-           // dependeeToDependent.TryGetValue(s, out dependee);
-
-            // Replace dependeeToDependent 
-            dependentToDependee.Remove(s);
             dependentToDependee.Add(s, values);
-            
         }
     }
 }
