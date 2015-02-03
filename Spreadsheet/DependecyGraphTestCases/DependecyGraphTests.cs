@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Dependencies;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace DependecyGraphTestCases
 {
@@ -176,6 +177,124 @@ namespace DependecyGraphTestCases
                 temp += s;
             }
             Assert.AreEqual("worldyou", temp);
+        }
+
+        [TestMethod]
+        public void Replace1()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+           
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependents("hello", temp);
+
+            String dependents = "";
+            IEnumerable values = test.GetDependents("hello");
+            foreach (String s in values)
+            {
+                dependents += s;
+            }
+            Assert.AreEqual("tomscottbrendanutah", dependents);
+        }
+
+        [TestMethod]
+        public void Replace2()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependents("hello", temp);
+
+            String dependents = "";
+            IEnumerable values = test.GetDependents("cs");
+            foreach (String s in values)
+            {
+                dependents += s;
+            }
+            Assert.AreEqual("350038102420", dependents);
+        }
+
+        [TestMethod]
+        public void Replace3()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependees("world", temp);
+
+            String dependees = "";
+            IEnumerable values = test.GetDependees("world");
+            foreach (String s in values)
+            {
+                dependees += s;
+            }
+            Assert.AreEqual("tomscottbrendanutah", dependees);
+        }
+
+        [TestMethod]
+        public void Replace4()
+        {
+            DependencyGraph test = new DependencyGraph();
+            test.AddDependency("hello", "world");
+            test.AddDependency("cs", "3500");
+            test.AddDependency("hello", "you");
+            test.AddDependency("cs", "3810");
+            test.AddDependency("cs", "2420");
+
+            List<String> temp = new List<String>();
+            temp.Add("tom");
+            temp.Add("scott");
+            temp.Add("brendan");
+            temp.Add("utah");
+            test.ReplaceDependees("world", temp);
+
+            String dependents = "";
+            IEnumerable values = test.GetDependents("cs");
+            foreach (String s in values)
+            {
+                dependents += s;
+            }
+            Assert.AreEqual("350038102420", dependents);
+        }
+
+        [TestMethod]
+        public void StressTest1()
+        {
+            DependencyGraph test = new DependencyGraph();
+            //for (int i = 0; i < 10000000; i++)
+          //  {
+                String i = "hello";
+                for (int j = 10000000; j > 0; j++)
+                {
+                    test.AddDependency(i, j.ToString);
+                }
+            
         }
     }
 }

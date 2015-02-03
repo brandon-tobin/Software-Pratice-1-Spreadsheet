@@ -192,12 +192,26 @@ namespace Dependencies
             {
                 values.Add(temp);
             }
+
+            // Get values from s 
+            List<String> dependents = new List<String>();
+            dependeeToDependent.TryGetValue(s, out dependents);
+
             // Replace dependeeToDependent 
             dependeeToDependent.Remove(s);
             dependeeToDependent.Add(s, values);
 
             // Replace dependentToDependee 
-            
+            for (int i = 0; i < dependents.Count; i++)
+            {
+                dependentToDependee.Remove(dependents[i]);
+            }
+            List<String> dependee = new List<String>();
+            dependee.Add(s);
+            foreach (String t in newDependents)
+            {
+                dependentToDependee.Add(t, dependee);
+            }
 
             
         }
@@ -208,6 +222,38 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
+            // Replacing in dependeeToDependent 
+            List<String> dependees = new List<String>();
+            dependentToDependee.TryGetValue(s, out dependees);
+
+            for (int i = 0; i < dependees.Count; i++ )
+            {
+                dependeeToDependent.Remove(dependees[i]);
+            }
+
+
+            List<String> dependent = new List<String>();
+            dependent.Add(s);
+            foreach (String t in newDependees)
+            {
+                dependeeToDependent.Add(t, dependent);
+            }
+
+            // Replacing in dependentToDependee 
+            List<String> values = new List<String>();
+            foreach (String temp in newDependees)
+            {
+                values.Add(temp);
+            }
+
+            // Get values from t 
+          //  List<String> dependee = new List<String>();
+           // dependeeToDependent.TryGetValue(s, out dependee);
+
+            // Replace dependeeToDependent 
+            dependentToDependee.Remove(s);
+            dependentToDependee.Add(s, values);
+            
         }
     }
 }
