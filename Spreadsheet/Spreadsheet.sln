@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyGraph", "Dependen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependecyGraphTestCases", "DependecyGraphTestCases\DependecyGraphTestCases.csproj", "{3C5CCAF3-E363-4410-B569-65CF268CCB85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS3GradingTests", "PS3GradingTests\PS3GradingTests.csproj", "{20E49A48-FE66-42A0-A597-5519C3B53F9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3C5CCAF3-E363-4410-B569-65CF268CCB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C5CCAF3-E363-4410-B569-65CF268CCB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C5CCAF3-E363-4410-B569-65CF268CCB85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20E49A48-FE66-42A0-A597-5519C3B53F9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20E49A48-FE66-42A0-A597-5519C3B53F9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20E49A48-FE66-42A0-A597-5519C3B53F9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20E49A48-FE66-42A0-A597-5519C3B53F9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

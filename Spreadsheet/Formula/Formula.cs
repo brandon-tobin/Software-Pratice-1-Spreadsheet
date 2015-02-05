@@ -44,7 +44,8 @@ namespace SpreadsheetUtilities
             String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
 
             // Pattern finds ( or operators 
-            String lpOpersPattern = String.Format("({0}) | ({1})", lpPattern, opPattern);
+           // String lpOpersPattern = String.Format("({0}) | ({1})", lpPattern, opPattern);
+            String lpOpersPattern = @"^[\+\-*\/\(]$";
             // Pattern finds (, a variable, a number 
             String lpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
             // Pattern finds a ), a variable, a number  
@@ -301,8 +302,6 @@ namespace SpreadsheetUtilities
                         double tempValue = val1 + val2;
                         // Push result back onto values stack 
                         values.Push(tempValue.ToString());
-                        // Push temp onto operator stack 
-                        operators.Push(temp);
                     }
                     // If the top value of the operator stack is -
                     else if (operators.Count != 0 && operators.Peek().Equals("-"))

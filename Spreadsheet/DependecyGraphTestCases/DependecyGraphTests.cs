@@ -438,25 +438,25 @@ namespace DependecyGraphTestCases
             Assert.AreEqual("tomscottbrendanutah", dependents);
         }
 
-        [TestMethod]
-        public void StressTest1()
-        {
-            DependencyGraph test = new DependencyGraph();
-            String i = "hello";
-            String temp = "";
-            for (int j = 100000; j > 0; j--)
-            {
-                temp += j;
-                test.AddDependency(i, j.ToString());
-            }
-            String dependents = "";
-            IEnumerable values = test.GetDependents("hello");
-            foreach (String s in values)
-            {
-                dependents += s;
-            }
-            Assert.AreEqual(temp, dependents);
+        //[TestMethod]
+        //public void StressTest1()
+        //{
+        //    DependencyGraph test = new DependencyGraph();
+        //    String i = "hello";
+        //    String temp = "";
+        //    for (int j = 100000; j > 0; j--)
+        //    {
+        //        temp += j;
+        //        test.AddDependency(i, j.ToString());
+        //    }
+        //    String dependents = "";
+        //    IEnumerable values = test.GetDependents("hello");
+        //    foreach (String s in values)
+        //    {
+        //        dependents += s;
+        //    }
+        //    Assert.AreEqual(temp, dependents);
 
-        }
+      //  }
     }
 }
