@@ -44,6 +44,8 @@ namespace Dependencies
         // Instance variable for holding the two dictionaries that will make up the dependency graph 
         Dictionary<String, List<String>> dependeeToDependent;
         Dictionary<String, List<String>> dependentToDependee;
+        // Size counter for keeping track of how big the DG is
+        int size = 0;
 
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
@@ -62,7 +64,8 @@ namespace Dependencies
         public int Size
         {
             // Count the number of entries in dependentToDependee dictionary 
-            get { return dependentToDependee.Count; }
+           // get { return dependentToDependee.Count; }
+            get { return size; }
         }
 
         /// <summary>
@@ -148,6 +151,8 @@ namespace Dependencies
                     }
                 }
                     dependeeToDependent[s].Add(t);
+                    // Increment size 
+                    size++;
             }
             // If dependee s doesn't exist already
             else
@@ -155,6 +160,8 @@ namespace Dependencies
                 List<String> temp = new List<String>();
                 temp.Add(t);
                 dependeeToDependent.Add(s, temp);
+                // Increment size 
+                size++;
             }
 
             // Add dependentToDependee 
@@ -187,6 +194,8 @@ namespace Dependencies
                 if (dependents.Count - 1 == 0) 
                 {
                     dependeeToDependent.Remove(s);
+                    // Decrement Size 
+                    size--;
                 }
                 // If dependee s has more than one dependent, remove the dependent from the list 
                 // and readd the list 
@@ -195,6 +204,8 @@ namespace Dependencies
                     dependents.Remove(t);
                     dependeeToDependent.Remove(s);
                     dependeeToDependent.Add(s, dependents);
+                    // Decrement Size 
+                    size--;
                 } 
             }
 
@@ -216,7 +227,6 @@ namespace Dependencies
                     dependentToDependee.Remove(t);
                     dependentToDependee.Add(t, dependees);
                 }
-              
             }
         }
 
@@ -237,25 +247,100 @@ namespace Dependencies
             List<String> dependents = new List<String>();
             if (dependeeToDependent.TryGetValue(s, out dependents))
             {
-
                 // Remove dependencies from dependeeToDependent  
                 dependeeToDependent.Remove(s);
-
                 // Remove dependencies from dependentToDependee
                 for (int i = 0; i < dependents.Count; i++)
                 {
                     dependentToDependee.Remove(dependents[i]);
+                    // Decrement Size 
+                    size--;
                 }
             }
            
             // Add new dependecies 
-            dependeeToDependent.Add(s, values);
+
+            //for (int i = 0; i < values.Count; i++)
+            //{
+            //    if (dependeeToDependent.ContainsKey(values[i]))
+            //    {
+            //        // If key is already in the  graph, add value to list  
+            //        List<String> tempDependents = new List<String>();
+            //        if (dependeeToDependent.TryGetValue(s, out tempDependents))
+            //        {
+            //            for (int j = 0; j < tempDependents.Count; j++)
+            //            {
+            //                if (tempDependents[j].Equals(values[i]))
+            //                {
+            //                    break;
+            //                }
+            //                dependeeToDependent[s].Add(values[i]);
+            //                // Increment size 
+            //                size++;
+            //            }
+            //        }
+            //    }
+            //    // If dependent values[i] doesn't exist already
+            //    else
+            //    {
+            //        List<String> dependentAdd = new List<String>();
+            //        dependentAdd.Add(values[i]);
+            //        dependeeToDependent.Add(s,dependentAdd);
+            //        // Increment size 
+            //        size++;
+            //    }
+            //}
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // dependeeToDependent.Add(s, values);
 
             List<String> param = new List<String>();
             param.Add(s);
             for (int i = 0; i < values.Count; i++)
             {
-                dependentToDependee.Add(values[i], param);
+                if (dependentToDependee.ContainsKey(values[i]))
+                {
+                    // If key is already in the  graph, add value to list  
+                    List<String> dependees = new List<String>();
+                    dependentToDependee.TryGetValue(values[i], out dependees);
+                    for (int j = 0; j < dependees.Count; j++)
+                    {
+                        if (dependees[j].Equals(s))
+                        {
+                            break;
+                        }
+
+                        dependentToDependee[values[i]].Add(s);
+                        // Increment size 
+                        size++;
+                    }
+                }
+                // If dependent values[i] doesn't exist already
+                else
+                {
+                    dependentToDependee.Add(values[i], param);
+                    // Increment size 
+                    size++;
+                }
             }
             
         }
@@ -275,6 +360,8 @@ namespace Dependencies
                 for (int i = 0; i < dependees.Count; i++)
                 {
                     dependeeToDependent.Remove(dependees[i]);
+                    //Decrement size 
+                    size--;
                 }
 
                 // Remove dependencies from dependentToDependee 
@@ -292,7 +379,29 @@ namespace Dependencies
                 param.Add(s);
                 for (int i = 0; i < values.Count; i++)
                 {
-                    dependeeToDependent.Add(values[i], param);
+                    if (dependeeToDependent.ContainsKey(values[i]))
+                    {
+                        // If dependency is already in the  graph, return without adding  
+                        List<String> dependents = new List<String>();
+                        dependeeToDependent.TryGetValue(values[i], out dependents);
+                        for (int j = 0; j < dependents.Count; j++)
+                        {
+                            if (dependents[j].Equals(s))
+                            {
+                                break;
+                            }
+                        }
+                        dependeeToDependent[values[i]].Add(s);
+                        // Increment size 
+                        size++;
+                    }
+                    // If dependent values[i] doesn't exist already
+                    else
+                    {
+                        dependeeToDependent.Add(values[i], param);
+                        // Increment size 
+                        size++;
+                    }
                 }
 
                 dependentToDependee.Add(s, values);
