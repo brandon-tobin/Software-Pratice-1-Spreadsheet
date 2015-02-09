@@ -236,102 +236,41 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
-            // Add newDependents to List values 
-            HashSet<String> values = new HashSet<String>();
+            HashSet<String> newDepends = new HashSet<String>();
             foreach (String temp in newDependents)
             {
-                values.Add(temp);
+                newDepends.Add(temp);
             }
 
-            // Get dependents of s 
-            HashSet<String> dependents = new HashSet<String>();
-            if (dependeeToDependent.TryGetValue(s, out dependents))
+            HashSet<String> toBeDeleted = new HashSet<String>();
+            if (dependeeToDependent.TryGetValue(s, out toBeDeleted))
             {
-                // Remove dependencies from dependeeToDependent  
-                size -= dependents.Count;
+                size -= toBeDeleted.Count;
                 dependeeToDependent.Remove(s);
-                // Remove dependencies from dependentToDependee
-                //for (int i = 0; i < dependents.Count; i++)
-                //{
-                //  dependentToDependee.Remove(dependents[i]);
-                foreach (String temp in dependents)
+
+                foreach (String temp in toBeDeleted)
                 {
                     dependentToDependee.Remove(temp);
                 }
-                //}
             }
 
-            // Add new dependecies 
-
-            //for (int i = 0; i < values.Count; i++)
-            //{
-            //    if (dependeeToDependent.ContainsKey(values[i]))
-            //    {
-            //        // If key is already in the  graph, add value to list  
-            //        List<String> tempDependents = new List<String>();
-            //        if (dependeeToDependent.TryGetValue(s, out tempDependents))
-            //        {
-            //            for (int j = 0; j < tempDependents.Count; j++)
-            //            {
-            //                if (tempDependents[j].Equals(values[i]))
-            //                {
-            //                    break;
-            //                }
-            //                dependeeToDependent[s].Add(values[i]);
-            //                // Increment size 
-            //                size++;
-            //            }
-            //        }
-            //    }
-            //    // If dependent values[i] doesn't exist already
-            //    else
-            //    {
-            //        List<String> dependentAdd = new List<String>();
-            //        dependentAdd.Add(values[i]);
-            //        dependeeToDependent.Add(s,dependentAdd);
-            //        // Increment size 
-            //        size++;
-            //    }
-            //}
-
-
-            dependeeToDependent.Add(s, values);
-            size += values.Count;
+            dependeeToDependent.Add(s, newDepends);
+            size += newDepends.Count;
 
             HashSet<String> param = new HashSet<String>();
             param.Add(s);
-            // for (int i = 0; i < values.Count; i++)
-            foreach (String tempVal in values)
+            foreach (String temp in newDepends)
             {
-                //  if (dependentToDependee.ContainsKey(tempVal))
-                // {
-                // If key is already in the  graph, add value to list  
-                HashSet<String> dependees = new HashSet<String>();
-                if (dependentToDependee.TryGetValue(tempVal, out dependees))
+                HashSet<String> exists = new HashSet<String>();
+                if (dependentToDependee.TryGetValue(temp, out exists))
                 {
-                    HashSet<String> toBeAdded = new HashSet<String>();
-                    foreach (String temp in dependees)
-                    {
-                        toBeAdded.Add(temp);
-                    }
-
-                    foreach (String tempDependee in toBeAdded)
-                    {
-                        if (tempDependee.Equals(s))
-                        {
-                            break;
-                        }
-
-                        dependentToDependee[tempVal].Add(s);
-                    }
+                    dependentToDependee[temp].Add(s);
                 }
-                // If dependent values[i] doesn't exist already
                 else
                 {
-                    dependentToDependee.Add(tempVal, param);
+                    dependentToDependee.Add(temp, param);
                 }
             }
-
         }
 
         /// <summary>
@@ -340,160 +279,44 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            // Add newDependents to List values 
-            HashSet<String> values = new HashSet<String>();
+            HashSet<String> newDepees = new HashSet<String>();
             foreach (String temp in newDependees)
             {
-                values.Add(temp);
+                newDepees.Add(temp);
             }
 
-            // Get dependees of s 
-            HashSet<String> dependees = new HashSet<String>();
-            if (dependentToDependee.TryGetValue(s, out dependees))
+            HashSet<String> toBeDeleted = new HashSet<String>();
+            if (dependentToDependee.TryGetValue(s, out toBeDeleted))
             {
-                // Remove dependencies from dependeeToDependent  
                 dependentToDependee.Remove(s);
-                // Remove dependencies from dependentToDependee
-                //for (int i = 0; i < dependents.Count; i++)
-                //{
-                //  dependentToDependee.Remove(dependents[i]);
-                foreach (String temp in dependees)
+
+                foreach (String temp in toBeDeleted)
                 {
-                    HashSet<String> toBeDeleted = new HashSet<String>();
-                    dependeeToDependent.TryGetValue(temp, out toBeDeleted);
                     dependeeToDependent.Remove(temp);
-                    // Decrement Size 
-                    size -= toBeDeleted.Count; ;
+                    size--;
                 }
-                //}
             }
 
-
-
-            dependentToDependee.Add(s, values);
+            dependentToDependee.Add(s, newDepees);
 
             HashSet<String> param = new HashSet<String>();
             param.Add(s);
-            // for (int i = 0; i < values.Count; i++)
-            foreach (String tempVal in values)
+            foreach (String temp in newDepees)
             {
-                //  if (dependentToDependee.ContainsKey(tempVal))
-                // {
-                // If key is already in the  graph, add value to list  
-                HashSet<String> dependents = new HashSet<String>();
-                if (dependeeToDependent.TryGetValue(tempVal, out dependents))
+                HashSet<String> exists = new HashSet<String>();
+                if (dependeeToDependent.TryGetValue(temp, out exists))
                 {
-                    HashSet<String> toBeAdded = new HashSet<String>();
-                    foreach (String temp in dependents)
-                    {
-                        toBeAdded.Add(temp);
-                    }
-
-                    foreach (String tempDependent in toBeAdded)
-                    {
-                        if (tempDependent.Equals(s))
-                        {
-                            break;
-                        }
-
-                        dependeeToDependent[tempVal].Add(s);
-                        // Increment size 
-                        size++;
-                    }
+                    dependeeToDependent[temp].Add(s);
+                    size++;
                 }
-                // If dependent values[i] doesn't exist already
                 else
                 {
-                    dependeeToDependent.Add(tempVal, param);
-                    // Increment size 
+                    dependeeToDependent.Add(temp, param);
                     size++;
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //    // Add dependees that need to be deleted to List dependees 
-            //    HashSet<String> dependees = new HashSet<String>();
-            //    if (dependentToDependee.TryGetValue(s, out dependees))
-            //    {
-            //        // Remove dependencies from dependeeToDependent 
-            //       // for (int i = 0; i < dependees.Count; i++)
-            //        foreach (String tempDependee in dependees)
-            //        {
-            //            dependeeToDependent.Remove(tempDependee);
-            //            //Decrement size 
-            //            size--;
-            //        }
-
-            //        // Remove dependencies from dependentToDependee 
-            //        dependentToDependee.Remove(s);
-            //    }
-            //        // Add newDependees to List values 
-            //        HashSet<String> values = new HashSet<String>();
-            //        foreach (String temp in newDependees)
-            //        {
-            //            values.Add(temp);
-            //        }
-
-            //        // Add new dependencies
-            //        HashSet<String> param = new HashSet<String>();
-            //        param.Add(s);
-            //      //  for (int i = 0; i < values.Count; i++)
-            //        foreach (String tempVal in values)
-            //        {
-            //            if (dependeeToDependent.ContainsKey(tempVal))
-            //            {
-            //                // If dependency is already in the  graph, return without adding  
-            //                HashSet<String> dependents = new HashSet<String>();
-            //                dependeeToDependent.TryGetValue(tempVal, out dependents);
-            //               // for (int j = 0; j < dependents.Count; j++)
-            //                foreach (String tempDependents in dependents)
-            //                {
-            //                    if (tempDependents.Equals(s))
-            //                    {
-            //                        break;
-            //                    }
-            //                }
-            //                dependeeToDependent[tempVal].Add(s);
-            //                // Increment size 
-            //                size++;
-            //            }
-            //            // If dependent values[i] doesn't exist already
-            //            else
-            //            {
-            //                dependeeToDependent.Add(tempVal, param);
-            //                // Increment size 
-            //                size++;
-            //            }
-            //        }
-
-            //        dependentToDependee.Add(s, values);
-
-            //}
         }
     }
-}
+} 
+   
+
