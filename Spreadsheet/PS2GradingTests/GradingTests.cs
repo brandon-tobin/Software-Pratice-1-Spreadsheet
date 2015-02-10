@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using SpreadsheetUtilities;
+using Formulas;
 
 namespace GradingTests
 {
@@ -100,12 +100,12 @@ namespace GradingTests
             Formula f = new Formula("((((((((((2)))))))))");
         }
 
-        [TestMethod()]
-        [ExpectedException(typeof(FormulaFormatException))]
-        public void Test14()
-        {
-            Formula f = new Formula("x");
-        }
+        //[TestMethod()]
+        //[ExpectedException(typeof(FormulaFormatException))]
+        //public void Test14()
+        //{
+        //    Formula f = new Formula("x");
+        //}
 
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
@@ -166,35 +166,35 @@ namespace GradingTests
         [TestMethod()]
         public void Test22()
         {
-            Formula f = new Formula("a0");
+            Formula f = new Formula("_a0");
             Assert.AreEqual(10, f.Evaluate(s => 10), 1e-6);
         }
 
         [TestMethod()]
         public void Test23()
         {
-            Formula f = new Formula("5 + x6");
+            Formula f = new Formula("5 + _x6");
             Assert.AreEqual(9, f.Evaluate(s => 4), 1e-6);
         }
 
         [TestMethod()]
         public void Test24()
         {
-            Formula f = new Formula("5 - x6");
+            Formula f = new Formula("5 - x6x3");
             Assert.AreEqual(1, f.Evaluate(s => 4), 1e-6);
         }
 
         [TestMethod()]
         public void Test25()
         {
-            Formula f = new Formula("5 * x6");
+            Formula f = new Formula("5 * _6");
             Assert.AreEqual(20, f.Evaluate(s => 4), 1e-6);
         }
 
         [TestMethod()]
         public void Test26()
         {
-            Formula f = new Formula("8 / x6");
+            Formula f = new Formula("8 / _");
             Assert.AreEqual(2, f.Evaluate(s => 4), 1e-6);
         }
 
@@ -312,7 +312,7 @@ namespace GradingTests
         [TestMethod()]
         public void Test41()
         {
-            Formula f = new Formula("(((((2+3*X1)/(7e-5+X2-X4))*X5+.0005e+92)-8.2)*3.14159) * ((x2+3.1)-.00000000008)");
+            Formula f = new Formula("(((((2+3*X1)/(7e-5+X2-X4))*X5p2+.0005e+92)-8.2)*3.14159) * ((x2+3.1)-.00000000008)");
         }
 
         // Stress test for constructor

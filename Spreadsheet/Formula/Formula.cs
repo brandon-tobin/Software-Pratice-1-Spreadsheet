@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SpreadsheetUtilities
+namespace Formulas
 {
     /// <summary>
     /// Represents formulas written in standard infix notation using standard precedence
@@ -19,24 +19,12 @@ namespace SpreadsheetUtilities
     {
         // Instance variables 
         String evaluateFormula;
+        HashSet<String> normalizedVaraibles = new HashSet<String>();
 
-        /// <summary>
-        /// Creates a Formula from a string that consists of a standard infix expression composed
-        /// from non-negative floating-point numbers (using standard C# syntax for double/int literals), 
-        /// variable symbols (one or more letters followed by one or more digits), left and right
-        /// parentheses, and the four binary operator symbols +, -, *, and /.  White space is
-        /// permitted between tokens, but is not required.
-        /// 
-        /// An example of a valid parameter to this constructor is "2.5e9 + x5 / 17".
-        /// Examples of invalid parameters are "x", "-5.3", and "2 5 + 3";
-        /// 
-        /// If the formula is syntacticaly invalid, throws a FormulaFormatException with an 
-        /// explanatory Message.
-        /// </summary>
-        public Formula(String formula)
+        public Formula(String formula, Normalizer N, Validator V)
         {
             // Regex Patterns 
-            String varPattern = @"[a-zA-Z]+\d+";
+            String varPattern = @"[a-zA-Z_][a-zA-Z0-9]*";
             String lpPattern = @"\(";
             String rpPattern = @"\)";
             String numbers = @"[0-9]";
@@ -44,7 +32,6 @@ namespace SpreadsheetUtilities
             String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
 
             // Pattern finds ( or operators 
-           // String lpOpersPattern = String.Format("({0}) | ({1})", lpPattern, opPattern);
             String lpOpersPattern = @"^[\+\-*\/\(]$";
             // Pattern finds (, a variable, a number 
             String lpVarsNums = String.Format("({0}) | ({1}) | ({2}) | ({3})", lpPattern, varPattern, numbers, doublePattern);
@@ -64,7 +51,7 @@ namespace SpreadsheetUtilities
             String lastToken = "";
             String previousTemp = "";
             String currentTemp = "";
-            
+
             // Loop through tokens to make sure there are no invalid tokens 
             foreach (String temp in tokens)
             {
@@ -72,13 +59,31 @@ namespace SpreadsheetUtilities
                 previousTemp = currentTemp;
                 currentTemp = temp;
 
+                // Perform normalizer 
+                if (Regex.IsMatch(temp, varPattern, RegexOptions.IgnorePatternWhitespace))
+                {
+                    currentTemp = N(temp);
+
+                    if (!Regex.IsMatch(currentTemp, varPattern, RegexOptions.IgnorePatternWhitespace))
+                    {
+                        throw new FormulaFormatException("Invalid variable after normalize");
+                    }
+
+                    if (!V(currentTemp))
+                    {
+                        throw new FormulaFormatException("hell");
+                    }
+                    normalizedVaraibles.Add(currentTemp);
+                }
+
+
                 // Grab first token 
                 if (totalTokens == 0)
                     firstToken = temp;
 
                 // Grab last token 
                 lastToken = temp;
-                
+
                 // Increment token counter 
                 totalTokens++;
 
@@ -102,6 +107,8 @@ namespace SpreadsheetUtilities
                 if (Regex.IsMatch(previousTemp, cpVarsNums, RegexOptions.IgnorePatternWhitespace))
                     if (!Regex.IsMatch(currentTemp, cpOpers, RegexOptions.IgnorePatternWhitespace))
                         throw new FormulaFormatException("Token following ) or operator is invalid");
+
+                evaluateFormula += currentTemp;
             }
 
             // There must be at least one token 
@@ -123,18 +130,30 @@ namespace SpreadsheetUtilities
                 throw new FormulaFormatException("Formula does not end with a valid char");
 
             // If the formula satisfies all requirements, store it in instance variable 
-            evaluateFormula = formula;
+            //evaluateFormula = formula;
 
         }
 
+        public delegate string Normalizer(string n);
+        public delegate bool Validator(string s);
+
         /// <summary>
-        /// A Lookup function is one that maps some strings to double values.  Given a string,
-        /// such a function can either return a double (meaning that the string maps to the
-        /// double) or throw an IllegalArgumentException (meaning that the string is unmapped.
-        /// Exactly how a Lookup function decides which strings map to doubles and which
-        /// don't is up to the implementation of that function.
+        /// Creates a Formula from a string that consists of a standard infix expression composed
+        /// from non-negative floating-point numbers (using standard C# syntax for double/int literals), 
+        /// variable symbols (one or more letters followed by one or more digits), left and right
+        /// parentheses, and the four binary operator symbols +, -, *, and /.  White space is
+        /// permitted between tokens, but is not required.
+        /// 
+        /// An example of a valid parameter to this constructor is "2.5e9 + x5 / 17".
+        /// Examples of invalid parameters are "x", "-5.3", and "2 5 + 3";
+        /// 
+        /// If the formula is syntacticaly invalid, throws a FormulaFormatException with an 
+        /// explanatory Message.
         /// </summary>
-        public delegate double Lookup(string s);
+        public Formula(String formula)
+            :this(formula, x => x, d => true)
+        {
+        }
 
         /// <summary>
         /// Evaluates this Formula, using lookup to determine the values of variables.  
@@ -151,7 +170,7 @@ namespace SpreadsheetUtilities
             Stack<string> operators = new Stack<string>();
 
             // Regex Patterns 
-            String varPattern = @"[a-zA-Z]+\d+";
+            String varPattern = @"[a-zA-Z_][a-zA-Z0-9]*";
             String lpPattern = @"\(";
             String rpPattern = @"\)";
             String opPlusMinus = @"[\+\-]";
@@ -456,7 +475,7 @@ namespace SpreadsheetUtilities
             String lpPattern = @"\(";
             String rpPattern = @"\)";
             String opPattern = @"[\+\-*/]";
-            String varPattern = @"[a-zA-Z]+\d+";
+            String varPattern = @"[a-zA-Z_][a-zA-Z0-9]*";
             String doublePattern = @"(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?";
             String spacePattern = @"\s+";
 
@@ -472,6 +491,11 @@ namespace SpreadsheetUtilities
                     yield return s;
                 }
             }
+        }
+
+        public IEnumerable<String> GetVariables()
+        {
+            return normalizedVaraibles;
         }
     }
 
@@ -502,4 +526,14 @@ namespace SpreadsheetUtilities
         {
         }
     }
+
+    /// <summary>
+    /// A Lookup function is one that maps some strings to double values.  Given a string,
+    /// such a function can either return a double (meaning that the string maps to the
+    /// double) or throw an IllegalArgumentException (meaning that the string is unmapped.
+    /// Exactly how a Lookup function decides which strings map to doubles and which
+    /// don't is up to the implementation of that function.
+    /// </summary>
+    public delegate double Lookup(string s);
+
 }

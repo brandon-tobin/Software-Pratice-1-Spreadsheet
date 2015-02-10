@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpreadsheetUtilities;
+using Formulas;
+using System.Collections.Generic;
 
 namespace TestCases
 {
@@ -13,7 +14,7 @@ namespace TestCases
     public class UnitTests
     {
         [TestMethod]
-        [ExpectedException(typeof(FormulaFormatException))]
+       // [ExpectedException(typeof(FormulaFormatException))]
         public void Construct1()
         {
             Formula f = new Formula("x");
@@ -152,6 +153,32 @@ namespace TestCases
         {
             Formula f = new Formula("20 - (x3 / 2)");
             Assert.AreEqual(f.Evaluate(s => 40), 0, 1e-6);
+        }
+
+        [TestMethod]
+        public void Normalize1()
+        {
+            Formula f = new Formula("20 - (x3 / 2)", x => x.ToUpper(), x => true);
+            IEnumerable<String> test = f.GetVariables();
+            List<String> variables = new List<String>();
+            foreach (String temp in test)
+            {
+                variables.Add(temp);
+            }
+            Assert.AreEqual(variables.Contains("X3"), true);
+        }
+
+        [TestMethod]
+        public void Normalize2()
+        {
+            Formula f = new Formula("20 - (x3 / 2)", x => x.ToUpper(), x => true);
+            IEnumerable<String> test = f.GetVariables();
+            List<String> variables = new List<String>();
+            foreach (String temp in test)
+            {
+                variables.Add(temp);
+            }
+            Assert.AreEqual(variables.Contains("x3"), false);
         }
     }
 }

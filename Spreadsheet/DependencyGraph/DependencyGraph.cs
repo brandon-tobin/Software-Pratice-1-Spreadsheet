@@ -249,8 +249,13 @@ namespace Dependencies
                 dependeeToDependent.Remove(s);
 
                 foreach (String temp in toBeDeleted)
-                {
-                    dependentToDependee.Remove(temp);
+                 {
+                     HashSet<String> tempDependents = new HashSet<String>();
+                     if (dependentToDependee.TryGetValue(temp, out tempDependents))
+                     {
+                         tempDependents.Remove(s);
+                         size--;
+                     }
                 }
             }
 
@@ -265,10 +270,12 @@ namespace Dependencies
                 if (dependentToDependee.TryGetValue(temp, out exists))
                 {
                     dependentToDependee[temp].Add(s);
+                    size++;
                 }
                 else
                 {
                     dependentToDependee.Add(temp, param);
+                    size++;
                 }
             }
         }
@@ -288,12 +295,17 @@ namespace Dependencies
             HashSet<String> toBeDeleted = new HashSet<String>();
             if (dependentToDependee.TryGetValue(s, out toBeDeleted))
             {
+                size -= toBeDeleted.Count;
                 dependentToDependee.Remove(s);
 
                 foreach (String temp in toBeDeleted)
                 {
-                    dependeeToDependent.Remove(temp);
-                    size--;
+                    HashSet<String> tempDependees = new HashSet<String>();
+                    if (dependentToDependee.TryGetValue(temp, out tempDependees))
+                    {
+                        tempDependees.Remove(s);
+                        size--;
+                    }
                 }
             }
 
