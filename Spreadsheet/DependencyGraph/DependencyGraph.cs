@@ -253,7 +253,9 @@ namespace Dependencies
                      HashSet<String> tempDependents = new HashSet<String>();
                      if (dependentToDependee.TryGetValue(temp, out tempDependents))
                      {
+                         dependentToDependee.Remove(temp);
                          tempDependents.Remove(s);
+                         dependentToDependee.Add(temp, tempDependents);
                          size--;
                      }
                 }
@@ -301,15 +303,18 @@ namespace Dependencies
                 foreach (String temp in toBeDeleted)
                 {
                     HashSet<String> tempDependees = new HashSet<String>();
-                    if (dependentToDependee.TryGetValue(temp, out tempDependees))
+                    if (dependeeToDependent.TryGetValue(temp, out tempDependees))
                     {
+                        dependeeToDependent.Remove(temp);
                         tempDependees.Remove(s);
+                        dependeeToDependent.Add(temp, tempDependees);
                         size--;
                     }
                 }
             }
 
             dependentToDependee.Add(s, newDepees);
+            size += newDepees.Count;
 
             HashSet<String> param = new HashSet<String>();
             param.Add(s);
