@@ -18,13 +18,22 @@ namespace Formulas
     public class Formula
     {
         // Instance variables 
+        // eValuateFormula will hold the formula itself for being evaluated after 
+        // it is built by the constructor 
         String evaluateFormula;
+        // normalizedVariables will keep track of the variables that have been 
+        // normalized in the constructor 
         HashSet<String> normalizedVaraibles = new HashSet<String>();
 
+        /// <summary>
+        /// This constructor takes a String formula, Normalizer N, and Validator V. 
+        /// It will construct a formula and apply the normalizer and validator that was sent 
+        /// in by the caller. 
+        /// </summary>
         public Formula(String formula, Normalizer N, Validator V)
         {
             // Regex Patterns 
-            String varPattern = @"[a-zA-Z_][a-zA-Z0-9]*";
+            String varPattern = @"^[a-zA-Z_][a-zA-Z0-9]*$";
             String lpPattern = @"\(";
             String rpPattern = @"\)";
             String numbers = @"[0-9]";
@@ -69,13 +78,13 @@ namespace Formulas
                         throw new FormulaFormatException("Invalid variable after normalize");
                     }
 
+                    // Perform validator 
                     if (!V(currentTemp))
                     {
-                        throw new FormulaFormatException("hell");
+                        throw new FormulaFormatException("Token validator failed");
                     }
                     normalizedVaraibles.Add(currentTemp);
                 }
-
 
                 // Grab first token 
                 if (totalTokens == 0)
@@ -86,7 +95,6 @@ namespace Formulas
 
                 // Increment token counter 
                 totalTokens++;
-
 
                 // Count parens in the formula 
                 if (temp.Equals("("))
@@ -128,13 +136,21 @@ namespace Formulas
             String closingPattern = String.Format("({0}) | ({1}) | ({2}) | ({3})", rpPattern, varPattern, numbers, doublePattern);
             if (!Regex.IsMatch(lastToken, closingPattern, RegexOptions.IgnorePatternWhitespace))
                 throw new FormulaFormatException("Formula does not end with a valid char");
-
-            // If the formula satisfies all requirements, store it in instance variable 
-            //evaluateFormula = formula;
-
         }
 
+        /// <summary>
+        /// The Normalizer delegate will take a method passed in by the caller 
+        /// to be used in the constructor. This delegate is added to allow the user 
+        /// to place more restrictions on the variables in the formula.
+        /// </summary>
         public delegate string Normalizer(string n);
+
+        /// <summary>
+        /// The Validator delegate will take a method passed in by the caller 
+        /// to be used in the constructor to check if the variable is still 
+        /// valid after being normalized. The Validator also allows the user to place 
+        /// more restrictions on the variables in the formula. 
+        /// </summary>
         public delegate bool Validator(string s);
 
         /// <summary>
@@ -528,7 +544,7 @@ namespace Formulas
     }
 
     /// <summary>
-    /// A Lookup function is one that maps some strings to double values.  Given a string,
+    /// A function is one that maps some strings to double values.  Given a string,
     /// such a function can either return a double (meaning that the string maps to the
     /// double) or throw an IllegalArgumentException (meaning that the string is unmapped.
     /// Exactly how a Lookup function decides which strings map to doubles and which

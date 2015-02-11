@@ -14,10 +14,10 @@ namespace TestCases
     public class UnitTests
     {
         [TestMethod]
-       // [ExpectedException(typeof(FormulaFormatException))]
+        [ExpectedException(typeof(FormulaFormatException))]
         public void Construct1()
         {
-            Formula f = new Formula("x");
+            Formula f = new Formula("$xaedfe");
         }
 
         [TestMethod]
@@ -156,6 +156,28 @@ namespace TestCases
         }
 
         [TestMethod]
+        [ExpectedException(typeof(FormulaEvaluationException))]
+        public void Evaluate11()
+        {
+            Formula f = new Formula("6 / x");
+            Assert.AreEqual(f.Evaluate(s => 0), 0, 1e-6);
+        }
+
+        [TestMethod]
+        public void Evaluate12()
+        {
+            Formula f = new Formula("6 / 2 + 1");
+            Assert.AreEqual(f.Evaluate(s => 0), 4, 1e-6);
+        }
+
+        [TestMethod()]
+        public void Evaluate13()
+        {
+            Formula f = new Formula("(5 + X1) / (X1 - 3)");
+            Assert.AreEqual(f.Evaluate(s => 1), -3, 1e-6);
+        }
+        
+        [TestMethod]
         public void Normalize1()
         {
             Formula f = new Formula("20 - (x3 / 2)", x => x.ToUpper(), x => true);
@@ -179,6 +201,20 @@ namespace TestCases
                 variables.Add(temp);
             }
             Assert.AreEqual(variables.Contains("x3"), false);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Normalize3()
+        {
+            Formula f = new Formula("20 - (x3 / 2)", x => x.Insert(0,"$"), x => true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Validate1()
+        {
+            Formula f = new Formula("20 - (x3 / 2)", x => x.Insert(0, "_"), x =>  x.Length > 10? true : false);
         }
     }
 }
