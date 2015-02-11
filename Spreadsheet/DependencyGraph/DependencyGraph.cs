@@ -42,7 +42,9 @@ namespace Dependencies
     public class DependencyGraph
     {
         // Instance variable for holding the two dictionaries that will make up the dependency graph 
+        // dependeeToDependent stores dependencies in the form (s, r)
         Dictionary<String, HashSet<String>> dependeeToDependent;
+        // dependentToDependee stores dependencies in the form (r, s)
         Dictionary<String, HashSet<String>> dependentToDependee;
         // Size counter for keeping track of how big the DG is
         int size = 0;
@@ -52,8 +54,8 @@ namespace Dependencies
         /// </summary>
         public DependencyGraph()
         {
-            // Initialize dictionaries taking parameters (string, List<String>)
-            // A Dictionary represents the dependency between the string and it's dependents which are stored in the List 
+            // Initialize dictionaries taking parameters (string, HashSet<String>)
+            // A Dictionary represents the dependency between the string and it's dependents which are stored in the HashSet 
             dependeeToDependent = new Dictionary<String, HashSet<String>>();
             dependentToDependee = new Dictionary<String, HashSet<String>>();
         }
@@ -236,18 +238,23 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            // Store newDependents in the newDepends HashSet 
             HashSet<String> newDepends = new HashSet<String>();
             foreach (String temp in newDependents)
             {
                 newDepends.Add(temp);
             }
 
+            // Store the dependents of s into toBeDeleted to make deleting from 
+            // dependentToDependee easier 
             HashSet<String> toBeDeleted = new HashSet<String>();
             if (dependeeToDependent.TryGetValue(s, out toBeDeleted))
             {
                 size -= toBeDeleted.Count;
+                // Remove all dependencies from dependeeToDependent with dependee s
                 dependeeToDependent.Remove(s);
 
+                // Loop through and remove the dependencies from dependentToDependee 
                 foreach (String temp in toBeDeleted)
                  {
                      HashSet<String> tempDependents = new HashSet<String>();
@@ -261,14 +268,17 @@ namespace Dependencies
                 }
             }
 
+            // Add new dependencies to dependeeTodependent 
             dependeeToDependent.Add(s, newDepends);
             size += newDepends.Count;
 
+            // Add new dependencies to dependentToDependee 
             HashSet<String> param = new HashSet<String>();
             param.Add(s);
             foreach (String temp in newDepends)
             {
                 HashSet<String> exists = new HashSet<String>();
+                // If the key is already in the dictionary, add the value to the HashSet 
                 if (dependentToDependee.TryGetValue(temp, out exists))
                 {
                     dependentToDependee[temp].Add(s);
@@ -288,18 +298,23 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
+            // Store newDependees in newDepees 
             HashSet<String> newDepees = new HashSet<String>();
             foreach (String temp in newDependees)
             {
                 newDepees.Add(temp);
             }
 
+            // Store the dependees of s into toBeDeleted to make deleting from 
+            // dependeeToDependent easier 
             HashSet<String> toBeDeleted = new HashSet<String>();
             if (dependentToDependee.TryGetValue(s, out toBeDeleted))
             {
                 size -= toBeDeleted.Count;
+                // Remove s from dependentToDependee 
                 dependentToDependee.Remove(s);
 
+                // Loop through and remove dependecies from dependeeToDependent 
                 foreach (String temp in toBeDeleted)
                 {
                     HashSet<String> tempDependees = new HashSet<String>();
@@ -312,15 +327,18 @@ namespace Dependencies
                     }
                 }
             }
-
+            
+            // Add the new dependencies to dependentToDependee 
             dependentToDependee.Add(s, newDepees);
             size += newDepees.Count;
 
+            // Add the new dependencies to dependeeToDependent 
             HashSet<String> param = new HashSet<String>();
             param.Add(s);
             foreach (String temp in newDepees)
             {
                 HashSet<String> exists = new HashSet<String>();
+                // If the key already exists, add s to the value 
                 if (dependeeToDependent.TryGetValue(temp, out exists))
                 {
                     dependeeToDependent[temp].Add(s);
