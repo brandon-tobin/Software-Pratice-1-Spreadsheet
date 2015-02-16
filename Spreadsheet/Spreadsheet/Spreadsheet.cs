@@ -35,7 +35,7 @@ namespace SS
             {
                 Cell temp;
                 spreadsheetCells.TryGetValue(name, out temp);
-                return temp.GetCellContents();
+                return temp.cellContents;
             }
             else
             {
@@ -51,7 +51,24 @@ namespace SS
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
             if (Regex.IsMatch(name, cellPattern))
             {
+                Cell toBeAdded = new Cell();
+                toBeAdded.cellName = name;
+                toBeAdded.cellContents = number.ToString();
+                toBeAdded.cellValue = number.ToString();
 
+                spreadsheetCells.Add(name, toBeAdded);
+
+                HashSet<String> returnvalues = new HashSet<String>();
+                returnvalues.Add(name);
+                //HashSet<String> dependents = new HashSet<String>();
+                // Direct dependents 
+                IEnumerable dependents = dependencies.GetDependees(name);
+                foreach (String temp in dependents)
+                {
+                    returnvalues.Add(temp);
+                }
+
+                return returnvalues;
             }
             else
             {
@@ -78,20 +95,25 @@ namespace SS
 
         public class Cell
         {
-            String cellName;
-            String cellContents;
-            String cellValue;
-            private Cell(String name, String contents)
-            {
-                cellName = name;
-                cellContents = contents;
-                cellValue = "";
-            }
+          //  String cellName;
+            //String cellContents;
+           // String cellValue;
+           // private Cell(String name, String contents)
+           // {
+               // cellName = name;
+               // cellContents = contents;
+                //cellValue = "";
+           // }
 
-            public String GetCellContents()
-            {
-                return cellContents;
-            }
+            public String cellContents {get; set;}
+            public String cellValue {get; set;}
+            public String cellName {get; set;}
+
+
+            //public String GetCellContents()
+            //{
+             //   return cellContents;
+            //}
         }
     }
 
