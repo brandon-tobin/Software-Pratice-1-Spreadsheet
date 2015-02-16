@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Formulas;
 using Dependencies;
+using System.Collections;
 
 namespace SS
 {
@@ -12,13 +13,11 @@ namespace SS
     {
         public Spreadsheet()
         {
-           
+            Dictionary<String, Cell> cells = new Dictionary<String, Cell>();
+            DependencyGraph dependencies = new DependencyGraph();
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
-            
-            
-            
             throw new NotImplementedException();
         }
 
@@ -45,6 +44,19 @@ namespace SS
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
             throw new NotImplementedException();
+        }
+    }
+
+     class Cell
+    {
+        String cellName;
+        String cellContents;
+        String cellValue;
+        private Cell(String name, String contents)
+        {
+            cellName = name;
+            cellContents = contents;
+            cellValue = "";
         }
     }
 }
