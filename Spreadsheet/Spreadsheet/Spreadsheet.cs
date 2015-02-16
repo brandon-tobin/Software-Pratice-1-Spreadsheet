@@ -6,29 +6,58 @@ using System.Threading.Tasks;
 using Formulas;
 using Dependencies;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace SS
 {
     public class Spreadsheet : AbstractSpreadsheet
     {
+        Dictionary<String, Cell> spreadsheetCells;
+        DependencyGraph dependencies;
         public Spreadsheet()
         {
-            Dictionary<String, Cell> cells = new Dictionary<String, Cell>();
-            DependencyGraph dependencies = new DependencyGraph();
+            spreadsheetCells = new Dictionary<String, Cell>();
+            dependencies = new DependencyGraph();
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+           // List<String> cellNames = new List<String>();
+           // cellNames = spreadsheetCells.Keys;
+            return spreadsheetCells.Keys;
         }
 
         public override object GetCellContents(string name)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
+            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            if (Regex.IsMatch(name, cellPattern))
+            {
+                Cell temp;
+                spreadsheetCells.TryGetValue(name, out temp);
+                return temp.GetCellContents();
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
+
         }
 
         public override ISet<string> SetCellContents(string name, double number)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            // Check validity of name 
+            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            if (Regex.IsMatch(name, cellPattern))
+            {
+
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
+
         }
 
         public override ISet<string> SetCellContents(string name, string text)
@@ -45,18 +74,25 @@ namespace SS
         {
             throw new NotImplementedException();
         }
-    }
 
-     class Cell
-    {
-        String cellName;
-        String cellContents;
-        String cellValue;
-        private Cell(String name, String contents)
+
+        public class Cell
         {
-            cellName = name;
-            cellContents = contents;
-            cellValue = "";
+            String cellName;
+            String cellContents;
+            String cellValue;
+            private Cell(String name, String contents)
+            {
+                cellName = name;
+                cellContents = contents;
+                cellValue = "";
+            }
+
+            public String GetCellContents()
+            {
+                return cellContents;
+            }
         }
     }
+
 }
