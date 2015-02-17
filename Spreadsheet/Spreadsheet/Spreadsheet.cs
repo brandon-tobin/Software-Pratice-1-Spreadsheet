@@ -79,17 +79,106 @@ namespace SS
 
         public override ISet<string> SetCellContents(string name, string text)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            // Check validity of text 
+            if (text.Equals(""))
+            {
+                throw new ArgumentNullException();
+            }
+            // Check validity of name 
+            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            if (Regex.IsMatch(name, cellPattern))
+            {
+                Cell toBeAdded = new Cell();
+                toBeAdded.cellName = name;
+                toBeAdded.cellContents = text;
+                toBeAdded.cellValue = text;
+
+                spreadsheetCells.Add(name, toBeAdded);
+
+                HashSet<String> returnvalues = new HashSet<String>();
+                returnvalues.Add(name);
+                // Direct dependents 
+                IEnumerable dependents = dependencies.GetDependees(name);
+                foreach (String temp in dependents)
+                {
+                    returnvalues.Add(temp);
+                }
+
+                return returnvalues;
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
         }
 
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            if (formula.Equals(""))
+            {
+                throw new ArgumentNullException();
+            }
+            // Check validity of name 
+            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            if (Regex.IsMatch(name, cellPattern))
+            {
+                // if check for circular dependency 
+
+                // else 
+                Cell toBeAdded = new Cell();
+                toBeAdded.cellName = name;
+                toBeAdded.cellContents = formula.ToString();
+                //toBeAdded.cellValue = text;
+
+                spreadsheetCells.Add(name, toBeAdded);
+
+                HashSet<String> returnvalues = new HashSet<String>();
+                returnvalues.Add(name);
+                // Direct dependents 
+                IEnumerable dependents = dependencies.GetDependees(name);
+                foreach (String temp in dependents)
+                {
+                    returnvalues.Add(temp);
+                }
+
+                return returnvalues;
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
         }
 
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            if (name.Equals(""))
+            {
+                throw new ArgumentNullException();
+            }
+            else
+            {
+                // Check validity of name 
+                String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+                if (Regex.IsMatch(name, cellPattern))
+                {
+                    HashSet<String> returnvalues = new HashSet<String>();
+                    // Direct dependents 
+                    IEnumerable dependents = dependencies.GetDependees(name);
+                    foreach (String temp in dependents)
+                    {
+                        returnvalues.Add(temp);
+                    }
+
+                    return returnvalues;
+                }
+                else
+                {
+                    throw new InvalidNameException();
+                }
+            }
         }
 
 
