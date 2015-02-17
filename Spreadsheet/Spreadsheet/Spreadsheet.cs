@@ -55,8 +55,8 @@ namespace SS
             {
                 Cell toBeAdded = new Cell();
                 toBeAdded.cellName = name;
-                toBeAdded.cellContents = number.ToString();
-                toBeAdded.cellValue = number.ToString();
+                toBeAdded.cellContents = number;
+                toBeAdded.cellValue = number;
 
                 spreadsheetCells.Add(name, toBeAdded);
 
@@ -147,32 +147,44 @@ namespace SS
             if (Regex.IsMatch(name, cellPattern))
             {
                 // if check for circular dependency 
+                IEnumerable variables = formula.GetVariables();
                 try
                 {
-
+                    foreach (String variable in variables)
+                    {
+                        GetCellsToRecalculate(variable);
+                    }
                 }
                 catch
                 {
-
+                    throw new CircularException();
                 }
-                // else 
+
                 Cell toBeAdded = new Cell();
                 toBeAdded.cellName = name;
-                toBeAdded.cellContents = formula.ToString();
-                //toBeAdded.cellValue = text;
-
+                toBeAdded.cellContents = formula;
                 spreadsheetCells.Add(name, toBeAdded);
+
 
                 HashSet<String> returnvalues = new HashSet<String>();
                 returnvalues.Add(name);
-                // Direct dependents 
-                IEnumerable dependents = dependencies.GetDependees(name);
+
+                HashSet<String> returnValues = new HashSet<String>();
+                IEnumerable dependents = GetCellsToRecalculate(name);
                 foreach (String temp in dependents)
                 {
-                    returnvalues.Add(temp);
+                    returnValues.Add(temp);
                 }
 
-                return returnvalues;
+                return returnValues;
+                // Direct dependents 
+                //IEnumerable dependents = dependencies.GetDependees(name);
+                //foreach (String temp in dependents)
+                //{
+                //    returnvalues.Add(temp);
+                //}
+
+                //return returnvalues;
             }
             else
             {
@@ -222,8 +234,8 @@ namespace SS
                 //cellValue = "";
            // }
 
-            public String cellContents {get; set;}
-            public String cellValue {get; set;}
+            public Object cellContents {get; set;}
+            public Object cellValue {get; set;}
             public String cellName {get; set;}
 
 
