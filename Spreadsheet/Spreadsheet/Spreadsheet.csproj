@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractSpreadsheet.cs" />
-    <Compile Include="Dictionary.cs" />
     <Compile Include="Spreadsheet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -26,7 +26,10 @@ namespace SS
 
         public override object GetCellContents(string name)
         {
-           // throw new NotImplementedException();
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -50,6 +53,11 @@ namespace SS
         public override ISet<string> SetCellContents(string name, double number)
         {
             // Check validity of name 
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
+
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -68,22 +76,6 @@ namespace SS
                 }
 
                 return returnValues;
-              //  returnvalues.Add(name);
-
-                // Direct dependents 
-                //IEnumerable dependents = dependencies.GetDependees(name);
-                //foreach (String temp in dependents)
-                //{
-                //    returnvalues.Add(temp);
-                //}
-
-                //// Indirect dependents 
-                //IEnumerable indirects = GetCellsToRecalculate(name);
-                //foreach (String temp in indirects)
-                //{
-                //    returnvalues.Add(temp);
-                //}
-                //return returnvalues;
             }
             else
             {
@@ -95,11 +87,15 @@ namespace SS
         public override ISet<string> SetCellContents(string name, string text)
         {
             // Check validity of text 
-            if (text.Equals(""))
+            if (text == null)
             {
                 throw new ArgumentNullException();
             }
             // Check validity of name 
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -119,17 +115,6 @@ namespace SS
 
                 return returnValues;
             }
-
-              //  returnvalues.Add(name);
-            //    // Direct dependents 
-            //    IEnumerable dependents = dependencies.GetDependees(name);
-            //    foreach (String temp in dependents)
-            //    {
-            //        returnvalues.Add(temp);
-            //    }
-
-            //    return returnvalues;
-            //}
             else
             {
                 throw new InvalidNameException();
@@ -138,11 +123,15 @@ namespace SS
 
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            if (formula.Equals(""))
+            if (formula == null)
             {
                 throw new ArgumentNullException();
             }
             // Check validity of name 
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -165,12 +154,21 @@ namespace SS
                 toBeAdded.cellContents = formula;
                 spreadsheetCells.Add(name, toBeAdded);
 
+                //dependencies.AddDependency(name, )
 
-                HashSet<String> returnvalues = new HashSet<String>();
-                returnvalues.Add(name);
+                // Add to dependency Graph 
+                foreach (String variable in variables)
+                {
+
+                    dependencies.AddDependency(name, variable);
+                }
 
                 HashSet<String> returnValues = new HashSet<String>();
+                returnValues.Add(name);
+
+               // HashSet<String> returnValues = new HashSet<String>();
                 IEnumerable dependents = GetCellsToRecalculate(name);
+               // IEnumerable dependents = dependencies.GetDependents(name);
                 foreach (String temp in dependents)
                 {
                     returnValues.Add(temp);
@@ -206,7 +204,7 @@ namespace SS
                 {
                     HashSet<String> returnvalues = new HashSet<String>();
                     // Direct dependents 
-                    IEnumerable dependents = dependencies.GetDependees(name);
+                    IEnumerable dependents = dependencies.GetDependents(name);
                     foreach (String temp in dependents)
                     {
                         returnvalues.Add(temp);
@@ -224,25 +222,9 @@ namespace SS
 
         public class Cell
         {
-          //  String cellName;
-            //String cellContents;
-           // String cellValue;
-           // private Cell(String name, String contents)
-           // {
-               // cellName = name;
-               // cellContents = contents;
-                //cellValue = "";
-           // }
-
             public Object cellContents {get; set;}
             public Object cellValue {get; set;}
             public String cellName {get; set;}
-
-
-            //public String GetCellContents()
-            //{
-             //   return cellContents;
-            //}
         }
     }
 
