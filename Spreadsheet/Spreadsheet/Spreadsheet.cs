@@ -80,6 +80,12 @@ namespace SS
             // Make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
+                // If the cell already exists, remove it 
+                if (spreadsheetCells.ContainsKey(name))
+                {
+                    spreadsheetCells.Remove(name);
+                }
+                
                 // Create new cell
                 Cell toBeAdded = new Cell();
                 // Set cellName equal to name
@@ -139,6 +145,12 @@ namespace SS
             // Make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
+                // If the cell already exists, remove it 
+                if (spreadsheetCells.ContainsKey(name))
+                {
+                    spreadsheetCells.Remove(name);
+                }
+
                 // Create new cell object 
                 Cell toBeAdded = new Cell();
                 // Set cellName equal to name 
@@ -193,11 +205,22 @@ namespace SS
             }
             // Set up regex pattern for checking cell names 
             String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+
+            // Parse the formula to get the variables 
+            IEnumerable variables = formula.GetVariables();
+
             // Check to make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
-                // Parse the formula to get the variables 
-                IEnumerable variables = formula.GetVariables();
+                // If the cell already exists, remove it 
+                if (spreadsheetCells.ContainsKey(name))
+                {
+                    spreadsheetCells.Remove(name);
+                    foreach (String variable in variables) 
+                    {
+                        dependencies.RemoveDependency(name, variable);
+                    }
+                }
             
                 // Check for circular dependencies 
                 try

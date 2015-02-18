@@ -431,8 +431,77 @@ namespace SpreadsheetTests
             Formula b1 = new Formula("A1*2");
             sheet.SetCellContents("B1", b1);
             sheet.SetCellContents("F01", b1);
+        }
 
-            
+        
+
+        
+        [TestMethod]
+        public void SetCellContentsTwiceString()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetCellContents("A1", 32);
+            sheet.SetCellContents("A1", "testing");
+
+            Object actualContents = sheet.GetCellContents("A1");
+            Object expectedContents = "testing";
+
+            Assert.AreEqual(expectedContents, actualContents);
+        }
+
+        [TestMethod]
+        public void SetCellContentsTwiceNumber()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetCellContents("A1", 321);
+            sheet.SetCellContents("A1", 554);
+
+            Object actualContents = sheet.GetCellContents("A1");
+            double expected = 554.0;            
+            Assert.AreEqual(expected, actualContents);
+        }
+
+        [TestMethod]
+        public void SetCellContentsChangeTypes()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetCellContents("AA212", "computing");
+            sheet.SetCellContents("AA212", 98.6);
+
+            Object actualContents = sheet.GetCellContents("AA212");
+            Double expected = 98.6;
+
+            Assert.AreEqual(expected, actualContents);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetDirectDependentsTest1()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            var privateObject = new PrivateObject(sheet);
+            privateObject.Invoke("GetDirectDependents", new String[1] { null });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetDirectDependentsTest2()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            var privateObject = new PrivateObject(sheet);
+            privateObject.Invoke("GetDirectDependents", new String[1] { "5463" });
+        }
+
+        [TestMethod]
+        public void SetCellContentsTwiceFormula()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula a1 = new Formula("B2+5");
+            sheet.SetCellContents("A1", a1);
+            Formula b1 = new Formula("B7+21");
+            sheet.SetCellContents("A1", b1);
+
+            Object actual = sheet.GetCellContents("A1");       
         }
     }
 }
