@@ -315,7 +315,84 @@ namespace SpreadsheetTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
         public void SetCellContentsStringFormula1()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula a1 = new Formula("2+5");
+            sheet.SetCellContents("A1", a1);
+            String name = null;
+            sheet.SetCellContents(name, a1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetCellContentsStringFormula2()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula a1 = new Formula("2+5");
+            sheet.SetCellContents("A1", a1);
+            Formula n = null;
+            sheet.SetCellContents("B1", n);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void SetCellContentsStringFormula3()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula a1 = new Formula("C1");
+            sheet.SetCellContents("A1", a1);
+            Formula b1 = new Formula("A1");
+            sheet.SetCellContents("B1", b1);
+            Formula c1 = new Formula("B1");
+            sheet.SetCellContents("C1", c1);
+        }
+
+        [TestMethod]
+        public void SetCellContentsStringFormula4()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula b1 = new Formula("A1*2");
+            sheet.SetCellContents("B1", b1);
+            Formula c1 = new Formula("B1 + A1");
+            sheet.SetCellContents("C1", c1);
+            IEnumerable dependents = sheet.SetCellContents("A1", 5);
+
+            HashSet<String> actualCellNames = new HashSet<String>();
+            foreach (String temp in dependents)
+            {
+                actualCellNames.Add(temp);
+            }
+
+            HashSet<String> expectedCellNames = new HashSet<String>();
+            expectedCellNames.Add("A1");
+            expectedCellNames.Add("B1");
+            expectedCellNames.Add("C1");
+
+            foreach (String expected in expectedCellNames)
+            {
+                Assert.IsTrue(actualCellNames.Contains(expected));
+            }
+
+            foreach (String actual in actualCellNames)
+            {
+                Assert.IsTrue(expectedCellNames.Contains(actual));
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void SetCellContentsStringFormula5()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula b1 = new Formula("A1*2");
+            sheet.SetCellContents("B1", b1);
+            sheet.SetCellContents("F01", b1);
+        }
+
+        [TestMethod]
+        public void SetCellContentsStringFormula6()
         {
             AbstractSpreadsheet sheet = new Spreadsheet();
             sheet.SetCellContents("A1", 2);
@@ -344,6 +421,18 @@ namespace SpreadsheetTests
             {
                 Assert.IsTrue(expectedCellNames.Contains(actual));
             }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetDirectDependents1()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            Formula b1 = new Formula("A1*2");
+            sheet.SetCellContents("B1", b1);
+            sheet.SetCellContents("F01", b1);
+
+            
         }
     }
 }
