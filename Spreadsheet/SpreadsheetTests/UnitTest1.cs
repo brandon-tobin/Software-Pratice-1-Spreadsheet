@@ -409,8 +409,7 @@ namespace SpreadsheetTests
 
             HashSet<String> expectedCellNames = new HashSet<String>();
             expectedCellNames.Add("C2");
-            expectedCellNames.Add("B1");
-            expectedCellNames.Add("A1");
+            
 
             foreach (String expected in expectedCellNames)
             {

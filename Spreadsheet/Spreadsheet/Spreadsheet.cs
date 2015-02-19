@@ -37,7 +37,7 @@ namespace SS
             {
                 Cell temp;
                 spreadsheetCells.TryGetValue(tempKey, out temp);
-                if (temp.cellContents != "")
+                if (!temp.cellContents.Equals(""))
                 {
                     returnValues.Add(tempKey);
                 }
@@ -248,7 +248,7 @@ namespace SS
 
                     GetCellsToRecalculate(name);
                 }
-                catch (CircularException e)
+                catch (CircularException)
                 {
                     throw new CircularException();
                 }
@@ -315,7 +315,8 @@ namespace SS
                     // Create returnvalues for a return set 
                     HashSet<String> returnvalues = new HashSet<String>();
                     // Get direct dependents by calling GetDependents on dependencies 
-                    IEnumerable dependents = dependencies.GetDependents(name);
+                    IEnumerable dependents = dependencies.GetDependees(name);
+                   // IEnumerable dependents = dependencies.GetDependents(name);
                     foreach (String temp in dependents)
                     {
                         // Add direct dependents to returnValues 
