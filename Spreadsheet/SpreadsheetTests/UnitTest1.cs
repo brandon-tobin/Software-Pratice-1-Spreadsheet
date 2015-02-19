@@ -179,7 +179,7 @@ namespace SpreadsheetTests
 
             HashSet<String> expectedCellNames = new HashSet<String>();
             expectedCellNames.Add("B1");
-           
+
             foreach (String expected in expectedCellNames)
             {
                 Assert.IsTrue(actualCellNames.Contains(expected));
@@ -198,7 +198,7 @@ namespace SpreadsheetTests
             sheet.SetCellContents("A1", 2);
             Formula b1 = new Formula("A1");
             sheet.SetCellContents("B1", b1);
-            IEnumerable dependents = sheet.SetCellContents("C1",102);
+            IEnumerable dependents = sheet.SetCellContents("C1", 102);
 
             HashSet<String> actualCellNames = new HashSet<String>();
             foreach (String temp in dependents)
@@ -237,7 +237,7 @@ namespace SpreadsheetTests
             AbstractSpreadsheet sheet = new Spreadsheet();
             String text = null;
             sheet.SetCellContents("A1", text);
-          
+
         }
 
         [TestMethod]
@@ -433,9 +433,9 @@ namespace SpreadsheetTests
             sheet.SetCellContents("F01", b1);
         }
 
-        
 
-        
+
+
         [TestMethod]
         public void SetCellContentsTwiceString()
         {
@@ -457,7 +457,7 @@ namespace SpreadsheetTests
             sheet.SetCellContents("A1", 554);
 
             Object actualContents = sheet.GetCellContents("A1");
-            double expected = 554.0;            
+            double expected = 554.0;
             Assert.AreEqual(expected, actualContents);
         }
 
@@ -501,7 +501,7 @@ namespace SpreadsheetTests
             Formula b1 = new Formula("B7+21");
             sheet.SetCellContents("A1", b1);
 
-            Object actual = sheet.GetCellContents("A1");       
+            Object actual = sheet.GetCellContents("A1");
         }
     }
 }

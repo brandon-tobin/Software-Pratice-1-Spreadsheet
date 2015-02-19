@@ -30,7 +30,18 @@ namespace SS
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
+            HashSet<String> returnValues = new HashSet<String>();
             // Return all key values in the spreadsheetCells dictionary 
+            IEnumerable keys = spreadsheetCells.Keys;
+            foreach (String tempKey in keys)
+            {
+                Cell temp;
+                spreadsheetCells.TryGetValue(tempKey, out temp);
+                if (temp.cellContents != "")
+                {
+                    returnValues.Add(tempKey);
+                }
+            }
             return spreadsheetCells.Keys;
         }
 
