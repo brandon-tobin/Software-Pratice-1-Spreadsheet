@@ -53,7 +53,7 @@ namespace SS
                 throw new InvalidNameException();
             }
             // Create regex pattern for checking cell names 
-            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
             // Make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -87,7 +87,7 @@ namespace SS
             }
 
             //Create regex pattern for checking cell names 
-            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
             // Make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -151,8 +151,13 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            // Check to see if text is empty 
+            if (text.Equals(""))
+            {
+                return new HashSet<String>();
+            }
             // Create regex pattern for checking cell names 
-            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
             // Make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
@@ -215,7 +220,7 @@ namespace SS
                 throw new InvalidNameException();
             }
             // Set up regex pattern for checking cell names 
-            String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
 
             // Parse the formula to get the variables 
             IEnumerable variables = formula.GetVariables();
@@ -303,7 +308,7 @@ namespace SS
             else
             {
                 // Create regex pattern for checking cell names
-                String cellPattern = @"[a-zA-Z]+[1-9]\d*";
+                String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
                 // Check if name is a valid cell name 
                 if (Regex.IsMatch(name, cellPattern))
                 {
