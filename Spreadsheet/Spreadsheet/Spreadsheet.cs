@@ -435,7 +435,14 @@ namespace SS
 
         public override void Save(System.IO.TextWriter dest)
         {
-            throw new NotImplementedException();
+            // Get all cell names 
+            IEnumerable cells = GetNamesOfAllNonemptyCells();
+
+            
+            foreach (String cellName in cells)
+            {
+
+            }
         }
 
         public override object GetCellValue(string name)
@@ -449,8 +456,8 @@ namespace SS
             // Normalize name 
             String normalName = name.ToUpper();
            
-            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
-            if (Regex.IsMatch(normalName, cellPattern) && isValidRegex.IsMatch(normalName))
+            // Check if name is valid 
+            if (NameIsValid(normalName))
             {
                 Cell temp = new Cell();
                 if (spreadsheetCells.TryGetValue(normalName, out temp))
@@ -472,7 +479,84 @@ namespace SS
 
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
-            throw new NotImplementedException();
+            // Check to see if content is null
+            if (content == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            // Check to see if name is null 
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
+
+            // Normalize name 
+            String normalName = name.ToUpper();
+
+            // Check to see if name is valid 
+            if (NameIsValid(normalName))
+            {
+                // If content parses as a double
+                double parsedContent;
+                if (double.TryParse(content, out parsedContent))
+                {
+                    return SetCellContents(normalName, parsedContent);
+                }
+
+                // If content begins with an = sign 
+                String equalPattern = @"^=";
+                if (Regex.IsMatch(content, equalPattern))
+                {
+                    String contentToBeParsed = content.Substring(1).ToUpper();
+                    
+                    // Try to parse into formula 
+                    Formula parsedFormula;
+                    try
+                    {
+                        parsedFormula = new Formula(contentToBeParsed);
+                    }
+                    catch (FormulaFormatException e)
+                    {
+                        throw e;
+                    }
+
+                    // Try to set contents of name to be formula, throw CircularException if needed
+                    try
+                    {
+                        return SetCellContents(name, parsedFormula);
+                    }
+                    catch (CircularException e)
+                    {
+                        throw e;
+                    }
+                }
+
+                // Content should just be a string since it isn't a formula or double 
+                else
+                {
+                    return SetCellContents(name, content);
+                }
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
+
+        }
+
+        public bool NameIsValid(String name)
+        {
+            // Check the validity of name 
+            String cellPattern = @"^[A-Z]+[1-9]\d*$";
+            if (Regex.IsMatch(name, cellPattern) && isValidRegex.IsMatch(name))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
