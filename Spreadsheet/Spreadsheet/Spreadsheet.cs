@@ -228,32 +228,13 @@ namespace SS
             // Check to make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
+                // Get features of cell prior to removing it in case there is a circular dependency 
                 Cell beforeCircleCheck = new Cell();
                 Object contents = new Object();
                 if (spreadsheetCells.TryGetValue(name, out beforeCircleCheck))
                 {
                     contents = beforeCircleCheck.cellContents;
                 }
-
-                // Check for circular dependencies 
-               /* try
-                {
-                    foreach (String variable in variables)
-                    {
-                        GetCellsToRecalculate(variable);
-                    }
-
-                    GetCellsToRecalculate(name);
-                }
-                catch (CircularException e)
-                {
-                    // beforeCircleCheck.cellContents = contents;
-                    spreadsheetCells.Add(name, beforeCircleCheck);
-                    throw e;
-                }*/
-
-
-               
 
                 // If the cell already exists, remove it 
                 if (spreadsheetCells.ContainsKey(name))
@@ -264,9 +245,6 @@ namespace SS
                         dependencies.RemoveDependency(name, variable);
                     }
                 }
-                
-                
-                
 
                 // Create new cell object 
                 Cell toBeAdded = new Cell();
@@ -274,7 +252,6 @@ namespace SS
                 toBeAdded.cellName = name;
                 // Set cellContents eequal to formula 
                 toBeAdded.cellContents = formula;
-                
                 // Add (name, cell) to spreadsheetCells dictionary 
                 spreadsheetCells.Add(name, toBeAdded);
 
@@ -284,15 +261,14 @@ namespace SS
                     dependencies.AddDependency(name, variable);
                 }
 
-               
-
+                // Check for circular dependencies. If one is found, restore origional cell 
                 try
                 {
                     GetCellsToRecalculate(name);
                 }
                 catch (CircularException e)
                 {
-                    // Restore dependecies
+                    // Restore origional cell
                     if (!(beforeCircleCheck == null))
                     {
                         spreadsheetCells.Remove(name);
@@ -306,6 +282,7 @@ namespace SS
                     throw e;
                 }
 
+                // Check for circular dependencies. If one is found, restore origional cell 
                 foreach (String variable in variables)
                 {
                     try
@@ -314,7 +291,7 @@ namespace SS
                     }
                     catch (CircularException e)
                     {
-                        // Restore dependecies 
+                        // Restore origional cell 
                         if (!(beforeCircleCheck == null)) {
 
                        spreadsheetCells.Remove(name);
@@ -328,6 +305,7 @@ namespace SS
                         throw e;
                     }
                 }
+
 
                 // Get dependencies for return method call 
                 HashSet<String> returnValues = new HashSet<String>();
