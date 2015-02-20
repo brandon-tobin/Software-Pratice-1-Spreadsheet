@@ -7,6 +7,7 @@ using Formulas;
 using Dependencies;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace SS
 {
@@ -17,14 +18,46 @@ namespace SS
         Dictionary<String, Cell> spreadsheetCells;
         // dependencies will act as a dependnecy graph for keeping track of dependees and dependents
         DependencyGraph dependencies;
+        // isValidRegex will hold the regex sent in by one of the constructors 
+        Regex isValidRegex;
        
         /// <summary>
         /// Constructor for Spreadsheet to create a new spreadsheetCells dictionary 
         /// and a dependencies dependency graph object. 
-        /// When Spreadsheet constructor is called, it will create a new spreadsheet object 
+        /// This constructor creates an empty Spreadsheet whose IsValid regular expression accepts
+        /// every string. 
         /// </summary>
         public Spreadsheet()
         {
+            spreadsheetCells = new Dictionary<String, Cell>();
+            dependencies = new DependencyGraph();
+            isValidRegex = new Regex(@"[\s\S]");
+        }
+
+        /// <summary>
+        /// Constructor for Spreadsheet to create a new spreadsheetCells dictionary, a
+        /// dependencies dependency graph object, and a isValidRegex regex object.
+        /// This constructor creates an empty Spreadsheet whose IsValid regular expression is provided
+        /// as the parameter. 
+        /// </summary>
+        public Spreadsheet(Regex isValid)
+        {
+            spreadsheetCells = new Dictionary<String, Cell>();
+            dependencies = new DependencyGraph();
+            isValidRegex = isValid;
+        }
+
+        /// <summary>
+        /// Constructor for Spreadsheet to create a new spreadsheetCells dictionary 
+        /// and a dependencies dependency graph object. 
+        /// This constructor creates a Spreadsheet that is a duplicate of the spreadsheet 
+        /// saved in source. 
+        /// If there's a problem reading source, throws an IOException 
+        /// If the contents of source is not formatted properly, throws a SpreadsheetReadException. 
+        /// </summary>
+        public Spreadsheet(TextReader source)
+        {
+            // Need to read in existing spreadsheet 
             spreadsheetCells = new Dictionary<String, Cell>();
             dependencies = new DependencyGraph();
         }
@@ -78,7 +111,7 @@ namespace SS
 
         }
 
-        public override ISet<string> SetCellContents(string name, double number)
+        protected override ISet<string> SetCellContents(string name, double number)
         {
             // Check if name is null, if it is, throw new InvalidNameException 
             if (name == null)
@@ -136,10 +169,9 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-
         }
 
-        public override ISet<string> SetCellContents(string name, string text)
+        protected override ISet<string> SetCellContents(string name, string text)
         {
             // Check to see if text is null, if it is, throw ArguementNullException  
             if (text == null)
@@ -207,7 +239,7 @@ namespace SS
             }
         }
 
-        public override ISet<string> SetCellContents(string name, Formula formula)
+        protected override ISet<string> SetCellContents(string name, Formula formula)
         {
             // Check to see if formula is null, if so, throw ArguementNullException 
             if (formula == null)
@@ -387,6 +419,60 @@ namespace SS
             public Object cellValue {get; set;}
             // Property for getting / setting cellName 
             public String cellName {get; set;}
+        }
+
+        public override bool Changed
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            protected set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override void Save(System.IO.TextWriter dest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object GetCellValue(string name)
+        {
+            // Check for cell name being null 
+            if (name == null)
+            {
+                throw new InvalidNameException();
+            }
+
+            // Normalize name 
+            String normalName = name.ToUpper();
+           
+            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
+            if (Regex.IsMatch(normalName, cellPattern) && isValidRegex.IsMatch(normalName))
+            {
+                Cell temp = new Cell();
+                if (spreadsheetCells.TryGetValue(normalName, out temp))
+                {
+                    return temp.cellValue;
+                }
+                else
+                {
+                    throw new InvalidNameException();
+                }
+            }
+            else
+            {
+                throw new InvalidNameException();
+            }
+ 
+            
+        }
+
+        public override ISet<string> SetContentsOfCell(string name, string content)
+        {
+            throw new NotImplementedException();
         }
     }
 }

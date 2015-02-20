@@ -1,10 +1,23 @@
 ﻿// Written by Joe Zachary for CS 3500, February 2015
 // Added usings for Formulas and Dependencies 02/11/15 2:03 pm
 // Didn't need the Dependencies using 02/11/15 2:24 pm
+// Fixed a syntactic issue with a comment 02/15/15 8:43 pm
+
+// Modified for use with PS6 02/16/15 11:30 am
+//           Added a new class SpreadsheetReadWriteException
+//           Modified class comment for AbstractSpreadsheet
+//           Added a new abstract property AbstractSpreadsheet.Changed.
+//           Added a new method AbstractSpreadsheet.Save
+//           Added a new method AbstractSpreadsheet.GetCellValue
+//           Added a new abstract method AbstractSpreadsheet.SetContentsOfCell
+//           Changed the three AbstractSpreadsheet.SetCellContents methods to be protected
+
+// Changed the parameter to the Save method
 
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Formulas;
 
 namespace SS
@@ -21,6 +34,22 @@ namespace SS
     /// </summary>
     public class InvalidNameException : Exception
     {
+    }
+
+    // ADDED FOR PS6
+    /// <summary>
+    /// Thrown to indicate that a saved spreadsheet could not be read
+    /// because of a formatting problem.
+    /// </summary>
+    public class SpreadsheetReadException : Exception
+    {
+        /// <summary>
+        /// Creates the exception with a message
+        /// </summary>
+        public SpreadsheetReadException(string msg)
+            : base(msg)
+        {
+        }
     }
 
     /// <summary>
@@ -43,17 +72,24 @@ namespace SS
         public string Reason { get; private set; }
     }
 
-
+    // MODIFIED PARAGRAPHS 1-3 AND ADDED PARAGRAPH 4,FOR PS6
     /// <summary>
     /// An AbstractSpreadsheet object represents the state of a simple spreadsheet.  A 
-    /// spreadsheet consists of an infinite number of named cells.
+    /// spreadsheet consists of a case-insensitive regular expression (called IsValid
+    /// below) and an infinite number of named cells.
     /// 
-    /// A string is a cell name if and only if it consists of one or more letters, 
-    /// followed by a non-zero digit, followed by zero or more digits.
+    /// A string is a valid cell name if and only if (1) it consists of one or more letters, 
+    /// followed by a non-zero digit, followed by zero or more digits AND (2) it is 
+    /// accepted by IsValid.
     /// 
-    /// For example, "A15", "a15", "XY32", and "BC7" are cell names.  (Note that despite
-    /// their similarity, "A15" and "a15" are different cell names.)  On the other hand, 
-    /// "Z", "X07", and "hello" are not cell names."
+    /// For example, "A15", "a15", "XY32", and "BC7" are valid cell names, so long as they also
+    /// are accepted by IsValid.  On the other hand, 
+    /// "Z", "X07", and "hello" are not valid cell names, regardless of IsValid.
+    /// 
+    /// Any valid incoming cell name, whether passed as a parameter or embedded in a formula,
+    /// must be normalized by converting all letters to upper case before it is used by or 
+    /// saved in this spreadsheet.  For example, the Formula "x3+a5" should be normalized
+    /// to "X3+A5" before use.
     /// 
     /// A spreadsheet contains a cell corresponding to every possible cell name.  
     /// In addition to a name, each cell has a contents and a value.  The distinction is
@@ -88,6 +124,50 @@ namespace SS
     /// </summary>
     public abstract class AbstractSpreadsheet
     {
+        // ADDED FOR PS6
+        /// <summary>
+        /// True if this spreadsheet has been modified since it was created or saved
+        /// (whichever happened most recently); false otherwise.
+        /// </summary>
+        public abstract bool Changed { get; protected set; }
+
+        // ADDED FOR PS6
+        /// <summary>
+        /// Writes the contents of this spreadsheet to dest using an XML format.
+        /// The XML elements should be structured as follows:
+        ///
+        /// <spreadsheet isvalid="IsValid regex goes here">
+        ///   <cell>
+        ///     <name>
+        ///       cell name goes here
+        ///     </name>
+        ///     <contents>
+        ///       cell contents goes here
+        ///     </contents>
+        ///   </cell>
+        /// </spreadsheet>
+        ///
+        /// The value of the isvalid attribute should be .ToString()
+        /// 
+        /// There should be one cell element for each non-empty cell in the spreadsheet.
+        /// If the cell contains a string, the string (without surrounding double quotes) should be written as the contents.
+        /// If the cell contains a double d, d.ToString() should be written as the contents.
+        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
+        /// IMPLEMENTATION NOTE:  You'll have to override the ToString method in the Formula class
+        ///
+        /// If there are any problems writing to dest, the method should throw an IOException.
+        /// </summary>
+        public abstract void Save(TextWriter dest);
+
+        // ADDED FOR PS6
+        /// <summary>
+        /// If name is null or invalid, throws an InvalidNameException.
+        ///
+        /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
+        /// value should be either a string, a double, or a Spreadsheet.FormulaError.
+        /// </summary>
+        public abstract object GetCellValue(String name);
+
         /// <summary>
         /// Enumerates the names of all the non-empty cells in the spreadsheet.
         /// </summary>
@@ -98,8 +178,42 @@ namespace SS
         /// 
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
         /// value should be either a string, a double, or a Formula.
+        /// </summary>
         public abstract object GetCellContents(String name);
 
+        // ADDED FOR PS6
+        /// <summary>
+        /// If content is null, throws an ArgumentNullException.
+        ///
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        ///
+        /// Otherwise, if content parses as a double, the contents of the named
+        /// cell becomes that double.
+        ///
+        /// Otherwise, if content begins with the character '=', an attempt is made
+        /// to parse the remainder of content into a Formula f using the Formula
+        /// constructor.  There are then three possibilities:
+        ///
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a
+        ///       SpreadsheetUtilities.FormulaFormatException is thrown.
+        ///
+        ///   (2) Otherwise, if changing the contents of the named cell to be f
+        ///       would cause a circular dependency, a CircularException is thrown.
+        ///
+        ///   (3) Otherwise, the contents of the named cell becomes f.
+        ///
+        /// Otherwise, the contents of the named cell becomes content.
+        ///
+        /// If an exception is not thrown, the method returns a set consisting of
+        /// name plus the names of all other cells whose value depends, directly
+        /// or indirectly, on the named cell.
+        ///
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        /// </summary>
+        public abstract ISet<String> SetContentsOfCell(String name, String content);
+
+        // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
         /// 
@@ -110,8 +224,9 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public abstract ISet<String> SetCellContents(String name, double number);
+        protected abstract ISet<String> SetCellContents(String name, double number);
 
+        // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If text is null, throws an ArgumentNullException.
         /// 
@@ -124,8 +239,9 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public abstract ISet<String> SetCellContents(String name, String text);
+        protected abstract ISet<String> SetCellContents(String name, String text);
 
+        // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If formula parameter is null, throws an ArgumentNullException.
         /// 
@@ -141,7 +257,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public abstract ISet<String> SetCellContents(String name, Formula formula);
+        protected abstract ISet<String> SetCellContents(String name, Formula formula);
 
         /// <summary>
         /// If name is null, throws an ArgumentNullException.
