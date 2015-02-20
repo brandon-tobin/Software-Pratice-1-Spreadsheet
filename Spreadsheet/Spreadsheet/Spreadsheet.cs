@@ -228,6 +228,33 @@ namespace SS
             // Check to make sure name is a valid cell name 
             if (Regex.IsMatch(name, cellPattern))
             {
+                Cell beforeCircleCheck = new Cell();
+                Object contents = new Object();
+                if (spreadsheetCells.TryGetValue(name, out beforeCircleCheck))
+                {
+                    contents = beforeCircleCheck.cellContents;
+                }
+
+                // Check for circular dependencies 
+               /* try
+                {
+                    foreach (String variable in variables)
+                    {
+                        GetCellsToRecalculate(variable);
+                    }
+
+                    GetCellsToRecalculate(name);
+                }
+                catch (CircularException e)
+                {
+                    // beforeCircleCheck.cellContents = contents;
+                    spreadsheetCells.Add(name, beforeCircleCheck);
+                    throw e;
+                }*/
+
+
+               
+
                 // If the cell already exists, remove it 
                 if (spreadsheetCells.ContainsKey(name))
                 {
@@ -237,21 +264,9 @@ namespace SS
                         dependencies.RemoveDependency(name, variable);
                     }
                 }
-            
-                // Check for circular dependencies 
-                try
-                {
-                    foreach (String variable in variables)
-                    {
-                        GetCellsToRecalculate(variable);
-                    }
-
-                    GetCellsToRecalculate(name);
-                }
-                catch (CircularException)
-                {
-                    throw new CircularException();
-                }
+                
+                
+                
 
                 // Create new cell object 
                 Cell toBeAdded = new Cell();
@@ -267,6 +282,51 @@ namespace SS
                 foreach (String variable in variables)
                 {
                     dependencies.AddDependency(name, variable);
+                }
+
+               
+
+                try
+                {
+                    GetCellsToRecalculate(name);
+                }
+                catch (CircularException e)
+                {
+                    // Restore dependecies
+                    if (!(beforeCircleCheck == null))
+                    {
+                        spreadsheetCells.Remove(name);
+                        foreach (String var in variables)
+                        {
+                            dependencies.AddDependency(name, var);
+                        }
+                        toBeAdded.cellContents = beforeCircleCheck.cellContents;
+                        spreadsheetCells.Add(name, toBeAdded);
+                    }
+                    throw e;
+                }
+
+                foreach (String variable in variables)
+                {
+                    try
+                    {
+                        GetCellsToRecalculate(variable);
+                    }
+                    catch (CircularException e)
+                    {
+                        // Restore dependecies 
+                        if (!(beforeCircleCheck == null)) {
+
+                       spreadsheetCells.Remove(name);
+                        foreach (String var in variables)
+                        {
+                            dependencies.AddDependency(name, var);
+                        }
+                        toBeAdded.cellContents = beforeCircleCheck.cellContents;
+                        spreadsheetCells.Add(name, toBeAdded);
+                        }
+                        throw e;
+                    }
                 }
 
                 // Get dependencies for return method call 
