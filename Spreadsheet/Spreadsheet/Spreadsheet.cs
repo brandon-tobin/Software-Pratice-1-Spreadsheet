@@ -151,15 +151,17 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+
+            String normalName = name.ToUpper();
             // Create regex pattern for checking cell names 
             String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
             // Make sure name is a valid cell name 
-            if (Regex.IsMatch(name, cellPattern))
+            if (Regex.IsMatch(normalName, cellPattern))
             {
                 // Create new Cell 
                 Cell temp;
                 // Try to get the contents of name. If we can, then return it
-                if (spreadsheetCells.TryGetValue(name, out temp))
+                if (spreadsheetCells.TryGetValue(normalName, out temp))
                 {
                     return temp.cellContents;
                 }
@@ -217,6 +219,9 @@ namespace SS
                 returnValues.Add(temp);
             }
 
+            // Change changed to true since we made a change to the spreadsheet 
+            Changed = true;
+
             // Return 
             return returnValues;
         }
@@ -266,6 +271,8 @@ namespace SS
                 // Store indirect dependents in returnValues 
                 returnValues.Add(temp);
             }
+            // Change changed to true since we made a change to the spreadsheet 
+            Changed = true;
             // return 
             return returnValues;
         }
@@ -364,6 +371,31 @@ namespace SS
                 returnValues.Add(temp);
             }
 
+            // Recalculate
+            Cell recalculation;
+            foreach (String depend in dependents)
+            {
+                if (spreadsheetCells.TryGetValue(depend, out recalculation))
+                {
+                    // Set value of cell 
+                    try
+                    {
+                        recalculation.cellValue = formula.Evaluate((x) => (double)GetCellValue(x));
+                    }
+                    catch (InvalidCastException)
+                    {
+                        recalculation.cellValue = new FormulaError();
+                    }
+                    catch (FormulaEvaluationException)
+                    {
+                        recalculation.cellValue = new FormulaError();
+                    }
+                }
+            }
+
+            // Change changed to true since we made a change to the spreadsheet 
+            Changed = true;
+
             // return 
             return returnValues;
         }
@@ -377,15 +409,16 @@ namespace SS
             }
             else
             {
+                String normalName = name.ToUpper();
                 // Create regex pattern for checking cell names
                 String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
                 // Check if name is a valid cell name 
-                if (Regex.IsMatch(name, cellPattern))
+                if (Regex.IsMatch(normalName, cellPattern))
                 {
                     // Create returnvalues for a return set 
                     HashSet<String> returnvalues = new HashSet<String>();
                     // Get direct dependents by calling GetDependents on dependencies 
-                    IEnumerable dependents = dependencies.GetDependees(name);
+                    IEnumerable dependents = dependencies.GetDependees(normalName);
                     // IEnumerable dependents = dependencies.GetDependents(name);
                     foreach (String temp in dependents)
                     {
@@ -541,8 +574,6 @@ namespace SS
                 double parsedContent;
                 if (double.TryParse(content, out parsedContent))
                 {
-                    // Change changed to true since we made a change to the spreadsheet 
-                    Changed = true;
                     return SetCellContents(normalName, parsedContent);
                 }
 
@@ -566,9 +597,7 @@ namespace SS
                     // Try to set contents of name to be formula, throw CircularException if needed
                     try
                     {
-                        // Change changed to true since we made a change to the spreadsheet 
-                        Changed = true;
-                        return SetCellContents(name, parsedFormula);
+                        return SetCellContents(normalName, parsedFormula);
                     }
                     catch (CircularException e)
                     {
@@ -579,9 +608,7 @@ namespace SS
                 // Content should just be a string since it isn't a formula or double 
                 else
                 {
-                    // Change changed to true since we made a change to the spreadsheet 
-                    Changed = true;
-                    return SetCellContents(name, content);
+                    return SetCellContents(normalName, content);
                 }
             }
             else
@@ -600,14 +627,21 @@ namespace SS
         {
             // Check the validity of name 
             String cellPattern = @"^[A-Z]+[1-9]\d*$";
-            if (Regex.IsMatch(name, cellPattern) && isValidRegex.IsMatch(name))
+            if (Regex.IsMatch(name, cellPattern))
             {
-                return true;
+                if (isValidRegex.IsMatch(name))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 return false;
-            }
+            }     
         }
     }
 }
