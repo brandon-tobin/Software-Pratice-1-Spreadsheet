@@ -68,56 +68,63 @@ namespace SS
         /// </summary>
         public Spreadsheet(TextReader source)
         {
-            // Create an empty spreadsheetCells dictionary 
-            spreadsheetCells = new Dictionary<String, Cell>();
-            // Create an empty dependencies DG 
-            dependencies = new DependencyGraph();
-            // Set Changed equal to false 
-            Changed = false;
-
-            // Read in the XML file 
-            using (XmlReader reader = XmlReader.Create(source))
+            try
             {
-                // Create a temporary cell object 
-                Cell readCell = new Cell();
-                while (reader.Read())
+                // Create an empty spreadsheetCells dictionary 
+                spreadsheetCells = new Dictionary<String, Cell>();
+                // Create an empty dependencies DG 
+                dependencies = new DependencyGraph();
+                // Set Changed equal to false 
+                Changed = false;
+
+                // Read in the XML file 
+                using (XmlReader reader = XmlReader.Create(source))
                 {
-                    if (reader.IsStartElement())
+                    // Create a temporary cell object 
+                    Cell readCell = new Cell();
+                    while (reader.Read())
                     {
-                        switch (reader.Name)
+                        if (reader.IsStartElement())
                         {
-                            // If reader is on spreadsheet, read in and set the isvalid regex 
-                            case "spreadsheet":
-                                reader.MoveToFirstAttribute();
-                                reader.ReadAttributeValue();
-                                String regex = reader.Value;
-                                Regex tempRegex = new Regex(regex);
-                                isValidRegex = tempRegex;
-                                break;
+                            switch (reader.Name)
+                            {
+                                // If reader is on spreadsheet, read in and set the isvalid regex 
+                                case "spreadsheet":
+                                    reader.MoveToFirstAttribute();
+                                    reader.ReadAttributeValue();
+                                    String regex = reader.Value;
+                                    Regex tempRegex = new Regex(regex);
+                                    isValidRegex = tempRegex;
+                                    break;
 
-                            // If reader is on cell, initialize a new temporary cell 
-                            case "cell":
-                                readCell = new Cell();
-                                break;
+                                // If reader is on cell, initialize a new temporary cell 
+                                case "cell":
+                                    readCell = new Cell();
+                                    break;
 
-                            // If reader is on name, set the temporary cell's name to name 
-                            case "name":
-                                reader.Read();
-                                String name = reader.Value;
-                                readCell.cellName = name;
-                                break;
+                                // If reader is on name, set the temporary cell's name to name 
+                                case "name":
+                                    reader.Read();
+                                    String name = reader.Value;
+                                    readCell.cellName = name;
+                                    break;
 
-                            // If reader is on contents, set the temporary cell's contents to contents 
-                            // and add the temporary cell to the spreadsheet 
-                            case "contents":
-                                reader.Read();
-                                String contents = reader.Value;
-                                readCell.cellContents = contents;
-                                SetContentsOfCell(readCell.cellName, contents);
-                                break;
+                                // If reader is on contents, set the temporary cell's contents to contents 
+                                // and add the temporary cell to the spreadsheet 
+                                case "contents":
+                                    reader.Read();
+                                    String contents = reader.Value;
+                                    readCell.cellContents = contents;
+                                    SetContentsOfCell(readCell.cellName, contents);
+                                    break;
+                            }
                         }
                     }
                 }
+            }
+            catch (IOException)
+            {
+                throw new IOException();
             }
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
@@ -325,31 +332,6 @@ namespace SS
                 throw e;
             }
 
-            // Check for circular dependencies. If one is found, restore origional cell 
-            foreach (String variable in variables)
-            {
-                try
-                {
-                    GetCellsToRecalculate(variable);
-                }
-                catch (CircularException e)
-                {
-                    // Restore origional cell 
-                    if (!(beforeCircleCheck == null))
-                    {
-
-                        spreadsheetCells.Remove(name);
-                        foreach (String var in variables)
-                        {
-                            dependencies.AddDependency(name, var);
-                        }
-                        toBeAdded.cellContents = beforeCircleCheck.cellContents;
-                        spreadsheetCells.Add(name, toBeAdded);
-                    }
-                    throw e;
-                }
-            }
-
             // Set value of cell 
             try
             {
@@ -448,52 +430,58 @@ namespace SS
             // Get all cell names 
             IEnumerable cells = GetNamesOfAllNonemptyCells();
 
-            using (XmlWriter writer = XmlWriter.Create(dest))
+            try
             {
-                // Write spreadsheet isValid Regex 
-                writer.WriteStartDocument();
-                writer.WriteStartElement("spreadsheet");
-                writer.WriteAttributeString("isvalid", isValidRegex.ToString());
-
-                // Write out cell elements 
-                foreach (String cellName in cells)
+                using (XmlWriter writer = XmlWriter.Create(dest))
                 {
-                    Cell cell;
-                    spreadsheetCells.TryGetValue(cellName, out cell);
+                    // Write spreadsheet isValid Regex 
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("spreadsheet");
+                    writer.WriteAttributeString("isvalid", isValidRegex.ToString());
 
-                    writer.WriteStartElement("cell");
-                    writer.WriteElementString("name", cell.cellName);
-
-                    // Determine cellContentsValue 
-                    // If cell contents is a string 
-                    if (cell.cellContentsType.Equals("string"))
+                    // Write out cell elements 
+                    foreach (String cellName in cells)
                     {
-                        writer.WriteElementString("contents", cell.cellContents.ToString());
+                        Cell cell;
+                        spreadsheetCells.TryGetValue(cellName, out cell);
+
+                        writer.WriteStartElement("cell");
+                        writer.WriteElementString("name", cell.cellName);
+
+                        // Determine cellContentsValue 
+                        // If cell contents is a string 
+                        if (cell.cellContentsType.Equals("string"))
+                        {
+                            writer.WriteElementString("contents", cell.cellContents.ToString());
+                        }
+
+                        // If cell contents is a double 
+                        if (cell.cellContentsType.Equals("double"))
+                        {
+                            writer.WriteElementString("contents", cell.cellContents.ToString());
+                        }
+
+                        // If cell contents is a formula 
+                        if (cell.cellContentsType.Equals("formula"))
+                        {
+                            Formula cellContents = (Formula)cell.cellContents;
+                            writer.WriteElementString("contents", "=" + cellContents.ToString());
+                        }
+
+                        // Write the end of the cell element 
+                        writer.WriteEndElement();
                     }
 
-                    // If cell contents is a double 
-                    if (cell.cellContentsType.Equals("double"))
-                    {
-                        writer.WriteElementString("contents", cell.cellContents.ToString());
-                    }
-
-                    // If cell contents is a formula 
-                    if (cell.cellContentsType.Equals("formula"))
-                    {
-                        Formula cellContents = (Formula)cell.cellContents;
-                        writer.WriteElementString("contents", "=" + cellContents.ToString());
-                    }
-
-                    // Write the end of the cell element 
-                    writer.WriteEndElement();
+                    // Write the end of the document 
+                    writer.WriteEndDocument();
+                    // Change Changed to false since it was just saved 
+                    Changed = false;
                 }
-
-                // Write the end of the document 
-                writer.WriteEndDocument();
             }
-
-            // Change Changed to false since it was just saved 
-            Changed = false;
+            catch (IOException e)
+            {
+                throw e;
+            }
         }
 
         public override object GetCellValue(string name)
