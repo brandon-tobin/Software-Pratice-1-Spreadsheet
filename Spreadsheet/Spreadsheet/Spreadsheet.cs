@@ -8,6 +8,7 @@ using Dependencies;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Xml;
 
 namespace SS
 {
@@ -60,6 +61,45 @@ namespace SS
             // Need to read in existing spreadsheet 
             spreadsheetCells = new Dictionary<String, Cell>();
             dependencies = new DependencyGraph();
+
+           
+            using (XmlReader reader = XmlReader.Create(source))
+            {
+                Cell readCell = new Cell();
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        switch (reader.Name)
+                        {
+                            case "spreadsheet":
+                                reader.MoveToFirstAttribute();
+                                reader.ReadAttributeValue();
+                                String regex = reader.Value;
+                                Regex tempRegex = new Regex(regex);
+                                isValidRegex = tempRegex;
+                                break;
+
+                            case "cell":
+                                readCell = new Cell();
+                                break;
+
+                            case "name":
+                                reader.Read();
+                                String name = reader.Value;
+                                readCell.cellName = name;
+                                break;
+                               
+                            case "contents":
+                                reader.Read();
+                                String contents = reader.Value;
+                                readCell.cellContents = contents;
+                                SetContentsOfCell(readCell.cellName, contents);
+                                break;
+                        }
+                    }
+                }
+            }
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
@@ -138,6 +178,8 @@ namespace SS
                 toBeAdded.cellContents = number;
                 // Set cellValue equal to number 
                 toBeAdded.cellValue = number;
+                // Set cellContentsType equal to double
+                toBeAdded.cellContentsType = "double";
 
                 // Add (name, cell) to our spreadsheetCells dictionary 
                 spreadsheetCells.Add(name, toBeAdded);
@@ -207,6 +249,8 @@ namespace SS
                 toBeAdded.cellContents = text;
                 // Set cellValue equal to text 
                 toBeAdded.cellValue = text;
+                // Set cellContentsType equal to string 
+                toBeAdded.cellContentsType = "string";  
 
                 // Add (name, cell) to spreadsheetCells dictionary 
                 spreadsheetCells.Add(name, toBeAdded);
@@ -284,6 +328,19 @@ namespace SS
                 toBeAdded.cellName = name;
                 // Set cellContents eequal to formula 
                 toBeAdded.cellContents = formula;
+                // Set cellContentsType equal to formula 
+                toBeAdded.cellContentsType = "formula";
+
+                // Set value of cell 
+                try
+                {
+                    toBeAdded.cellValue = formula.Evaluate((x) => (double)GetCellValue(x));
+                }
+                catch (FormulaEvaluationException)
+                {
+                    toBeAdded.cellValue = new FormulaError();
+                }
+
                 // Add (name, cell) to spreadsheetCells dictionary 
                 spreadsheetCells.Add(name, toBeAdded);
 
@@ -357,6 +414,10 @@ namespace SS
                     returnValues.Add(temp);
                 }
 
+                
+
+                
+
                 // return 
                 return returnValues;
             }
@@ -419,30 +480,60 @@ namespace SS
             public Object cellValue {get; set;}
             // Property for getting / setting cellName 
             public String cellName {get; set;}
+
+            public String cellContentsType {get; set;}
         }
 
-        public override bool Changed
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            protected set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool Changed { get; protected set; }
 
         public override void Save(System.IO.TextWriter dest)
         {
             // Get all cell names 
             IEnumerable cells = GetNamesOfAllNonemptyCells();
-
-            
-            foreach (String cellName in cells)
+            //TextWriter writer = dest;
+           // XmlWriter writer = dest;
+            using (XmlWriter writer = XmlWriter.Create(dest))
             {
+                // Write spreadsheet isValid Regex 
+                writer.WriteStartDocument();
+               // writer.WriteStartElement("Spreadsheet isvalid = \"" + isValidRegex.ToString() + "\"");
+                writer.WriteStartElement("spreadsheet");
+                writer.WriteAttributeString("isvalid", isValidRegex.ToString());
+                foreach (String cellName in cells)
+                {
+                    Cell cell;
+                    spreadsheetCells.TryGetValue(cellName, out cell);
 
+                    writer.WriteStartElement("cell");
+                    writer.WriteElementString("name", cell.cellName);
+                   
+                    // Determine cellContentsValue 
+                    // If cell contents is a string 
+                    if (cell.cellContentsType.Equals("string"))
+                    {
+                        writer.WriteElementString("contents", cell.cellContents.ToString());
+                    }
+
+                    // If cell contents is a double 
+                    if (cell.cellContentsType.Equals("double"))
+                    {
+                        writer.WriteElementString("contents", cell.cellContents.ToString());
+                    }
+
+                    // If cell contents is a formula 
+                    if (cell.cellContentsType.Equals("formula"))
+                    {
+                        Formula cellContents = (Formula)cell.cellContents;
+                        writer.WriteElementString("contents", "=" + cellContents.toString());
+                    }
+
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndDocument();
             }
+          
+            Changed = false;
         }
 
         public override object GetCellValue(string name)
@@ -501,6 +592,8 @@ namespace SS
                 double parsedContent;
                 if (double.TryParse(content, out parsedContent))
                 {
+                    // Change changed to true since we made a change to the spreadsheet 
+                    Changed = true;
                     return SetCellContents(normalName, parsedContent);
                 }
 
@@ -524,6 +617,8 @@ namespace SS
                     // Try to set contents of name to be formula, throw CircularException if needed
                     try
                     {
+                        // Change changed to true since we made a change to the spreadsheet 
+                        Changed = true;
                         return SetCellContents(name, parsedFormula);
                     }
                     catch (CircularException e)
@@ -535,6 +630,8 @@ namespace SS
                 // Content should just be a string since it isn't a formula or double 
                 else
                 {
+                    // Change changed to true since we made a change to the spreadsheet 
+                    Changed = true;
                     return SetCellContents(name, content);
                 }
             }
@@ -542,7 +639,6 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-
         }
 
         public bool NameIsValid(String name)

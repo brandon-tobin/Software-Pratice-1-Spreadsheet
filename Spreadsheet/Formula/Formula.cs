@@ -513,6 +513,11 @@ namespace Formulas
         {
             return normalizedVaraibles;
         }
+
+        public string toString()
+        {
+            return evaluateFormula;
+        }
     }
 
     /// <summary>
@@ -551,5 +556,4 @@ namespace Formulas
     /// don't is up to the implementation of that function.
     /// </summary>
     public delegate double Lookup(string s);
-
 }
