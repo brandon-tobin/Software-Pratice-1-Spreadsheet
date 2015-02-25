@@ -29,13 +29,40 @@ namespace PS6WrittenTestCases
         }
 
         [TestMethod]
+        public void GetNameNonEmptyCells1()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetContentsOfCell("A1", "5");
+            sheet.SetContentsOfCell("B53", "=5+2");
+            sheet.SetContentsOfCell("C22", "HelloWorld");
+
+            Assert.IsTrue(new HashSet<string>(sheet.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "A1", "B53", "C22" }));
+        }
+
+       /* [TestMethod]
         [ExpectedException(typeof(InvalidNameException))]
         public void GetCellContents1()
         {
             AbstractSpreadsheet sheet = new Spreadsheet();
-            sheet.SetContentsOfCell("A11", "=A21+AB4");
+            sheet.SetContentsOfCell("A11", "=A21+A4");
             sheet.SetContentsOfCell("A22", "23");
             sheet.GetCellContents(null);
+        }*/
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetCellContents2()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.GetCellContents(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetCellContents3()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.GetCellContents("X07");
         }
 
         [TestMethod]
@@ -71,6 +98,22 @@ namespace PS6WrittenTestCases
             sheet.SetContentsOfCell("X21", "2132");
 
             Assert.AreEqual(2132.0, sheet.GetCellValue("X21"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void SetContentsofCell5()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetContentsOfCell(null, "242");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void SetContentsofCell6()
+        {
+            AbstractSpreadsheet sheet = new Spreadsheet();
+            sheet.SetContentsOfCell("X07", "242");
         }
 
         [TestMethod]
@@ -142,7 +185,7 @@ namespace PS6WrittenTestCases
             Formula actual = (Formula)sheet.GetCellContents("B21");
 
             String expectedAns = "2+5";
-            String actualAns = actual.toString();
+            String actualAns = actual.ToString();
             Assert.AreEqual(expectedAns, actualAns);
         }
     }

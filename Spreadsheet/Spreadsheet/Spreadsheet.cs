@@ -21,7 +21,7 @@ namespace SS
         DependencyGraph dependencies;
         // isValidRegex will hold the regex sent in by one of the constructors 
         Regex isValidRegex;
-       
+
         /// <summary>
         /// Constructor for Spreadsheet to create a new spreadsheetCells dictionary 
         /// and a dependencies dependency graph object. 
@@ -30,9 +30,14 @@ namespace SS
         /// </summary>
         public Spreadsheet()
         {
+            // Create an empty spreadsheetCells dictionary 
             spreadsheetCells = new Dictionary<String, Cell>();
+            // Create an empty dependencies DG 
             dependencies = new DependencyGraph();
+            // Set isValidRegex to allow every string 
             isValidRegex = new Regex(@"[\s\S]");
+            // Set Chagned equal to false 
+            Changed = false;
         }
 
         /// <summary>
@@ -43,9 +48,14 @@ namespace SS
         /// </summary>
         public Spreadsheet(Regex isValid)
         {
+            // Create an empty spreadsheetCells dictionary 
             spreadsheetCells = new Dictionary<String, Cell>();
+            // Create an empty dependencies DG 
             dependencies = new DependencyGraph();
+            // Set isValidRegex to isValid 
             isValidRegex = isValid;
+            // Set Changed equal to false 
+            Changed = false;
         }
 
         /// <summary>
@@ -58,13 +68,17 @@ namespace SS
         /// </summary>
         public Spreadsheet(TextReader source)
         {
-            // Need to read in existing spreadsheet 
+            // Create an empty spreadsheetCells dictionary 
             spreadsheetCells = new Dictionary<String, Cell>();
+            // Create an empty dependencies DG 
             dependencies = new DependencyGraph();
+            // Set Changed equal to false 
+            Changed = false;
 
-           
+            // Read in the XML file 
             using (XmlReader reader = XmlReader.Create(source))
             {
+                // Create a temporary cell object 
                 Cell readCell = new Cell();
                 while (reader.Read())
                 {
@@ -72,6 +86,7 @@ namespace SS
                     {
                         switch (reader.Name)
                         {
+                            // If reader is on spreadsheet, read in and set the isvalid regex 
                             case "spreadsheet":
                                 reader.MoveToFirstAttribute();
                                 reader.ReadAttributeValue();
@@ -80,16 +95,20 @@ namespace SS
                                 isValidRegex = tempRegex;
                                 break;
 
+                            // If reader is on cell, initialize a new temporary cell 
                             case "cell":
                                 readCell = new Cell();
                                 break;
 
+                            // If reader is on name, set the temporary cell's name to name 
                             case "name":
                                 reader.Read();
                                 String name = reader.Value;
                                 readCell.cellName = name;
                                 break;
-                               
+
+                            // If reader is on contents, set the temporary cell's contents to contents 
+                            // and add the temporary cell to the spreadsheet 
                             case "contents":
                                 reader.Read();
                                 String contents = reader.Value;
@@ -153,213 +172,172 @@ namespace SS
 
         protected override ISet<string> SetCellContents(string name, double number)
         {
-            // Check if name is null, if it is, throw new InvalidNameException 
-            if (name == null)
+            // If the cell already exists, remove it 
+            if (spreadsheetCells.ContainsKey(name))
             {
-                throw new InvalidNameException();
+                spreadsheetCells.Remove(name);
             }
 
-            //Create regex pattern for checking cell names 
-            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
-            // Make sure name is a valid cell name 
-            if (Regex.IsMatch(name, cellPattern))
+            // Create new cell
+            Cell toBeAdded = new Cell();
+            // Set cellName equal to name
+            toBeAdded.cellName = name;
+            // Set cellContents equal to number 
+            toBeAdded.cellContents = number;
+            // Set cellValue equal to number 
+            toBeAdded.cellValue = number;
+            // Set cellContentsType equal to double
+            toBeAdded.cellContentsType = "double";
+
+            // Add (name, cell) to our spreadsheetCells dictionary 
+            spreadsheetCells.Add(name, toBeAdded);
+
+            // Get dependecies for return portion of method call 
+            HashSet<String> returnValues = new HashSet<String>();
+            // Call GetCellsToRecalculate to get direct dependents 
+            IEnumerable dependents = GetCellsToRecalculate(name);
+            foreach (String temp in dependents)
             {
-                // If the cell already exists, remove it 
-                if (spreadsheetCells.ContainsKey(name))
-                {
-                    spreadsheetCells.Remove(name);
-                }
-                
-                // Create new cell
-                Cell toBeAdded = new Cell();
-                // Set cellName equal to name
-                toBeAdded.cellName = name;
-                // Set cellContents equal to number 
-                toBeAdded.cellContents = number;
-                // Set cellValue equal to number 
-                toBeAdded.cellValue = number;
-                // Set cellContentsType equal to double
-                toBeAdded.cellContentsType = "double";
-
-                // Add (name, cell) to our spreadsheetCells dictionary 
-                spreadsheetCells.Add(name, toBeAdded);
-
-                // Get dependecies for return portion of method call 
-                HashSet<String> returnValues = new HashSet<String>();
-                // Call GetCellsToRecalculate to get direct dependents 
-                IEnumerable dependents = GetCellsToRecalculate(name);
-                foreach (String temp in dependents)
-                {
-                    // Add direct dependents to returnValues 
-                    returnValues.Add(temp);
-                }
-
-                // Call GetDependees on dependencies to get indirect dependents 
-                IEnumerable dependees = dependencies.GetDependees(name);
-                foreach (String temp in dependees)
-                {
-                    // Add indirect dependents to returnValues
-                    returnValues.Add(temp);
-                }
-
-                // Return 
-                return returnValues;
+                // Add direct dependents to returnValues 
+                returnValues.Add(temp);
             }
 
-            // If name was not valid, throw InvalidNameException 
-            else
+            // Call GetDependees on dependencies to get indirect dependents 
+            IEnumerable dependees = dependencies.GetDependees(name);
+            foreach (String temp in dependees)
             {
-                throw new InvalidNameException();
+                // Add indirect dependents to returnValues
+                returnValues.Add(temp);
             }
+
+            // Return 
+            return returnValues;
         }
 
         protected override ISet<string> SetCellContents(string name, string text)
         {
-            // Check to see if text is null, if it is, throw ArguementNullException  
-            if (text == null)
-            {
-                throw new ArgumentNullException();
-            }
-            // Check to see if name is null, if it is, throw InvalidNameException 
-            if (name == null)
-            {
-                throw new InvalidNameException();
-            }
             // Check to see if text is empty 
             if (text.Equals(""))
             {
                 return new HashSet<String>();
             }
-            // Create regex pattern for checking cell names 
-            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
-            // Make sure name is a valid cell name 
-            if (Regex.IsMatch(name, cellPattern))
+
+            // If the cell already exists, remove it 
+            if (spreadsheetCells.ContainsKey(name))
             {
-                // If the cell already exists, remove it 
-                if (spreadsheetCells.ContainsKey(name))
-                {
-                    spreadsheetCells.Remove(name);
-                }
-
-                // Create new cell object 
-                Cell toBeAdded = new Cell();
-                // Set cellName equal to name 
-                toBeAdded.cellName = name;
-                // Set cellContents equal to text 
-                toBeAdded.cellContents = text;
-                // Set cellValue equal to text 
-                toBeAdded.cellValue = text;
-                // Set cellContentsType equal to string 
-                toBeAdded.cellContentsType = "string";  
-
-                // Add (name, cell) to spreadsheetCells dictionary 
-                spreadsheetCells.Add(name, toBeAdded);
-
-                // Get dependencies for return method call 
-                HashSet<String> returnValues = new HashSet<String>();
-                // Call GetCellsToRecalculate to get direct dependents 
-                IEnumerable dependents = GetCellsToRecalculate(name);
-                foreach (String temp in dependents)
-                {
-                    // Store direct dependents in returnValues 
-                    returnValues.Add(temp);
-                }
-
-                // Call GetDependees on dependencies to get indirect dependents 
-                IEnumerable dependees = dependencies.GetDependees(name);
-                foreach (String temp in dependees)
-                {
-                    // Store indirect dependents in returnValues 
-                    returnValues.Add(temp);
-                }
-                // return 
-                return returnValues;
+                spreadsheetCells.Remove(name);
             }
 
-            // If name was not valid, throw InvalidNameExeception 
-            else
+            // Create new cell object 
+            Cell toBeAdded = new Cell();
+            // Set cellName equal to name 
+            toBeAdded.cellName = name;
+            // Set cellContents equal to text 
+            toBeAdded.cellContents = text;
+            // Set cellValue equal to text 
+            toBeAdded.cellValue = text;
+            // Set cellContentsType equal to string 
+            toBeAdded.cellContentsType = "string";
+
+            // Add (name, cell) to spreadsheetCells dictionary 
+            spreadsheetCells.Add(name, toBeAdded);
+
+            // Get dependencies for return method call 
+            HashSet<String> returnValues = new HashSet<String>();
+            // Call GetCellsToRecalculate to get direct dependents 
+            IEnumerable dependents = GetCellsToRecalculate(name);
+            foreach (String temp in dependents)
             {
-                throw new InvalidNameException();
+                // Store direct dependents in returnValues 
+                returnValues.Add(temp);
             }
+
+            // Call GetDependees on dependencies to get indirect dependents 
+            IEnumerable dependees = dependencies.GetDependees(name);
+            foreach (String temp in dependees)
+            {
+                // Store indirect dependents in returnValues 
+                returnValues.Add(temp);
+            }
+            // return 
+            return returnValues;
         }
 
         protected override ISet<string> SetCellContents(string name, Formula formula)
         {
-            // Check to see if formula is null, if so, throw ArguementNullException 
-            if (formula == null)
-            {
-                throw new ArgumentNullException();
-            }
-            // Check to see if name is null, if so, throw InvalidNameException  
-            if (name == null)
-            {
-                throw new InvalidNameException();
-            }
-            // Set up regex pattern for checking cell names 
-            String cellPattern = @"^[a-zA-Z]+[1-9]\d*$";
-
             // Parse the formula to get the variables 
             IEnumerable variables = formula.GetVariables();
 
-            // Check to make sure name is a valid cell name 
-            if (Regex.IsMatch(name, cellPattern))
+            // Get features of cell prior to removing it in case there is a circular dependency 
+            Cell beforeCircleCheck = new Cell();
+            Object contents = new Object();
+            if (spreadsheetCells.TryGetValue(name, out beforeCircleCheck))
             {
-                // Get features of cell prior to removing it in case there is a circular dependency 
-                Cell beforeCircleCheck = new Cell();
-                Object contents = new Object();
-                if (spreadsheetCells.TryGetValue(name, out beforeCircleCheck))
-                {
-                    contents = beforeCircleCheck.cellContents;
-                }
+                contents = beforeCircleCheck.cellContents;
+            }
 
-                // If the cell already exists, remove it 
-                if (spreadsheetCells.ContainsKey(name))
-                {
-                    spreadsheetCells.Remove(name);
-                    foreach (String variable in variables) 
-                    {
-                        dependencies.RemoveDependency(name, variable);
-                    }
-                }
-
-                // Create new cell object 
-                Cell toBeAdded = new Cell();
-                // Set cellName equal to name
-                toBeAdded.cellName = name;
-                // Set cellContents eequal to formula 
-                toBeAdded.cellContents = formula;
-                // Set cellContentsType equal to formula 
-                toBeAdded.cellContentsType = "formula";
-
-                // Set value of cell 
-                try
-                {
-                    toBeAdded.cellValue = formula.Evaluate((x) => (double)GetCellValue(x));
-                }
-                catch (FormulaEvaluationException)
-                {
-                    toBeAdded.cellValue = new FormulaError();
-                }
-
-                // Add (name, cell) to spreadsheetCells dictionary 
-                spreadsheetCells.Add(name, toBeAdded);
-
-                // Add to dependency Graph 
+            // If the cell already exists, remove it 
+            if (spreadsheetCells.ContainsKey(name))
+            {
+                spreadsheetCells.Remove(name);
                 foreach (String variable in variables)
                 {
-                    dependencies.AddDependency(name, variable);
+                    dependencies.RemoveDependency(name, variable);
                 }
+            }
 
-                // Check for circular dependencies. If one is found, restore origional cell 
+            // Create new cell object 
+            Cell toBeAdded = new Cell();
+            // Set cellName equal to name
+            toBeAdded.cellName = name;
+            // Set cellContents eequal to formula 
+            toBeAdded.cellContents = formula;
+            // Set cellContentsType equal to formula 
+            toBeAdded.cellContentsType = "formula";
+
+            // Add (name, cell) to spreadsheetCells dictionary 
+            spreadsheetCells.Add(name, toBeAdded);
+
+            // Add to dependency Graph 
+            foreach (String variable in variables)
+            {
+                dependencies.AddDependency(name, variable);
+            }
+
+            // Check for circular dependencies. If one is found, restore origional cell 
+            try
+            {
+                GetCellsToRecalculate(name);
+            }
+            catch (CircularException e)
+            {
+                // Restore origional cell
+                if (!(beforeCircleCheck == null))
+                {
+                    spreadsheetCells.Remove(name);
+                    foreach (String var in variables)
+                    {
+                        dependencies.AddDependency(name, var);
+                    }
+                    toBeAdded.cellContents = beforeCircleCheck.cellContents;
+                    spreadsheetCells.Add(name, toBeAdded);
+                }
+                throw e;
+            }
+
+            // Check for circular dependencies. If one is found, restore origional cell 
+            foreach (String variable in variables)
+            {
                 try
                 {
-                    GetCellsToRecalculate(name);
+                    GetCellsToRecalculate(variable);
                 }
                 catch (CircularException e)
                 {
-                    // Restore origional cell
+                    // Restore origional cell 
                     if (!(beforeCircleCheck == null))
                     {
+
                         spreadsheetCells.Remove(name);
                         foreach (String var in variables)
                         {
@@ -370,63 +348,42 @@ namespace SS
                     }
                     throw e;
                 }
-
-                // Check for circular dependencies. If one is found, restore origional cell 
-                foreach (String variable in variables)
-                {
-                    try
-                    {
-                        GetCellsToRecalculate(variable);
-                    }
-                    catch (CircularException e)
-                    {
-                        // Restore origional cell 
-                        if (!(beforeCircleCheck == null)) {
-
-                       spreadsheetCells.Remove(name);
-                        foreach (String var in variables)
-                        {
-                            dependencies.AddDependency(name, var);
-                        }
-                        toBeAdded.cellContents = beforeCircleCheck.cellContents;
-                        spreadsheetCells.Add(name, toBeAdded);
-                        }
-                        throw e;
-                    }
-                }
-
-
-                // Get dependencies for return method call 
-                HashSet<String> returnValues = new HashSet<String>();
-                // Call GetCellsToRecalculate for direct dependents 
-                IEnumerable dependents = GetCellsToRecalculate(name);
-                foreach (String temp in dependents)
-                {
-                    // Add direct dependents to returnValues 
-                    returnValues.Add(temp);
-                }
-                
-                // Call GetDependees on dependencies to get indirect dependents 
-                IEnumerable dependees = dependencies.GetDependees(name);
-                foreach (String temp in dependees)
-                {
-                    // Add indriect dependents to returnValues 
-                    returnValues.Add(temp);
-                }
-
-                
-
-                
-
-                // return 
-                return returnValues;
             }
-            
-            // If name was not valid, throw InvlaidNameException 
-            else
+
+            // Set value of cell 
+            try
             {
-                throw new InvalidNameException();
+                toBeAdded.cellValue = formula.Evaluate((x) => (double)GetCellValue(x));
             }
+            catch (InvalidCastException)
+            {
+                toBeAdded.cellValue = new FormulaError();
+            }
+            catch (FormulaEvaluationException)
+            {
+                toBeAdded.cellValue = new FormulaError();
+            }
+
+            // Get dependencies for return method call 
+            HashSet<String> returnValues = new HashSet<String>();
+            // Call GetCellsToRecalculate for direct dependents 
+            IEnumerable dependents = GetCellsToRecalculate(name);
+            foreach (String temp in dependents)
+            {
+                // Add direct dependents to returnValues 
+                returnValues.Add(temp);
+            }
+
+            // Call GetDependees on dependencies to get indirect dependents 
+            IEnumerable dependees = dependencies.GetDependees(name);
+            foreach (String temp in dependees)
+            {
+                // Add indriect dependents to returnValues 
+                returnValues.Add(temp);
+            }
+
+            // return 
+            return returnValues;
         }
 
         protected override IEnumerable<string> GetDirectDependents(string name)
@@ -447,7 +404,7 @@ namespace SS
                     HashSet<String> returnvalues = new HashSet<String>();
                     // Get direct dependents by calling GetDependents on dependencies 
                     IEnumerable dependents = dependencies.GetDependees(name);
-                   // IEnumerable dependents = dependencies.GetDependents(name);
+                    // IEnumerable dependents = dependencies.GetDependents(name);
                     foreach (String temp in dependents)
                     {
                         // Add direct dependents to returnValues 
@@ -475,13 +432,13 @@ namespace SS
         public class Cell
         {
             // Property for getting / setting cellContents 
-            public Object cellContents {get; set;}
+            public Object cellContents { get; set; }
             // Property for getting / setting cellValue
-            public Object cellValue {get; set;}
+            public Object cellValue { get; set; }
             // Property for getting / setting cellName 
-            public String cellName {get; set;}
-
-            public String cellContentsType {get; set;}
+            public String cellName { get; set; }
+            // Property for getting / setting cellContentsType 
+            public String cellContentsType { get; set; }
         }
 
         public override bool Changed { get; protected set; }
@@ -490,15 +447,15 @@ namespace SS
         {
             // Get all cell names 
             IEnumerable cells = GetNamesOfAllNonemptyCells();
-            //TextWriter writer = dest;
-           // XmlWriter writer = dest;
+
             using (XmlWriter writer = XmlWriter.Create(dest))
             {
                 // Write spreadsheet isValid Regex 
                 writer.WriteStartDocument();
-               // writer.WriteStartElement("Spreadsheet isvalid = \"" + isValidRegex.ToString() + "\"");
                 writer.WriteStartElement("spreadsheet");
                 writer.WriteAttributeString("isvalid", isValidRegex.ToString());
+
+                // Write out cell elements 
                 foreach (String cellName in cells)
                 {
                     Cell cell;
@@ -506,7 +463,7 @@ namespace SS
 
                     writer.WriteStartElement("cell");
                     writer.WriteElementString("name", cell.cellName);
-                   
+
                     // Determine cellContentsValue 
                     // If cell contents is a string 
                     if (cell.cellContentsType.Equals("string"))
@@ -524,15 +481,18 @@ namespace SS
                     if (cell.cellContentsType.Equals("formula"))
                     {
                         Formula cellContents = (Formula)cell.cellContents;
-                        writer.WriteElementString("contents", "=" + cellContents.toString());
+                        writer.WriteElementString("contents", "=" + cellContents.ToString());
                     }
 
+                    // Write the end of the cell element 
                     writer.WriteEndElement();
                 }
 
+                // Write the end of the document 
                 writer.WriteEndDocument();
             }
-          
+
+            // Change Changed to false since it was just saved 
             Changed = false;
         }
 
@@ -546,7 +506,7 @@ namespace SS
 
             // Normalize name 
             String normalName = name.ToUpper();
-           
+
             // Check if name is valid 
             if (NameIsValid(normalName))
             {
@@ -557,15 +517,16 @@ namespace SS
                 }
                 else
                 {
-                    throw new InvalidNameException();
+                    return "";
+                    //throw new InvalidNameException();
                 }
             }
             else
             {
                 throw new InvalidNameException();
             }
- 
-            
+
+
         }
 
         public override ISet<string> SetContentsOfCell(string name, string content)
@@ -602,7 +563,7 @@ namespace SS
                 if (Regex.IsMatch(content, equalPattern))
                 {
                     String contentToBeParsed = content.Substring(1).ToUpper();
-                    
+
                     // Try to parse into formula 
                     Formula parsedFormula;
                     try
@@ -641,6 +602,12 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// This formula checks to make sure the cell name is valid and also that the 
+        /// regex is matched for the cell name. 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool NameIsValid(String name)
         {
             // Check the validity of name 

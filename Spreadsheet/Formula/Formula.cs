@@ -509,12 +509,21 @@ namespace Formulas
             }
         }
 
+        /// <summary>
+        /// This method returns an IEnumerable of variables that are present in the formula. 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<String> GetVariables()
         {
             return normalizedVaraibles;
         }
 
-        public string toString()
+        /// <summary>
+        /// This method returns the String version of the formula, therefore acting as the converter 
+        /// between the formula object and the string representation. 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
             return evaluateFormula;
         }

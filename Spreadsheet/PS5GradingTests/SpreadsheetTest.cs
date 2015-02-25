@@ -42,7 +42,7 @@ namespace GradingTests
         public void Test4()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents(null, 1.5); 
+            s.SetContentsOfCell(null, "1.5"); 
         }
 
         [TestMethod()]
@@ -50,14 +50,14 @@ namespace GradingTests
         public void Test5()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1A", 1.5);
+            s.SetContentsOfCell("A1A", "1.5");
         }
 
         [TestMethod()]
         public void Test6()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("Z7", 1.5);
+            s.SetContentsOfCell("Z7", "1.5");
             Assert.AreEqual(1.5, (double)s.GetCellContents("Z7"), 1e-9);
         }
 
@@ -67,7 +67,7 @@ namespace GradingTests
         public void Test7()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A8", (string)null);
+            s.SetContentsOfCell("A8", (string)null);
         }
 
         [TestMethod()]
@@ -75,7 +75,7 @@ namespace GradingTests
         public void Test8()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents(null, "hello");
+            s.SetContentsOfCell(null, "hello");
         }
 
         [TestMethod()]
@@ -83,14 +83,14 @@ namespace GradingTests
         public void Test9()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("AZ", "hello");
+            s.SetContentsOfCell("AZ", "hello");
         }
 
         [TestMethod()]
         public void Test10()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("Z7", "hello");
+            s.SetContentsOfCell("Z7", "hello");
             Assert.AreEqual("hello", s.GetCellContents("Z7"));
         }
 
@@ -100,7 +100,7 @@ namespace GradingTests
         public void Test11()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A8", (Formula)null);
+            s.SetContentsOfCell("A8", null);
         }
 
         [TestMethod()]
@@ -108,7 +108,7 @@ namespace GradingTests
         public void Test12()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents(null, new Formula("2"));
+            s.SetContentsOfCell(null, "=2");
         }
 
         [TestMethod()]
@@ -116,14 +116,14 @@ namespace GradingTests
         public void Test13()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("AZ", new Formula("2"));
+            s.SetContentsOfCell("AZ", "=2");
         }
 
         [TestMethod()]
         public void Test14()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("Z7", new Formula("3"));
+            s.SetContentsOfCell("Z7", "=3");
             Formula f = (Formula)s.GetCellContents("Z7");
             Assert.AreEqual(3, f.Evaluate(x => 0));
         }
@@ -134,8 +134,8 @@ namespace GradingTests
         public void Test15()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("A2"));
-            s.SetCellContents("A2", new Formula("A1"));
+            s.SetContentsOfCell("A1", "=A2");
+            s.SetContentsOfCell("A2", "=A1");
         }
 
         [TestMethod()]
@@ -143,10 +143,10 @@ namespace GradingTests
         public void Test16()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("A2+A3"));
-            s.SetCellContents("A3", new Formula("A4+A5"));
-            s.SetCellContents("A5", new Formula("A6+A7"));
-            s.SetCellContents("A7", new Formula("A1+A1"));
+            s.SetContentsOfCell("A1", "=A2+A3");
+            s.SetContentsOfCell("A3", "=A4+A5");
+            s.SetContentsOfCell("A5", "=A6+A7");
+            s.SetContentsOfCell("A7", "=A1+A1");
         }
 
         [TestMethod()]
@@ -156,10 +156,10 @@ namespace GradingTests
             AbstractSpreadsheet s = new Spreadsheet();
             try
             {
-                s.SetCellContents("A1", new Formula("A2+A3"));
-                s.SetCellContents("A2", 15);
-                s.SetCellContents("A3", 30);
-                s.SetCellContents("A2", new Formula("A3*A1"));
+                s.SetContentsOfCell("A1", "=A2+A3");
+                s.SetContentsOfCell("A2", "15");
+                s.SetContentsOfCell("A3", "30");
+                s.SetContentsOfCell("A2", "=A3*A1");
             }
             catch (CircularException e)
             {
@@ -180,7 +180,7 @@ namespace GradingTests
         public void Test19()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("B1", "");
+            s.SetContentsOfCell("B1", "");
             Assert.IsFalse(s.GetNamesOfAllNonemptyCells().GetEnumerator().MoveNext());
         }
 
@@ -188,7 +188,7 @@ namespace GradingTests
         public void Test20()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("B1", "hello");
+            s.SetContentsOfCell("B1", "hello");
             Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
         }
 
@@ -196,7 +196,7 @@ namespace GradingTests
         public void Test21()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("B1", 52.25);
+            s.SetContentsOfCell("B1", "52.25");
             Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
         }
 
@@ -204,7 +204,7 @@ namespace GradingTests
         public void Test22()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("B1", new Formula("3.5"));
+            s.SetContentsOfCell("B1", "=3.5");
             Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
         }
 
@@ -212,9 +212,9 @@ namespace GradingTests
         public void Test23()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", 17.2);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("B1", new Formula("3.5"));
+            s.SetContentsOfCell("A1", "17.2");
+            s.SetContentsOfCell("C1", "hello");
+            s.SetContentsOfCell("B1", "=3.5");
             Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "A1", "B1", "C1" }));
         }
 
@@ -223,38 +223,38 @@ namespace GradingTests
         public void Test24()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("B1", "hello");
-            s.SetCellContents("C1", new Formula("5"));
-            Assert.IsTrue(s.SetCellContents("A1", 17.2).SetEquals(new HashSet<string>() { "A1" }));
+            s.SetContentsOfCell("B1", "hello");
+            s.SetContentsOfCell("C1", "=5");
+            Assert.IsTrue(s.SetContentsOfCell("A1", "17.2").SetEquals(new HashSet<string>() { "A1" }));
         }
 
         [TestMethod()]
         public void Test25()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", 17.2);
-            s.SetCellContents("C1", new Formula("5"));
-            Assert.IsTrue(s.SetCellContents("B1", "hello").SetEquals(new HashSet<string>() { "B1" }));
+            s.SetContentsOfCell("A1", "17.2");
+            s.SetContentsOfCell("C1", "=5");
+            Assert.IsTrue(s.SetContentsOfCell("B1", "hello").SetEquals(new HashSet<string>() { "B1" }));
         }
 
         [TestMethod()]
         public void Test26()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", 17.2);
-            s.SetCellContents("B1", "hello");
-            Assert.IsTrue(s.SetCellContents("C1", new Formula("5")).SetEquals(new HashSet<string>() { "C1" }));
+            s.SetContentsOfCell("A1", "17.2");
+            s.SetContentsOfCell("B1", "hello");
+            Assert.IsTrue(s.SetContentsOfCell("C1", "=5").SetEquals(new HashSet<string>() { "C1" }));
         }
 
         [TestMethod()]
         public void Test27()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("A2+A3"));
-            s.SetCellContents("A2", 6);
-            s.SetCellContents("A3", new Formula("A2+A4"));
-            s.SetCellContents("A4", new Formula("A2+A5"));
-            Assert.IsTrue(s.SetCellContents("A5", 82.5).SetEquals(new HashSet<string>() { "A5", "A4", "A3", "A1" }));
+            s.SetContentsOfCell("A1", "=A2+A3");
+            s.SetContentsOfCell("A2", "6");
+            s.SetContentsOfCell("A3", "=A2+A4");
+            s.SetContentsOfCell("A4", "=A2+A5");
+            Assert.IsTrue(s.SetContentsOfCell("A5", "82.5").SetEquals(new HashSet<string>() { "A5", "A4", "A3", "A1" }));
         }
 
         // CHANGING CELLS
@@ -262,8 +262,8 @@ namespace GradingTests
         public void Test28()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("A2+A3"));
-            s.SetCellContents("A1", 2.5);
+            s.SetContentsOfCell("A1", "=A2+A3");
+            s.SetContentsOfCell("A1", "2.5");
             Assert.AreEqual(2.5, (double)s.GetCellContents("A1"), 1e-9);
         }
 
@@ -271,8 +271,8 @@ namespace GradingTests
         public void Test29()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("A2+A3"));
-            s.SetCellContents("A1", "Hello");
+            s.SetContentsOfCell("A1", "=A2+A3");
+            s.SetContentsOfCell("A1", "Hello");
             Assert.AreEqual("Hello", (string)s.GetCellContents("A1"));
         }
 
@@ -280,8 +280,8 @@ namespace GradingTests
         public void Test30()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", "Hello");
-            s.SetCellContents("A1", new Formula("23"));
+            s.SetContentsOfCell("A1", "Hello");
+            s.SetContentsOfCell("A1", "=23");
             Assert.AreEqual(23, ((Formula)s.GetCellContents("A1")).Evaluate(x => 0));
         }
 
@@ -290,22 +290,22 @@ namespace GradingTests
         public void Test31()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("B1+B2"));
-            s.SetCellContents("B1", new Formula("C1-C2"));
-            s.SetCellContents("B2", new Formula("C3*C4"));
-            s.SetCellContents("C1", new Formula("D1*D2"));
-            s.SetCellContents("C2", new Formula("D3*D4"));
-            s.SetCellContents("C3", new Formula("D5*D6"));
-            s.SetCellContents("C4", new Formula("D7*D8"));
-            s.SetCellContents("D1", new Formula("E1"));
-            s.SetCellContents("D2", new Formula("E1"));
-            s.SetCellContents("D3", new Formula("E1"));
-            s.SetCellContents("D4", new Formula("E1"));
-            s.SetCellContents("D5", new Formula("E1"));
-            s.SetCellContents("D6", new Formula("E1"));
-            s.SetCellContents("D7", new Formula("E1"));
-            s.SetCellContents("D8", new Formula("E1"));
-            ISet<String> cells = s.SetCellContents("E1", 0);
+            s.SetContentsOfCell("A1", "=B1+B2");
+            s.SetContentsOfCell("B1", "=C1-C2");
+            s.SetContentsOfCell("B2", "=C3*C4");
+            s.SetContentsOfCell("C1", "=D1*D2");
+            s.SetContentsOfCell("C2", "=D3*D4");
+            s.SetContentsOfCell("C3", "=D5*D6");
+            s.SetContentsOfCell("C4", "=D7*D8");
+            s.SetContentsOfCell("D1", "=E1");
+            s.SetContentsOfCell("D2", "=E1");
+            s.SetContentsOfCell("D3", "=E1");
+            s.SetContentsOfCell("D4", "=E1");
+            s.SetContentsOfCell("D5", "=E1");
+            s.SetContentsOfCell("D6", "=E1");
+            s.SetContentsOfCell("D7", "=E1");
+            s.SetContentsOfCell("D8", "=E1");
+            ISet<String> cells = s.SetContentsOfCell("E1", "0");
             Assert.IsTrue(new HashSet<string>(){"A1", "B1", "B2", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "E1"}.SetEquals(cells));
         }
         [TestMethod()]
@@ -332,7 +332,7 @@ namespace GradingTests
             for (int i = 1; i < 200; i++)
             {
                 cells.Add("A" + i);
-                Assert.IsTrue(cells.SetEquals(s.SetCellContents("A" + i, new Formula("A" + (i + 1)))));
+                Assert.IsTrue(cells.SetEquals(s.SetContentsOfCell("A" + i, "=A" + (i + 1))));
             }
         }
         [TestMethod()]
@@ -356,11 +356,11 @@ namespace GradingTests
             AbstractSpreadsheet s = new Spreadsheet();
             for (int i = 1; i < 200; i++)
             {
-                s.SetCellContents("A" + i, new Formula("A" + (i + 1)));
+                s.SetContentsOfCell("A" + i, "=A" + (i + 1));
             }
             try
             {
-                s.SetCellContents("A150", new Formula("A50"));
+                s.SetContentsOfCell("A150", "=A50");
                 Assert.Fail();
             }
             catch (CircularException)
@@ -389,17 +389,17 @@ namespace GradingTests
             AbstractSpreadsheet s = new Spreadsheet();
             for (int i = 0; i < 500; i++)
             {
-                s.SetCellContents("A1" + i, new Formula("A1" + (i + 1)));
+                s.SetContentsOfCell("A1" + i, "=A1" + (i + 1));
             }
 
-            ISet<string> sss = s.SetCellContents("A1499", 25.0);
+            ISet<string> sss = s.SetContentsOfCell("A1499", "25.0");
             Assert.AreEqual(500, sss.Count);
             for (int i = 0; i < 500; i++)
             {
                 Assert.IsTrue(sss.Contains("A1" + i));
             }
 
-            sss = s.SetCellContents("A1249", 25.0);
+            sss = s.SetContentsOfCell("A1249", "25.0");
             Assert.AreEqual(250, sss.Count);
             for (int i = 0; i < 250; i++)
             {
@@ -457,13 +457,13 @@ namespace GradingTests
                     switch (rand.Next(3))
                     {
                         case 0:
-                            s.SetCellContents(randomName(rand), 3.14);
+                            s.SetContentsOfCell(randomName(rand), "3.14");
                             break;
                         case 1:
-                            s.SetCellContents(randomName(rand), "hello");
+                            s.SetContentsOfCell(randomName(rand), "hello");
                             break;
                         case 2:
-                            s.SetCellContents(randomName(rand), randomFormula(rand));
+                            s.SetContentsOfCell(randomName(rand), randomFormula(rand));
                             break;
                     }
                 }
