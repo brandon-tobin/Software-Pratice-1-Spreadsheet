@@ -122,9 +122,9 @@ namespace SS
                     }
                 }
             }
-            catch (XmlException)
+            catch (IOException)
             {
-                throw new SpreadsheetReadException("Invalid xml file");
+                throw new IOException();
             }
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
@@ -209,29 +209,6 @@ namespace SS
             {
                 // Add direct dependents to returnValues 
                 returnValues.Add(temp);
-            }
-
-            // Recalculate
-            Cell recalculation;
-            foreach (String depend in dependents)
-            {
-                if (spreadsheetCells.TryGetValue(depend, out recalculation))
-                {
-                    Formula f = new Formula(recalculation.cellContents.ToString());
-                    // Set value of cell 
-                    try
-                    {
-                        recalculation.cellValue = f.Evaluate((x) => (double)GetCellValue(x));
-                    }
-                    catch (InvalidCastException)
-                    {
-                        recalculation.cellValue = new FormulaError();
-                    }
-                    catch (FormulaEvaluationException)
-                    {
-                        recalculation.cellValue = new FormulaError();
-                    }
-                }
             }
 
             // Call GetDependees on dependencies to get indirect dependents 
@@ -375,11 +352,6 @@ namespace SS
             {
                 toBeAdded.cellValue = new FormulaError();
             }
-            catch (InvalidNameException)
-            {
-                toBeAdded.cellValue = new FormulaError();
-                throw new FormulaFormatException("Variable name not valid");
-            }
 
             // Get dependencies for return method call 
             HashSet<String> returnValues = new HashSet<String>();
@@ -408,8 +380,7 @@ namespace SS
                     // Set value of cell 
                     try
                     {
-                        Formula f = new Formula(recalculation.cellContents.ToString());
-                        recalculation.cellValue = f.Evaluate((x) => (double)GetCellValue(x));
+                        recalculation.cellValue = formula.Evaluate((x) => (double)GetCellValue(x));
                     }
                     catch (InvalidCastException)
                     {
@@ -557,6 +528,7 @@ namespace SS
             // Normalize name 
             String normalName = name.ToUpper();
 
+            // Check if name is valid 
             if (NameIsValid(normalName))
             {
                 Cell temp = new Cell();
@@ -567,12 +539,15 @@ namespace SS
                 else
                 {
                     return "";
+                    //throw new InvalidNameException();
                 }
             }
             else
             {
                 throw new InvalidNameException();
             }
+
+
         }
 
         public override ISet<string> SetContentsOfCell(string name, string content)

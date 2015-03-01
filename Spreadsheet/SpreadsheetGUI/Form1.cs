@@ -8,18 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SS
+namespace SpreadsheetGUI
 {
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void spreadsheetPanel1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)

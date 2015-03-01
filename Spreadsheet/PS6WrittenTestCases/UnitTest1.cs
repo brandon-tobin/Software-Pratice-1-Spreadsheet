@@ -245,19 +245,5 @@ namespace PS6WrittenTestCases
             String actualAns = actual.ToString();
             Assert.AreEqual(expectedAns, actualAns);
         }
-
-        [TestMethod]
-        public void Recalculation1()
-        {
-            AbstractSpreadsheet sheet = new Spreadsheet();
-            sheet.SetContentsOfCell("A1", "5");
-            sheet.SetContentsOfCell("A2", "=A1 + 5");
-
-            Assert.AreEqual(10.0, sheet.GetCellValue("A2"));
-
-            sheet.SetContentsOfCell("A1", "10");
-
-            Assert.AreEqual(15.0, sheet.GetCellValue("A2"));
-        }
     }
 }
