@@ -16,10 +16,26 @@ namespace SS
         {
             InitializeComponent();
 
-          
+            columnValue.Text = "A";
+            rowValue.Text = 1.ToString();
+
+            spreadsheetPanel1.SelectionChanged += displaySelection;
         }
 
-      
+        private void displaySelection(SpreadsheetPanel sheet)
+        {
+            int row, col;
+            String value;
+            sheet.GetSelection(out col, out row);
+            sheet.GetValue(col, row, out value);
+
+            int asciiCol = col + 65;
+            columnValue.Text = Char.ConvertFromUtf32(asciiCol);
+
+            int actualRow = row + 1;
+            rowValue.Text = actualRow.ToString();
+
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
