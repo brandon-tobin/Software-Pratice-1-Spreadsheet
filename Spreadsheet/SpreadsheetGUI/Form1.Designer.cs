@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.spreadsheetPanel1 = new SS.SpreadsheetPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,16 +39,16 @@
             this.columnValue = new System.Windows.Forms.TextBox();
             this.rowName = new System.Windows.Forms.Label();
             this.rowValue = new System.Windows.Forms.TextBox();
+            this.cellName = new System.Windows.Forms.Label();
+            this.cellNameValue = new System.Windows.Forms.TextBox();
+            this.cellValueName = new System.Windows.Forms.Label();
+            this.cellValueBox = new System.Windows.Forms.TextBox();
+            this.cellContentsName = new System.Windows.Forms.Label();
+            this.cellContentsValue = new System.Windows.Forms.TextBox();
+            this.contentsInsert = new System.Windows.Forms.Button();
+            this.spreadsheetPanel1 = new SS.SpreadsheetPanel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // spreadsheetPanel1
-            // 
-            this.spreadsheetPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 84);
-            this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1036, 594);
-            this.spreadsheetPanel1.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -57,7 +56,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1036, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1036, 40);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -70,38 +69,38 @@
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 38);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.openToolStripMenuItem.Text = "Open...";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -118,6 +117,7 @@
             // 
             this.columnValue.Location = new System.Drawing.Point(111, 47);
             this.columnValue.Name = "columnValue";
+            this.columnValue.ReadOnly = true;
             this.columnValue.Size = new System.Drawing.Size(100, 31);
             this.columnValue.TabIndex = 3;
             // 
@@ -134,14 +134,92 @@
             // 
             this.rowValue.Location = new System.Drawing.Point(335, 47);
             this.rowValue.Name = "rowValue";
+            this.rowValue.ReadOnly = true;
             this.rowValue.Size = new System.Drawing.Size(100, 31);
             this.rowValue.TabIndex = 5;
+            // 
+            // cellName
+            // 
+            this.cellName.AutoSize = true;
+            this.cellName.Location = new System.Drawing.Point(13, 90);
+            this.cellName.Name = "cellName";
+            this.cellName.Size = new System.Drawing.Size(117, 25);
+            this.cellName.TabIndex = 6;
+            this.cellName.Text = "Cell Name:";
+            // 
+            // cellNameValue
+            // 
+            this.cellNameValue.Location = new System.Drawing.Point(142, 85);
+            this.cellNameValue.Name = "cellNameValue";
+            this.cellNameValue.ReadOnly = true;
+            this.cellNameValue.Size = new System.Drawing.Size(100, 31);
+            this.cellNameValue.TabIndex = 7;
+            // 
+            // cellValueName
+            // 
+            this.cellValueName.AutoSize = true;
+            this.cellValueName.Location = new System.Drawing.Point(268, 92);
+            this.cellValueName.Name = "cellValueName";
+            this.cellValueName.Size = new System.Drawing.Size(113, 25);
+            this.cellValueName.TabIndex = 8;
+            this.cellValueName.Text = "Cell value:";
+            // 
+            // cellValueBox
+            // 
+            this.cellValueBox.Location = new System.Drawing.Point(388, 84);
+            this.cellValueBox.Name = "cellValueBox";
+            this.cellValueBox.ReadOnly = true;
+            this.cellValueBox.Size = new System.Drawing.Size(119, 31);
+            this.cellValueBox.TabIndex = 9;
+            // 
+            // cellContentsName
+            // 
+            this.cellContentsName.AutoSize = true;
+            this.cellContentsName.Location = new System.Drawing.Point(13, 128);
+            this.cellContentsName.Name = "cellContentsName";
+            this.cellContentsName.Size = new System.Drawing.Size(147, 25);
+            this.cellContentsName.TabIndex = 10;
+            this.cellContentsName.Text = "Cell Contents:";
+            // 
+            // cellContentsValue
+            // 
+            this.cellContentsValue.Location = new System.Drawing.Point(167, 121);
+            this.cellContentsValue.Name = "cellContentsValue";
+            this.cellContentsValue.Size = new System.Drawing.Size(340, 31);
+            this.cellContentsValue.TabIndex = 11;
+            this.cellContentsValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cellContentsValue_KeyDown);
+            // 
+            // contentsInsert
+            // 
+            this.contentsInsert.Location = new System.Drawing.Point(545, 121);
+            this.contentsInsert.Name = "contentsInsert";
+            this.contentsInsert.Size = new System.Drawing.Size(94, 43);
+            this.contentsInsert.TabIndex = 12;
+            this.contentsInsert.Text = "Insert";
+            this.contentsInsert.UseVisualStyleBackColor = true;
+            this.contentsInsert.Click += new System.EventHandler(this.contentsInsert_Click);
+            this.contentsInsert.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.contentsInsert_KeyPress);
+            // 
+            // spreadsheetPanel1
+            // 
+            this.spreadsheetPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 170);
+            this.spreadsheetPanel1.Name = "spreadsheetPanel1";
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(1036, 508);
+            this.spreadsheetPanel1.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1036, 678);
+            this.Controls.Add(this.contentsInsert);
+            this.Controls.Add(this.cellContentsValue);
+            this.Controls.Add(this.cellContentsName);
+            this.Controls.Add(this.cellValueBox);
+            this.Controls.Add(this.cellValueName);
+            this.Controls.Add(this.cellNameValue);
+            this.Controls.Add(this.cellName);
             this.Controls.Add(this.rowValue);
             this.Controls.Add(this.rowName);
             this.Controls.Add(this.columnValue);
@@ -173,6 +251,13 @@
         private System.Windows.Forms.TextBox columnValue;
         private System.Windows.Forms.Label rowName;
         private System.Windows.Forms.TextBox rowValue;
+        private System.Windows.Forms.Label cellName;
+        private System.Windows.Forms.TextBox cellNameValue;
+        private System.Windows.Forms.Label cellValueName;
+        private System.Windows.Forms.TextBox cellValueBox;
+        private System.Windows.Forms.Label cellContentsName;
+        private System.Windows.Forms.TextBox cellContentsValue;
+        private System.Windows.Forms.Button contentsInsert;
 
 
 
