@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace SS
 {
@@ -41,11 +42,12 @@ namespace SS
             rowValue.Text = actualRow.ToString();
 
             cellNameValue.Text = Char.ConvertFromUtf32(asciiCol) + actualRow.ToString();
-
-            String cellContents;
-            cellContents = spreadSheet.GetCellContents(cellNameValue.Text).ToString();
+           
+           String cellContents = spreadSheet.GetCellContents(cellNameValue.Text).ToString();
             cellContentsValue.Text = cellContents;
 
+            String cellValue = spreadSheet.GetCellValue(cellNameValue.Text).ToString();
+            cellValueBox.Text = cellValue;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -66,11 +68,28 @@ namespace SS
         {
             int row;
             int col;
+            // Get cell coordinates 
             spreadsheetPanel1.GetSelection(out col, out row);
 
+            // Get contents to be set as cell contents 
             String contents = cellContentsValue.Text;
 
-            spreadsheetPanel1.SetValue(col, row, contents);
+            // Get name to be set as cell name 
+            String cellName = cellNameValue.Text;
+
+            // Add cell to spreadsheet 
+            spreadSheet.SetContentsOfCell(cellName, contents);
+
+            // Get value of cell 
+            String CellValue = spreadSheet.GetCellValue(cellName).ToString();
+
+            // Display value of cell in spreadsheetpanel 
+            spreadsheetPanel1.SetValue(col, row, CellValue);
+
+            // Move selection down by one row 
+            spreadsheetPanel1.SetSelection(col, row + 1);
+
+            cellContentsValue.Clear();
         }
 
         private void contentsInsert_KeyPress(object sender, KeyPressEventArgs e)
@@ -103,10 +122,33 @@ namespace SS
 
                 // Move selection down by one row 
                 spreadsheetPanel1.SetSelection(col, row + 1);
-
                 
                 cellContentsValue.Clear();
             }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveAs = new SaveFileDialog();
+
+            saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+            saveAs.FilterIndex = 1;
+            saveAs.RestoreDirectory = true;
+
+            if (saveAs.ShowDialog() == DialogResult.OK)
+            {
+                String xml = "";
+                using (StreamWriter writer = File.CreateText(saveAs.FileName))
+                {
+                    spreadSheet.Save(writer);
+                    xml = writer.ToString();
+                }     
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
