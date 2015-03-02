@@ -1,4 +1,4 @@
-﻿namespace SpreadsheetGUI
+﻿namespace SS
 {
     partial class Form1
     {
@@ -36,15 +36,19 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.columnName = new System.Windows.Forms.Label();
+            this.columnValue = new System.Windows.Forms.TextBox();
+            this.rowName = new System.Windows.Forms.Label();
+            this.rowValue = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // spreadsheetPanel1
             // 
             this.spreadsheetPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 62);
+            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 84);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1036, 616);
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(1036, 594);
             this.spreadsheetPanel1.TabIndex = 0;
             // 
             // menuStrip1
@@ -53,7 +57,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1036, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1036, 42);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -66,7 +70,7 @@
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 38);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -74,6 +78,7 @@
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
             this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -98,12 +103,49 @@
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
             this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
+            // columnName
+            // 
+            this.columnName.AutoSize = true;
+            this.columnName.Location = new System.Drawing.Point(13, 53);
+            this.columnName.Name = "columnName";
+            this.columnName.Size = new System.Drawing.Size(91, 25);
+            this.columnName.TabIndex = 2;
+            this.columnName.Text = "Column:";
+            // 
+            // columnValue
+            // 
+            this.columnValue.Location = new System.Drawing.Point(111, 47);
+            this.columnValue.Name = "columnValue";
+            this.columnValue.Size = new System.Drawing.Size(100, 31);
+            this.columnValue.TabIndex = 3;
+            // 
+            // rowName
+            // 
+            this.rowName.AutoSize = true;
+            this.rowName.Location = new System.Drawing.Point(268, 53);
+            this.rowName.Name = "rowName";
+            this.rowName.Size = new System.Drawing.Size(60, 25);
+            this.rowName.TabIndex = 4;
+            this.rowName.Text = "Row:";
+            // 
+            // rowValue
+            // 
+            this.rowValue.Location = new System.Drawing.Point(335, 47);
+            this.rowValue.Name = "rowValue";
+            this.rowValue.Size = new System.Drawing.Size(100, 31);
+            this.rowValue.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1036, 678);
+            this.Controls.Add(this.rowValue);
+            this.Controls.Add(this.rowName);
+            this.Controls.Add(this.columnValue);
+            this.Controls.Add(this.columnName);
             this.Controls.Add(this.spreadsheetPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -127,6 +169,10 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.Label columnName;
+        private System.Windows.Forms.TextBox columnValue;
+        private System.Windows.Forms.Label rowName;
+        private System.Windows.Forms.TextBox rowValue;
 
 
 
