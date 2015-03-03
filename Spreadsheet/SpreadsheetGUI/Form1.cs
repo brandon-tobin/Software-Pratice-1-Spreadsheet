@@ -63,6 +63,14 @@ namespace SS
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Check to see if data will be lost 
+            if (spreadSheet.Changed)
+            {
+               if (MessageBox.Show("Save your changes before exit?", "Save changes?", MessageBoxButtons.YesNoCancel) == DialogResult.OK) 
+                {
+                    saveAsToolStripMenuItem_Click(sender, e);
+               }
+            }
             Close();
         }
 
@@ -85,13 +93,21 @@ namespace SS
             String cellName = cellNameValue.Text;
 
             // Add cell to spreadsheet 
-            spreadSheet.SetContentsOfCell(cellName, contents);
+            try
+            {
+                spreadSheet.SetContentsOfCell(cellName, contents);
+                // Get value of cell 
+                String cellValue = spreadSheet.GetCellValue(cellName).ToString();
 
-            // Get value of cell 
-            String CellValue = spreadSheet.GetCellValue(cellName).ToString();
-
-            // Display value of cell in spreadsheetpanel 
-            spreadsheetPanel1.SetValue(col, row, CellValue);
+                // Display value of cell in spreadsheetpanel 
+                spreadsheetPanel1.SetValue(col, row, cellValue);
+            }
+            catch (CircularException ex)
+            {
+                String cellValue = ex.ToString();
+                spreadsheetPanel1.SetValue(col, row, cellValue);
+            }
+           
 
             // Move selection down by one row 
             spreadsheetPanel1.SetSelection(col, row + 1);
@@ -112,14 +128,19 @@ namespace SS
 
             String cellValue;
             Object cellContents;
+            
             switch (e.KeyData)
             {
                 case Keys.Enter:
+
+                    spreadsheetPanel1.GetSelection(out col, out row);
 
                     // Get contents to be set as cell contents 
                     String contents = cellContentsValue.Text;
 
                     // Get name to be set as cell name 
+                    cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
+                     
                     String cellName = cellNameValue.Text;
 
                     // Add cell to spreadsheet 
@@ -134,7 +155,17 @@ namespace SS
                     // Move selection down by one row 
                     spreadsheetPanel1.SetSelection(col, row + 1);
 
-                    cellContentsValue.Clear();
+                    // Update row textbox 
+                    rowValue.Text = (row + 2).ToString();
+                    // Update cellName textbox
+                    cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+                    // Update cellValue textbox
+                    spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+                    cellValueBox.Text = cellValue;
+                    // Update cellContents textobx 
+                    cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                    cellContentsValue.Text = cellContents.ToString();
+
                     break;
 
                 case Keys.Right:
@@ -213,12 +244,25 @@ namespace SS
         {
             SaveFileDialog saveAs = new SaveFileDialog();
 
-            saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
-            saveAs.FilterIndex = 1;
-            saveAs.RestoreDirectory = true;
-
-            if (saveAs.ShowDialog() == DialogResult.OK)
+            if (saveAs.FileName == "")
             {
+                saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+                saveAs.FilterIndex = 1;
+                saveAs.RestoreDirectory = true;
+
+                if (saveAs.ShowDialog() == DialogResult.OK)
+                {
+                    String xml = "";
+                    using (StreamWriter writer = File.CreateText(saveAs.FileName))
+                    {
+                        spreadSheet.Save(writer);
+                        xml = writer.ToString();
+                    }
+                }
+            }
+            else
+            {
+                saveAs.CheckFileExists = false;
                 String xml = "";
                 using (StreamWriter writer = File.CreateText(saveAs.FileName))
                 {
@@ -255,6 +299,11 @@ namespace SS
                     spreadsheetPanel1.SetValue(col, row, spreadsheet.GetCellValue(cellName).ToString());
                 }
             }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveAsToolStripMenuItem_Click(sender, e);
         }
     }
 }
