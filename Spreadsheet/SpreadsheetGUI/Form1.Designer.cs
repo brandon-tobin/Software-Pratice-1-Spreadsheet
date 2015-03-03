@@ -56,7 +56,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1036, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1036, 40);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -185,6 +185,7 @@
             // 
             // cellContentsValue
             // 
+            this.cellContentsValue.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.cellContentsValue.Location = new System.Drawing.Point(167, 121);
             this.cellContentsValue.Name = "cellContentsValue";
             this.cellContentsValue.Size = new System.Drawing.Size(340, 31);

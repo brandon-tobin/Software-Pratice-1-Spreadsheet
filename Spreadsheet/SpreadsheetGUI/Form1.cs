@@ -21,10 +21,17 @@ namespace SS
             columnValue.Text = "A";
             rowValue.Text = 1.ToString();
             cellNameValue.Text = "A" + 1.ToString();
+    
+            
 
             spreadSheet = new Spreadsheet();
 
             spreadsheetPanel1.SelectionChanged += displaySelection;
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            cellContentsValue.Focus();
         }
 
         private void displaySelection(SpreadsheetPanel sheet)
@@ -42,8 +49,8 @@ namespace SS
             rowValue.Text = actualRow.ToString();
 
             cellNameValue.Text = Char.ConvertFromUtf32(asciiCol) + actualRow.ToString();
-           
-           String cellContents = spreadSheet.GetCellContents(cellNameValue.Text).ToString();
+
+            String cellContents = spreadSheet.GetCellContents(cellNameValue.Text).ToString();
             cellContentsValue.Text = cellContents;
 
             String cellValue = spreadSheet.GetCellValue(cellNameValue.Text).ToString();
@@ -98,32 +105,107 @@ namespace SS
 
         private void cellContentsValue_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Enter)
+            int row;
+            int col;
+            // Get cell coordinates 
+            spreadsheetPanel1.GetSelection(out col, out row);
+
+            String cellValue;
+            Object cellContents;
+            switch (e.KeyData)
             {
-                int row;
-                int col;
-                // Get cell coordinates 
-                spreadsheetPanel1.GetSelection(out col, out row);
+                case Keys.Enter:
 
-                // Get contents to be set as cell contents 
-                String contents = cellContentsValue.Text;
-               
-                // Get name to be set as cell name 
-                String cellName = cellNameValue.Text;
+                    // Get contents to be set as cell contents 
+                    String contents = cellContentsValue.Text;
 
-                // Add cell to spreadsheet 
-                spreadSheet.SetContentsOfCell(cellName, contents);
+                    // Get name to be set as cell name 
+                    String cellName = cellNameValue.Text;
 
-                // Get value of cell 
-                String CellValue = spreadSheet.GetCellValue(cellName).ToString();
+                    // Add cell to spreadsheet 
+                    spreadSheet.SetContentsOfCell(cellName, contents);
 
-                // Display value of cell in spreadsheetpanel 
-                spreadsheetPanel1.SetValue(col, row, CellValue);
+                    // Get value of cell 
+                    String CellValue = spreadSheet.GetCellValue(cellName).ToString();
 
-                // Move selection down by one row 
-                spreadsheetPanel1.SetSelection(col, row + 1);
-                
-                cellContentsValue.Clear();
+                    // Display value of cell in spreadsheetpanel 
+                    spreadsheetPanel1.SetValue(col, row, CellValue);
+
+                    // Move selection down by one row 
+                    spreadsheetPanel1.SetSelection(col, row + 1);
+
+                    cellContentsValue.Clear();
+                    break;
+
+                case Keys.Right:
+                    if (col < 25)
+                    {
+                        spreadsheetPanel1.SetSelection(col + 1, row);
+                        // Update column textbox 
+                        int asciiCol = col + 1 + 65;
+                        columnValue.Text = Char.ConvertFromUtf32(asciiCol);
+                        // Update cellName textbox 
+                        cellNameValue.Text = Char.ConvertFromUtf32(asciiCol) + (row + 1).ToString();
+                        // Update cellValue textbox
+                        spreadsheetPanel1.GetValue(col + 1, row, out cellValue);
+                        cellValueBox.Text = cellValue;
+                        // Update cellContents textobx 
+                        cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                        cellContentsValue.Text = cellContents.ToString();
+                    }
+                break;
+
+                case Keys.Down:
+                if (row < 98)
+                {
+                    spreadsheetPanel1.SetSelection(col, row + 1);
+                    // Update row textbox 
+                    rowValue.Text = (row + 2).ToString();
+                    // Update cellName textbox
+                    cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+                    // Update cellValue textbox
+                    spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+                    cellValueBox.Text = cellValue;
+                    // Update cellContents textobx 
+                    cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                    cellContentsValue.Text = cellContents.ToString();
+                }
+                break;
+
+                case Keys.Left:
+                if (col >= 1)
+                {
+                    spreadsheetPanel1.SetSelection(col - 1, row);
+                    // Update column textbox 
+                    int asciiCol2 = col - 1 + 65;
+                    columnValue.Text = Char.ConvertFromUtf32(asciiCol2);
+                    // Update cellName textbox 
+                    cellNameValue.Text = Char.ConvertFromUtf32(asciiCol2) + (row + 1).ToString();
+                    // Update cellValue textbox
+                    spreadsheetPanel1.GetValue(col - 1, row, out cellValue);
+                    cellValueBox.Text = cellValue;
+                    // Update cellContents textobx 
+                    cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                    cellContentsValue.Text = cellContents.ToString();
+                }
+                break;
+
+                case Keys.Up:
+                if (row >= 1)
+                {
+                    spreadsheetPanel1.SetSelection(col, row - 1);
+                    // Update row textbox 
+                    rowValue.Text = (row).ToString();
+                    // Update cellName textbox 
+                    cellNameValue.Text = char.ConvertFromUtf32(col + 65) + (row).ToString();
+                    // Update cellValue textbox
+                    spreadsheetPanel1.GetValue(col, row - 1, out cellValue);
+                    cellValueBox.Text = cellValue;
+                    // Update cellContents textobx 
+                    cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                    cellContentsValue.Text = cellContents.ToString();
+                }
+                break;
             }
         }
 
@@ -142,13 +224,37 @@ namespace SS
                 {
                     spreadSheet.Save(writer);
                     xml = writer.ToString();
-                }     
+                }
             }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFile = new OpenFileDialog();
 
+            openFile.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+            openFile.FilterIndex = 1;
+
+            openFile.Multiselect = false;
+
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader reader = new StreamReader(openFile.FileName);
+                AbstractSpreadsheet spreadsheet = new Spreadsheet(reader);
+
+                IEnumerable<String> cells = spreadsheet.GetNamesOfAllNonemptyCells();
+                foreach (String cellName in cells)
+                {
+                    String parsedCol = cellName.Substring(0, 1);
+                    String parsedRow = cellName.Substring(1, cellName.Length - 1);
+
+                    Char parsedChar = parsedCol[0];
+                    int col = (int)parsedChar - 65;
+                    int row = Convert.ToInt32(parsedRow) - 1;
+
+                    spreadsheetPanel1.SetValue(col, row, spreadsheet.GetCellValue(cellName).ToString());
+                }
+            }
         }
     }
 }

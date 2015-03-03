@@ -305,7 +305,7 @@ namespace SS
             // Set cellName equal to name
             toBeAdded.cellName = name;
             // Set cellContents eequal to formula 
-            toBeAdded.cellContents = formula;
+            toBeAdded.cellContents = "=" + formula;
             // Set cellContentsType equal to formula 
             toBeAdded.cellContentsType = "formula";
 
@@ -497,8 +497,8 @@ namespace SS
                         // If cell contents is a formula 
                         if (cell.cellContentsType.Equals("formula"))
                         {
-                            Formula cellContents = (Formula)cell.cellContents;
-                            writer.WriteElementString("contents", "=" + cellContents.ToString());
+                            Object cellContents = cell.cellContents;
+                            writer.WriteElementString("contents", cellContents.ToString());
                         }
 
                         // Write the end of the cell element 
