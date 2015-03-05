@@ -219,6 +219,36 @@ namespace SS
                 returnValues.Add(temp);
             }
 
+            // Recalculate
+            Cell recalculation;
+            foreach (String depend in dependents)
+            {
+                if (spreadsheetCells.TryGetValue(depend, out recalculation))
+                {
+                    // Set value of cell 
+                    try
+                    {
+                        String equalPattern = @"^=";
+                        String cellContents = recalculation.cellContents.ToString();
+                        if (Regex.IsMatch(cellContents, equalPattern))
+                        {
+                            String parsedContents = cellContents.Substring(1);
+                            Formula f = new Formula(parsedContents);
+                            recalculation.cellValue = f.Evaluate((x) => (double)GetCellValue(x));
+                            //SetContentsOfCell(recalculation.cellName, recalculation.cellContents.ToString());
+                        }
+                    }
+                    catch (InvalidCastException)
+                    {
+                        recalculation.cellValue = new FormulaError();
+                    }
+                    catch (FormulaEvaluationException)
+                    {
+                        recalculation.cellValue = new FormulaError();
+                    }
+                }
+            }
+
             // Change changed to true since we made a change to the spreadsheet 
             Changed = true;
 

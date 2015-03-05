@@ -14,6 +14,7 @@ namespace SS
     public partial class Form1 : Form
     {
         private AbstractSpreadsheet spreadSheet;
+        private String currentFileName = "";
         public Form1()
         {
             InitializeComponent();
@@ -60,18 +61,33 @@ namespace SS
         private void Form1_Load(object sender, EventArgs e)
         {
         }
-
+        
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // Check to see if data will be lost 
             if (spreadSheet.Changed)
             {
-               if (MessageBox.Show("Save your changes before exit?", "Save changes?", MessageBoxButtons.YesNoCancel) == DialogResult.OK) 
+                if (MessageBox.Show("Save your changes before exit?", "Save changes?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    object sender = new object();
                     saveAsToolStripMenuItem_Click(sender, e);
-               }
+                    return;
+                }
+                else
+                {
+                    return;
+                }
             }
-            Close();
+            else
+            {
+                return;
+            }
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -143,8 +159,26 @@ namespace SS
                      
                     String cellName = cellNameValue.Text;
 
-                    // Add cell to spreadsheet 
-                    spreadSheet.SetContentsOfCell(cellName, contents);
+                    
+                    // Add cell to spreadsheet
+                    IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
+
+                    // Recalculate cells 
+                    foreach (String cell in recalculate)
+                    {
+                        String parsedCol = cell.Substring(0, 1);
+                        String parsedRow = cell.Substring(1, cellName.Length - 1);
+
+                        Char parsedChar = parsedCol[0];
+                        int colNum = (int)parsedChar - 65;
+                        int rowNum = Convert.ToInt32(parsedRow) - 1;
+
+                       // String cellVal = spreadSheet.GetCellValue(cell).ToString();
+
+                        spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
+                      //  spreadsheetPanel1.
+
+                    }
 
                     // Get value of cell 
                     String CellValue = spreadSheet.GetCellValue(cellName).ToString();
@@ -257,6 +291,7 @@ namespace SS
                     {
                         spreadSheet.Save(writer);
                         xml = writer.ToString();
+                        currentFileName = saveAs.FileName;
                     }
                 }
             }
@@ -303,7 +338,24 @@ namespace SS
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveAsToolStripMenuItem_Click(sender, e);
+            if (!String.IsNullOrEmpty(currentFileName))
+            {
+                SaveFileDialog saveAs = new SaveFileDialog();
+
+                String fileName = Path.GetFileName(currentFileName);
+                String xml = "";
+             //   using (StreamWriter writer = File.CreateText(saveAs.FileName))
+              //  using (StreamWriter writer = File.Open(fileName, FileMode.Open))
+             //   {
+               //     spreadSheet.Save(writer);
+              //      xml = writer.ToString();
+               //     currentFileName = saveAs.FileName;
+              //  }
+            }
+            else
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+            }
         }
     }
 }

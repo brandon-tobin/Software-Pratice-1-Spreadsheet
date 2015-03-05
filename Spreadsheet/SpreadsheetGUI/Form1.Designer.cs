@@ -47,7 +47,11 @@
             this.cellContentsValue = new System.Windows.Forms.TextBox();
             this.contentsInsert = new System.Windows.Forms.Button();
             this.spreadsheetPanel1 = new SS.SpreadsheetPanel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -56,7 +60,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1036, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1917, 40);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -69,41 +73,41 @@
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 38);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(187, 36);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -206,17 +210,41 @@
             // 
             // spreadsheetPanel1
             // 
-            this.spreadsheetPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 170);
+            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 203);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1036, 508);
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(2006, 639);
             this.spreadsheetPanel1.TabIndex = 0;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusName,
+            this.statusValue});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 859);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1917, 37);
+            this.statusStrip1.TabIndex = 13;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // statusName
+            // 
+            this.statusName.Name = "statusName";
+            this.statusName.Size = new System.Drawing.Size(85, 32);
+            this.statusName.Text = "Status:";
+            // 
+            // statusValue
+            // 
+            this.statusValue.Name = "statusValue";
+            this.statusValue.Size = new System.Drawing.Size(125, 32);
+            this.statusValue.Text = "Successful";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1036, 678);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(1917, 896);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.contentsInsert);
             this.Controls.Add(this.cellContentsValue);
             this.Controls.Add(this.cellContentsName);
@@ -232,10 +260,13 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Spreadsheet";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -262,6 +293,9 @@
         private System.Windows.Forms.Label cellContentsName;
         private System.Windows.Forms.TextBox cellContentsValue;
         private System.Windows.Forms.Button contentsInsert;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel statusName;
+        private System.Windows.Forms.ToolStripStatusLabel statusValue;
 
 
 
