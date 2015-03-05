@@ -99,36 +99,53 @@ namespace SS
         {
             int row;
             int col;
-            // Get cell coordinates 
             spreadsheetPanel1.GetSelection(out col, out row);
 
             // Get contents to be set as cell contents 
             String contents = cellContentsValue.Text;
 
             // Get name to be set as cell name 
+            cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
+
             String cellName = cellNameValue.Text;
 
-            // Add cell to spreadsheet 
-            try
-            {
-                spreadSheet.SetContentsOfCell(cellName, contents);
-                // Get value of cell 
-                String cellValue = spreadSheet.GetCellValue(cellName).ToString();
 
-                // Display value of cell in spreadsheetpanel 
-                spreadsheetPanel1.SetValue(col, row, cellValue);
-            }
-            catch (CircularException ex)
+            // Add cell to spreadsheet
+            IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
+
+            // Recalculate cells 
+            foreach (String cell in recalculate)
             {
-                String cellValue = ex.ToString();
-                spreadsheetPanel1.SetValue(col, row, cellValue);
+                String parsedCol = cell.Substring(0, 1);
+                String parsedRow = cell.Substring(1, cellName.Length - 1);
+
+                Char parsedChar = parsedCol[0];
+                int colNum = (int)parsedChar - 65;
+                int rowNum = Convert.ToInt32(parsedRow) - 1;
+                spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
             }
-           
+
+            // Get value of cell 
+            String CellValue = spreadSheet.GetCellValue(cellName).ToString();
+            String cellValue;
+            Object cellContents;
+
+            // Display value of cell in spreadsheetpanel 
+            spreadsheetPanel1.SetValue(col, row, CellValue);
 
             // Move selection down by one row 
             spreadsheetPanel1.SetSelection(col, row + 1);
 
-            cellContentsValue.Clear();
+            // Update row textbox 
+            rowValue.Text = (row + 2).ToString();
+            // Update cellName textbox
+            cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+            // Update cellValue textbox
+            spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+            cellValueBox.Text = cellValue;
+            // Update cellContents textobx 
+            cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+            cellContentsValue.Text = cellContents.ToString();
         }
 
         private void contentsInsert_KeyPress(object sender, KeyPressEventArgs e)
