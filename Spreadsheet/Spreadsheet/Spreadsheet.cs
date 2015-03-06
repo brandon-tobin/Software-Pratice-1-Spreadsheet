@@ -126,6 +126,10 @@ namespace SS
             {
                 throw new IOException();
             }
+            catch (XmlException e)
+            {
+                throw new SpreadsheetReadException(e.Message);
+            }
         }
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {

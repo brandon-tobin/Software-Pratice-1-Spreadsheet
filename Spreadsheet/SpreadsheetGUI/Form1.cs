@@ -109,43 +109,55 @@ namespace SS
 
             String cellName = cellNameValue.Text;
 
-
-            // Add cell to spreadsheet
-            IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
-
-            // Recalculate cells 
-            foreach (String cell in recalculate)
+            try
             {
-                String parsedCol = cell.Substring(0, 1);
-                String parsedRow = cell.Substring(1, cellName.Length - 1);
+                // Add cell to spreadsheet
+                IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
 
-                Char parsedChar = parsedCol[0];
-                int colNum = (int)parsedChar - 65;
-                int rowNum = Convert.ToInt32(parsedRow) - 1;
-                spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
+                // Recalculate cells 
+                foreach (String cell in recalculate)
+                {
+                    String parsedCol = cell.Substring(0, 1);
+                    String parsedRow = cell.Substring(1, cellName.Length - 1);
+
+                    Char parsedChar = parsedCol[0];
+                    int colNum = (int)parsedChar - 65;
+                    int rowNum = Convert.ToInt32(parsedRow) - 1;
+                    spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
+                }
+
+                // Get value of cell 
+                String CellValue = spreadSheet.GetCellValue(cellName).ToString();
+                String cellValue;
+                Object cellContents;
+
+                // Display value of cell in spreadsheetpanel 
+                spreadsheetPanel1.SetValue(col, row, CellValue);
+
+                // Move selection down by one row 
+                spreadsheetPanel1.SetSelection(col, row + 1);
+
+                // Update row textbox 
+                rowValue.Text = (row + 2).ToString();
+                // Update cellName textbox
+                cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+                // Update cellValue textbox
+                spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+                cellValueBox.Text = cellValue;
+                // Update cellContents textobx 
+                cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                cellContentsValue.Text = cellContents.ToString();
             }
-
-            // Get value of cell 
-            String CellValue = spreadSheet.GetCellValue(cellName).ToString();
-            String cellValue;
-            Object cellContents;
-
-            // Display value of cell in spreadsheetpanel 
-            spreadsheetPanel1.SetValue(col, row, CellValue);
-
-            // Move selection down by one row 
-            spreadsheetPanel1.SetSelection(col, row + 1);
-
-            // Update row textbox 
-            rowValue.Text = (row + 2).ToString();
-            // Update cellName textbox
-            cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
-            // Update cellValue textbox
-            spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
-            cellValueBox.Text = cellValue;
-            // Update cellContents textobx 
-            cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
-            cellContentsValue.Text = cellContents.ToString();
+            catch (Formulas.FormulaFormatException fexception)
+            {
+                statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
+                cellContentsValue.Clear();
+            }
+            catch (CircularException cexception)
+            {
+                statusValue.Text = cexception.Message + "  (" + cellContentsValue.Text + ")";
+                cellContentsValue.Clear();
+            }
         }
 
         private void contentsInsert_KeyPress(object sender, KeyPressEventArgs e)
@@ -176,46 +188,59 @@ namespace SS
                      
                     String cellName = cellNameValue.Text;
 
-                    
-                    // Add cell to spreadsheet
-                    IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
-
-                    // Recalculate cells 
-                    foreach (String cell in recalculate)
+                    try
                     {
-                        String parsedCol = cell.Substring(0, 1);
-                        String parsedRow = cell.Substring(1, cellName.Length - 1);
+                        // Add cell to spreadsheet
+                        IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
 
-                        Char parsedChar = parsedCol[0];
-                        int colNum = (int)parsedChar - 65;
-                        int rowNum = Convert.ToInt32(parsedRow) - 1;
+                        // Recalculate cells 
+                        foreach (String cell in recalculate)
+                        {
+                            String parsedCol = cell.Substring(0, 1);
+                            String parsedRow = cell.Substring(1, cellName.Length - 1);
 
-                       // String cellVal = spreadSheet.GetCellValue(cell).ToString();
+                            Char parsedChar = parsedCol[0];
+                            int colNum = (int)parsedChar - 65;
+                            int rowNum = Convert.ToInt32(parsedRow) - 1;
 
-                        spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
-                      //  spreadsheetPanel1.
+                            // String cellVal = spreadSheet.GetCellValue(cell).ToString();
 
+                            spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
+                            //  spreadsheetPanel1.
+
+                        }
+
+                        // Get value of cell 
+                        String CellValue = spreadSheet.GetCellValue(cellName).ToString();
+
+                        // Display value of cell in spreadsheetpanel 
+                        spreadsheetPanel1.SetValue(col, row, CellValue);
+
+                        // Move selection down by one row 
+                        spreadsheetPanel1.SetSelection(col, row + 1);
+
+                        // Update row textbox 
+                        rowValue.Text = (row + 2).ToString();
+                        // Update cellName textbox
+                        cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+                        // Update cellValue textbox
+                        spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+                        cellValueBox.Text = cellValue;
+                        // Update cellContents textobx 
+                        cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                        cellContentsValue.Text = cellContents.ToString();
+                        statusValue.Text = "Successful";
                     }
-
-                    // Get value of cell 
-                    String CellValue = spreadSheet.GetCellValue(cellName).ToString();
-
-                    // Display value of cell in spreadsheetpanel 
-                    spreadsheetPanel1.SetValue(col, row, CellValue);
-
-                    // Move selection down by one row 
-                    spreadsheetPanel1.SetSelection(col, row + 1);
-
-                    // Update row textbox 
-                    rowValue.Text = (row + 2).ToString();
-                    // Update cellName textbox
-                    cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
-                    // Update cellValue textbox
-                    spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
-                    cellValueBox.Text = cellValue;
-                    // Update cellContents textobx 
-                    cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
-                    cellContentsValue.Text = cellContents.ToString();
+                    catch (Formulas.FormulaFormatException fexception )
+                    {
+                        statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
+                        cellContentsValue.Clear();
+                    }
+                    catch (CircularException cexception)
+                    {
+                        statusValue.Text = cexception.Message + "  ("+cellContentsValue.Text + ")";
+                        cellContentsValue.Clear();
+                    }
 
                     break;
 
@@ -234,6 +259,7 @@ namespace SS
                         // Update cellContents textobx 
                         cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
                         cellContentsValue.Text = cellContents.ToString();
+                        statusValue.Text = "Successfull";
                     }
                 break;
 
@@ -251,6 +277,7 @@ namespace SS
                     // Update cellContents textobx 
                     cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
                     cellContentsValue.Text = cellContents.ToString();
+                    statusValue.Text = "Successfull";
                 }
                 break;
 
@@ -269,6 +296,7 @@ namespace SS
                     // Update cellContents textobx 
                     cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
                     cellContentsValue.Text = cellContents.ToString();
+                    statusValue.Text = "Successfull";
                 }
                 break;
 
@@ -286,6 +314,7 @@ namespace SS
                     // Update cellContents textobx 
                     cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
                     cellContentsValue.Text = cellContents.ToString();
+                    statusValue.Text = "Successfull";
                 }
                 break;
             }
@@ -295,32 +324,30 @@ namespace SS
         {
             SaveFileDialog saveAs = new SaveFileDialog();
 
-            if (saveAs.FileName == "")
+            try
             {
-                saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
-                saveAs.FilterIndex = 1;
-                saveAs.RestoreDirectory = true;
-
-                if (saveAs.ShowDialog() == DialogResult.OK)
+                if (saveAs.FileName == "")
                 {
-                    String xml = "";
-                    using (StreamWriter writer = File.CreateText(saveAs.FileName))
+                    saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+                    saveAs.FilterIndex = 1;
+                    saveAs.RestoreDirectory = true;
+
+                    if (saveAs.ShowDialog() == DialogResult.OK)
                     {
-                        spreadSheet.Save(writer);
-                        xml = writer.ToString();
-                        currentFileName = saveAs.FileName;
+                        String xml = "";
+                        using (StreamWriter writer = File.CreateText(saveAs.FileName))
+                        {
+                            spreadSheet.Save(writer);
+                            xml = writer.ToString();
+                            currentFileName = saveAs.FileName;
+                            writer.Close();
+                        }
                     }
                 }
             }
-            else
+            catch (IOException ioexception)
             {
-                saveAs.CheckFileExists = false;
-                String xml = "";
-                using (StreamWriter writer = File.CreateText(saveAs.FileName))
-                {
-                    spreadSheet.Save(writer);
-                    xml = writer.ToString();
-                }
+                MessageBox.Show("Problem saving file" + ioexception.Message);
             }
         }
 
@@ -333,23 +360,33 @@ namespace SS
 
             openFile.Multiselect = false;
 
-            if (openFile.ShowDialog() == DialogResult.OK)
+            try
             {
-                StreamReader reader = new StreamReader(openFile.FileName);
-                AbstractSpreadsheet spreadsheet = new Spreadsheet(reader);
-
-                IEnumerable<String> cells = spreadsheet.GetNamesOfAllNonemptyCells();
-                foreach (String cellName in cells)
+                if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    String parsedCol = cellName.Substring(0, 1);
-                    String parsedRow = cellName.Substring(1, cellName.Length - 1);
+                    StreamReader reader = new StreamReader(openFile.FileName);
+                    AbstractSpreadsheet spreadsheet = new Spreadsheet(reader);
+                    currentFileName = openFile.FileName;
 
-                    Char parsedChar = parsedCol[0];
-                    int col = (int)parsedChar - 65;
-                    int row = Convert.ToInt32(parsedRow) - 1;
+                    IEnumerable<String> cells = spreadsheet.GetNamesOfAllNonemptyCells();
+                    foreach (String cellName in cells)
+                    {
+                        String parsedCol = cellName.Substring(0, 1);
+                        String parsedRow = cellName.Substring(1, cellName.Length - 1);
 
-                    spreadsheetPanel1.SetValue(col, row, spreadsheet.GetCellValue(cellName).ToString());
+                        Char parsedChar = parsedCol[0];
+                        int col = (int)parsedChar - 65;
+                        int row = Convert.ToInt32(parsedRow) - 1;
+
+                        spreadsheetPanel1.SetValue(col, row, spreadsheet.GetCellValue(cellName).ToString());
+                        reader.Close();
+                    }
                 }
+            }
+            catch (SpreadsheetReadException rexception)
+            {
+                MessageBox.Show(rexception.Message);
+                closeToolStripMenuItem_Click(sender, e); 
             }
         }
 
@@ -359,20 +396,35 @@ namespace SS
             {
                 SaveFileDialog saveAs = new SaveFileDialog();
 
-                String fileName = Path.GetFileName(currentFileName);
+           //     String fileName = Path.GetFileName(currentFileName);
                 String xml = "";
-             //   using (StreamWriter writer = File.CreateText(saveAs.FileName))
-              //  using (StreamWriter writer = File.Open(fileName, FileMode.Open))
-             //   {
-               //     spreadSheet.Save(writer);
-              //      xml = writer.ToString();
-               //     currentFileName = saveAs.FileName;
-              //  }
+                using (StreamWriter writer = File.CreateText(currentFileName))
+               // using (StreamWriter writer2 = File.OpenWrite(fileName))
+       //         using (StreamWriter writer = File.Open(fileName, FileMode.Open))
+                {
+                    spreadSheet.Save(writer);
+                    xml = writer.ToString();
+                    //currentFileName = saveAs.FileName;
+                    writer.Close();
+                }
             }
             else
             {
                 saveAsToolStripMenuItem_Click(sender, e);
             }
+        }
+
+        private void controlsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String message = "Controls for operating the spreadsheet: Use the arrow keys on the keyboard to naviage around the grid. ";
+                   message += "Insert a value into the cell contents textbox and hit the insert button or press enter to insert data into the cell.  ";
+                   message += "The file menu works similarly to how the file menu works for other programs. If you try to exit without saving changes, you will be prompted to save changes. ";
+                   message += "Pressing the enter key without inserting cell contents will allow you to move down rows, but the column will stay the same. ";
+                   message += "If you insert a formula into a cell that does not contain valid cell names, a FormulaError will be placed as the value of the cell. ";
+                   message += "You cannot use the arrow keys to scroll over in a textbox. Using the arrow keys will select a different cell. You must use your mouse show the hidden data. ";
+                   message += "Errors that do not appear in the spreadsheet panel will appear below the panel in the Status section. ";
+
+            MessageBox.Show(message);
         }
     }
 }

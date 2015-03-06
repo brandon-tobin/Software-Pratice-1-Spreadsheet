@@ -46,10 +46,12 @@
             this.cellContentsName = new System.Windows.Forms.Label();
             this.cellContentsValue = new System.Windows.Forms.TextBox();
             this.contentsInsert = new System.Windows.Forms.Button();
-            this.spreadsheetPanel1 = new SS.SpreadsheetPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusName = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.spreadsheetPanel1 = new SS.SpreadsheetPanel();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.controlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -57,7 +59,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1917, 40);
@@ -73,7 +76,7 @@
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 38);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -176,8 +179,9 @@
             this.cellValueBox.Location = new System.Drawing.Point(388, 84);
             this.cellValueBox.Name = "cellValueBox";
             this.cellValueBox.ReadOnly = true;
-            this.cellValueBox.Size = new System.Drawing.Size(119, 31);
+            this.cellValueBox.Size = new System.Drawing.Size(399, 31);
             this.cellValueBox.TabIndex = 9;
+            this.cellValueBox.WordWrap = false;
             // 
             // cellContentsName
             // 
@@ -193,13 +197,14 @@
             this.cellContentsValue.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.cellContentsValue.Location = new System.Drawing.Point(167, 121);
             this.cellContentsValue.Name = "cellContentsValue";
-            this.cellContentsValue.Size = new System.Drawing.Size(340, 31);
+            this.cellContentsValue.Size = new System.Drawing.Size(397, 31);
             this.cellContentsValue.TabIndex = 11;
+            this.cellContentsValue.WordWrap = false;
             this.cellContentsValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cellContentsValue_KeyDown);
             // 
             // contentsInsert
             // 
-            this.contentsInsert.Location = new System.Drawing.Point(545, 121);
+            this.contentsInsert.Location = new System.Drawing.Point(611, 128);
             this.contentsInsert.Name = "contentsInsert";
             this.contentsInsert.Size = new System.Drawing.Size(94, 43);
             this.contentsInsert.TabIndex = 12;
@@ -208,25 +213,14 @@
             this.contentsInsert.Click += new System.EventHandler(this.contentsInsert_Click);
             this.contentsInsert.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.contentsInsert_KeyPress);
             // 
-            // spreadsheetPanel1
-            // 
-            this.spreadsheetPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.spreadsheetPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 203);
-            this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(2006, 639);
-            this.spreadsheetPanel1.TabIndex = 0;
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusName,
             this.statusValue});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 859);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 858);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1917, 37);
+            this.statusStrip1.Size = new System.Drawing.Size(1917, 38);
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -239,8 +233,35 @@
             // statusValue
             // 
             this.statusValue.Name = "statusValue";
-            this.statusValue.Size = new System.Drawing.Size(125, 32);
+            this.statusValue.Size = new System.Drawing.Size(125, 33);
             this.statusValue.Text = "Successful";
+            this.statusValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // spreadsheetPanel1
+            // 
+            this.spreadsheetPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.spreadsheetPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 203);
+            this.spreadsheetPanel1.Name = "spreadsheetPanel1";
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(2006, 639);
+            this.spreadsheetPanel1.TabIndex = 0;
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.controlsToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(77, 38);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // controlsToolStripMenuItem
+            // 
+            this.controlsToolStripMenuItem.Name = "controlsToolStripMenuItem";
+            this.controlsToolStripMenuItem.Size = new System.Drawing.Size(244, 36);
+            this.controlsToolStripMenuItem.Text = "Controls";
+            this.controlsToolStripMenuItem.Click += new System.EventHandler(this.controlsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -300,6 +321,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusName;
         private System.Windows.Forms.ToolStripStatusLabel statusValue;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem controlsToolStripMenuItem;
 
 
 
