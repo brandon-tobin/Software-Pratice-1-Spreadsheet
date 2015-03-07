@@ -23,9 +23,6 @@ namespace SS
             rowValue.Text = 1.ToString();
             cellNameValue.Text = "A" + 1.ToString();
 
-           
-    
-            
 
             spreadSheet = new Spreadsheet();
 

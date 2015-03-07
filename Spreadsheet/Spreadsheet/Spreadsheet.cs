@@ -269,9 +269,28 @@ namespace SS
                 Cell value;
                 if (spreadsheetCells.TryGetValue(name, out value))
                 {
-                    spreadsheetCells.Remove(name);
+                    value.cellContents = "";
+                    value.cellValue = "";
+                  
+                    // Readd cell's that need to be recomputed 
+                    IEnumerable<String> recalc = GetCellsToRecalculate(name);
+                    //recalc.Skip<String>(1);
+                    Cell contents;
+                    foreach (String cellNm in recalc)
+                    {
+                        spreadsheetCells.TryGetValue(cellNm, out contents);
+                        if (contents.cellName.Equals(name))
+                        {
+                            continue;
+                        }
+                  
+                      SetContentsOfCell(cellNm, contents.cellContents.ToString());
+                      String toBeAddedContents = contents.cellContents.ToString();
+                       
+                    }
                 }
 
+                spreadsheetCells.Remove(name);
                 return new HashSet<String>();
             }
 
@@ -312,6 +331,36 @@ namespace SS
                 // Store indirect dependents in returnValues 
                 returnValues.Add(temp);
             }
+
+             Cell recalculation;
+             foreach (String depend in dependents)
+             {
+                 if (spreadsheetCells.TryGetValue(depend, out recalculation))
+                 {
+                     // Set value of cell 
+                     try
+                     {
+                         String equalPattern = @"^=";
+                         String cellContents = recalculation.cellContents.ToString();
+                         if (Regex.IsMatch(cellContents, equalPattern))
+                         {
+                             String parsedContents = cellContents.Substring(1);
+                             Formula f = new Formula(parsedContents);
+                             recalculation.cellValue = f.Evaluate((x) => (double)GetCellValue(x));
+                             //SetContentsOfCell(recalculation.cellName, recalculation.cellContents.ToString());
+                         }
+                     }
+                     catch (InvalidCastException)
+                     {
+                         recalculation.cellValue = new FormulaError();
+                     }
+                     catch (FormulaEvaluationException)
+                     {
+                         recalculation.cellValue = new FormulaError();
+                     }
+                 }
+             }
+
             // Change changed to true since we made a change to the spreadsheet 
             Changed = true;
             // return 
