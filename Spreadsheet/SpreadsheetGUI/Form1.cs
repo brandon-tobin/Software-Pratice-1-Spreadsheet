@@ -229,11 +229,13 @@ namespace SS
                 // Set the spreadsheet status to successful since the cell was successfully inserted 
                 statusValue.Text = "Successful";
             }
+            // Catch any FormulaFormatExceptions and set the spreadsheet status to the exception 
             catch (Formulas.FormulaFormatException fexception)
             {
                 statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
                 cellContentsValue.Clear();
             }
+            // Catch any CircularExceptions and set the spreadsheet status to the exception 
             catch (CircularException cexception)
             {
                 statusValue.Text = cexception.Message + "  (" + cellContentsValue.Text + ")";
@@ -241,24 +243,40 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// Method is not used, but too scared to delete it since strange things happen when you delete these methods. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void contentsInsert_KeyPress(object sender, KeyPressEventArgs e)
         {
         }
 
+        /// <summary>
+        /// This method handles updating the cell's information when navigating around the spreadsheet grid using the arrow keys on the keyboard. 
+        /// It also allows the user to insert information into a cell by writing in the cellContentsValue text box and pressing enter instead of the insert button. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cellContentsValue_KeyDown(object sender, KeyEventArgs e)
         {
+            // Create variables for holding row and column values 
             int row;
             int col;
+
             // Get cell coordinates 
             spreadsheetPanel1.GetSelection(out col, out row);
 
+            // Create varaible sfor holding the cellValue and cellContents 
             String cellValue;
             Object cellContents;
 
+            // Start switch statement for determining which key is pressed on the keyboard 
             switch (e.KeyData)
             {
+                // Switch case -- enter key has been pressed 
                 case Keys.Enter:
-
+                    // Get the row and column values for the current selection 
                     spreadsheetPanel1.GetSelection(out col, out row);
 
                     // Get contents to be set as cell contents 
@@ -267,8 +285,10 @@ namespace SS
                     // Get name to be set as cell name 
                     cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
 
+                    // Set the cellNameValue textbox to hold the cellName 
                     String cellName = cellNameValue.Text;
 
+                    // Try to insert the cell into the spreadsheet 
                     try
                     {
                         // Add cell to spreadsheet
@@ -277,6 +297,7 @@ namespace SS
                         {
                             recalculate = spreadSheet.GetNamesOfAllNonemptyCells();
                         }
+
                         // Recalculate cells 
                         foreach (String cell in recalculate)
                         {
@@ -288,7 +309,6 @@ namespace SS
                             int rowNum = Convert.ToInt32(parsedRow) - 1;
 
                             spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
-
                         }
 
                         // Get value of cell 
@@ -312,22 +332,26 @@ namespace SS
                         cellContentsValue.Text = cellContents.ToString();
                         statusValue.Text = "Successful";
                     }
+                    // Catch any FormulaFormatExceptions and set the spreadsheet status to show the error 
                     catch (Formulas.FormulaFormatException fexception)
                     {
                         statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
                         cellContentsValue.Clear();
                     }
+                    // Catch any CircularExceptions and set the spreadsheet status to show the error 
                     catch (CircularException cexception)
                     {
                         statusValue.Text = cexception.Message + "  (" + cellContentsValue.Text + ")";
                         cellContentsValue.Clear();
                     }
-
                     break;
 
+                // Switch case -- Right Arrow Key 
                 case Keys.Right:
+                    // Check to see if we will be going out of bounds of the grid 
                     if (col < 25)
                     {
+                        // Move the cell selection one column to the right 
                         spreadsheetPanel1.SetSelection(col + 1, row);
                         // Update column textbox 
                         int asciiCol = col + 1 + 65;
@@ -343,10 +367,13 @@ namespace SS
                         statusValue.Text = "Successfull";
                     }
                     break;
-
+                
+                // Switch case -- Down arrow key 
                 case Keys.Down:
+                    // Check to see if we will be going out of bounds of the grid  
                     if (row < 98)
                     {
+                        // Move the cell selection one row down 
                         spreadsheetPanel1.SetSelection(col, row + 1);
                         // Update row textbox 
                         rowValue.Text = (row + 2).ToString();
@@ -362,9 +389,12 @@ namespace SS
                     }
                     break;
 
+                // Switch case -- Left arrow key 
                 case Keys.Left:
+                    // Check to see if we will be going out of bounds of the grid 
                     if (col >= 1)
                     {
+                        // Move the cell selection one column to the left 
                         spreadsheetPanel1.SetSelection(col - 1, row);
                         // Update column textbox 
                         int asciiCol2 = col - 1 + 65;
@@ -380,10 +410,13 @@ namespace SS
                         statusValue.Text = "Successfull";
                     }
                     break;
-
+                
+                // Switch case -- Up arrow key 
                 case Keys.Up:
+                    // Check to see if we will be going out of bounds of the grid 
                     if (row >= 1)
                     {
+                        // Move the cell selection one row up 
                         spreadsheetPanel1.SetSelection(col, row - 1);
                         // Update row textbox 
                         rowValue.Text = (row).ToString();
@@ -401,58 +434,88 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// Method for handling the SaveAs button click. 
+        /// This method will open a SaveAs dialog box for the user to select where they want to save the file. 
+        /// Once the user presses Save, the spreadsheet will be saved to the XML file they specified
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Create new SaveFileDialog object 
             SaveFileDialog saveAs = new SaveFileDialog();
 
+            // Try to perform the save process 
             try
             {
-                if (saveAs.FileName == "")
-                {
+                    // Set the saveAs filter to show just .ss files by default, but give option to allow all files to be shown 
                     saveAs.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+                    // Set the default file view 
                     saveAs.FilterIndex = 1;
                     saveAs.RestoreDirectory = true;
 
+                    // If the user presses save, perform the file writing 
                     if (saveAs.ShowDialog() == DialogResult.OK)
                     {
                         String xml = "";
+                        // Create a new StreamWriter and file for writing the object 
                         using (StreamWriter writer = File.CreateText(saveAs.FileName))
                         {
+                            // Write the spreadsheet 
                             spreadSheet.Save(writer);
                             xml = writer.ToString();
+                            // Set the instance variable to remember the file name 
                             currentFileName = saveAs.FileName;
+                            // Close the file writer 
                             writer.Close();
                         }
                     }
-                }
             }
+            // Catch the save exceptions and show a dialog box with the error 
             catch (IOException ioexception)
             {
                 MessageBox.Show("Problem saving file" + ioexception.Message);
             }
         }
 
+        /// <summary>
+        /// Method for handling the opening of files when the Open button is clicked. 
+        /// When a file is opened, all previous data in the current spreadsheet is lost and replaced with the data from the file being opened. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Create new OpenFileDialog object 
             OpenFileDialog openFile = new OpenFileDialog();
 
+            // Set filter for which files can be shown 
             openFile.Filter = "Spreadsheet File (*.ss)|*.ss|All Files |*.*";
+            // Set default filter to .ss files 
             openFile.FilterIndex = 1;
-
             openFile.Multiselect = false;
 
+            // Try to open the file 
             try
             {
+                // If Open has been selected 
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
+                    // Read in the file 
                     StreamReader reader = new StreamReader(openFile.FileName);
+                    // Replace the old spreadSheet object with the new one created by the file opener 
                     this.spreadSheet = new Spreadsheet(reader);
+                    // Clear the spreadsheet panel to get the old cells off of it 
                     spreadsheetPanel1.Clear();
+                    // Update the fileName in the instance variable 
                     currentFileName = openFile.FileName;
 
+                    // Add all of the cells in the spreadsheet into the spreadsheet panel 
                     IEnumerable<String> cells = spreadSheet.GetNamesOfAllNonemptyCells();
                     foreach (String cellName in cells)
                     {
+                        // Parse cell's row and column information 
                         String parsedCol = cellName.Substring(0, 1);
                         String parsedRow = cellName.Substring(1, cellName.Length - 1);
 
@@ -460,15 +523,20 @@ namespace SS
                         int col = (int)parsedChar - 65;
                         int row = Convert.ToInt32(parsedRow) - 1;
 
+                        // Add cell into the spreadsheet panel 
                         spreadsheetPanel1.SetValue(col, row, spreadSheet.GetCellValue(cellName).ToString());
-                        reader.Close();
 
-
+                        // Set the values for the default selected cell A1 
                         cellContentsValue.Text = spreadSheet.GetCellContents("A1").ToString();
                         cellValueBox.Text = spreadSheet.GetCellValue("A1").ToString();
+                        spreadsheetPanel1.SetSelection(0, 0);
                     }
+
+                    // Close the reader 
+                    reader.Close();
                 }
             }
+            // Catch any SpreadsheetReadExceptions and show the exception in a dialog box 
             catch (SpreadsheetReadException rexception)
             {
                 MessageBox.Show(rexception.Message);
@@ -476,27 +544,47 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// Method for handling the saving for the spreadsheet. 
+        /// This method is the alternative way of saving the spreadsheet when the user doesn't want to go through the Save As process. 
+        /// If the spreadsheet has never been saved before, the Save As dailog box will appear. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // If the spreadsheet has been saved before, skip the Save As dialog process and save the spreadsheet to the file used before. 
             if (!String.IsNullOrEmpty(currentFileName))
             {
+                // Create new SaveFialDialog object 
                 SaveFileDialog saveAs = new SaveFileDialog();
                 String xml = "";
+                // Create StreamWriter and open the file for saving 
                 using (StreamWriter writer = File.CreateText(currentFileName))
                 {
+                    // Perform the save 
                     spreadSheet.Save(writer);
                     xml = writer.ToString();
+                    // Close the writer 
                     writer.Close();
                 }
             }
+            // If the spreadsheet hasn't been saved before, perform the Save As process 
             else
             {
                 saveAsToolStripMenuItem_Click(sender, e);
             }
         }
 
+        /// <summary>
+        /// Method for showing the help information when the Help button is clicked. 
+        /// The dialog box shown will reveal how to use the basic controls of the spreadsheet. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void controlsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Create string for holding the directions 
             String message = "Controls for operating the spreadsheet: Use the arrow keys on the keyboard to naviage around the grid. ";
             message += "Insert a value into the cell contents textbox and hit the insert button or press enter to insert data into the cell.  ";
             message += "The file menu works similarly to how the file menu works for other programs. If you try to exit without saving changes, you will be prompted to save changes. ";
@@ -506,6 +594,7 @@ namespace SS
             message += "Errors that do not appear in the spreadsheet panel will appear below the panel in the Status section. ";
             message += "To delete a cell, remove the cell's contents and click Insert or press Enter";
 
+            // Show message box with the directions 
             MessageBox.Show(message);
         }
     }
