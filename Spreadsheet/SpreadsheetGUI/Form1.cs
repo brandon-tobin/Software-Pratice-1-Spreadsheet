@@ -22,6 +22,8 @@ namespace SS
             columnValue.Text = "A";
             rowValue.Text = 1.ToString();
             cellNameValue.Text = "A" + 1.ToString();
+
+           
     
             
 
@@ -192,7 +194,10 @@ namespace SS
                     {
                         // Add cell to spreadsheet
                         IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
-
+                        if (recalculate.Count() == 0)
+                        {
+                            recalculate = spreadSheet.GetNamesOfAllNonemptyCells();
+                        }
                         // Recalculate cells 
                         foreach (String cell in recalculate)
                         {
@@ -203,10 +208,7 @@ namespace SS
                             int colNum = (int)parsedChar - 65;
                             int rowNum = Convert.ToInt32(parsedRow) - 1;
 
-                            // String cellVal = spreadSheet.GetCellValue(cell).ToString();
-
                             spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
-                            //  spreadsheetPanel1.
 
                         }
 
@@ -365,10 +367,11 @@ namespace SS
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader reader = new StreamReader(openFile.FileName);
-                    AbstractSpreadsheet spreadsheet = new Spreadsheet(reader);
+                    this.spreadSheet = new Spreadsheet(reader);
+                    spreadsheetPanel1.Clear();
                     currentFileName = openFile.FileName;
 
-                    IEnumerable<String> cells = spreadsheet.GetNamesOfAllNonemptyCells();
+                    IEnumerable<String> cells = spreadSheet.GetNamesOfAllNonemptyCells();
                     foreach (String cellName in cells)
                     {
                         String parsedCol = cellName.Substring(0, 1);
@@ -378,8 +381,12 @@ namespace SS
                         int col = (int)parsedChar - 65;
                         int row = Convert.ToInt32(parsedRow) - 1;
 
-                        spreadsheetPanel1.SetValue(col, row, spreadsheet.GetCellValue(cellName).ToString());
+                        spreadsheetPanel1.SetValue(col, row, spreadSheet.GetCellValue(cellName).ToString());
                         reader.Close();
+               
+
+                        cellContentsValue.Text = spreadSheet.GetCellContents("A1").ToString();
+                        cellValueBox.Text = spreadSheet.GetCellValue("A1").ToString();
                     }
                 }
             }
@@ -395,16 +402,12 @@ namespace SS
             if (!String.IsNullOrEmpty(currentFileName))
             {
                 SaveFileDialog saveAs = new SaveFileDialog();
-
-           //     String fileName = Path.GetFileName(currentFileName);
                 String xml = "";
                 using (StreamWriter writer = File.CreateText(currentFileName))
-               // using (StreamWriter writer2 = File.OpenWrite(fileName))
-       //         using (StreamWriter writer = File.Open(fileName, FileMode.Open))
+              
                 {
                     spreadSheet.Save(writer);
                     xml = writer.ToString();
-                    //currentFileName = saveAs.FileName;
                     writer.Close();
                 }
             }

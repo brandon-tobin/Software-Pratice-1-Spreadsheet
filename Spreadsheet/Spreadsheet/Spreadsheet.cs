@@ -74,8 +74,7 @@ namespace SS
                 spreadsheetCells = new Dictionary<String, Cell>();
                 // Create an empty dependencies DG 
                 dependencies = new DependencyGraph();
-                // Set Changed equal to false 
-                Changed = false;
+                
 
                 // Read in the XML file 
                 using (XmlReader reader = XmlReader.Create(source))
@@ -121,6 +120,8 @@ namespace SS
                         }
                     }
                 }
+                // Set Changed equal to false 
+                Changed = false;
             }
             catch (IOException)
             {
@@ -265,6 +266,12 @@ namespace SS
             // Check to see if text is empty 
             if (text.Equals(""))
             {
+                Cell value;
+                if (spreadsheetCells.TryGetValue(name, out value))
+                {
+                    spreadsheetCells.Remove(name);
+                }
+
                 return new HashSet<String>();
             }
 
