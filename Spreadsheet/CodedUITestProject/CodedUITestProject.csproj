@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7CF2BDA1-9A61-4075-9535-A3A2DD2CFC66}</ProjectGuid>
+    <ProjectGuid>{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodedUITests</RootNamespace>
-    <AssemblyName>CodedUITests</AssemblyName>
+    <RootNamespace>CodedUITestProject</RootNamespace>
+    <AssemblyName>CodedUITestProject</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodedUITest1.cs" />
-    <Compile Include="CodedUITest2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIMap.cs">
       <DependentUpon>UIMap.uitest</DependentUpon>

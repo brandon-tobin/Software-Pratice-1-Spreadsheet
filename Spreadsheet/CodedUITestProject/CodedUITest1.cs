@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Keyboard = Microsoft.VisualStudio.TestTools.UITesting.Keyboard;
 
 
-namespace CodedUITests
+namespace CodedUITestProject
 {
     /// <summary>
     /// Summary description for CodedUITest1
@@ -20,6 +20,14 @@ namespace CodedUITests
     {
         public CodedUITest1()
         {
+        }
+
+        [TestMethod]
+        public void CodedUITestMethod1()
+        {
+            // To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+            this.UIMap.RecordedMethod1();
+            this.UIMap.AssertMethod1();
         }
 
         #region Additional test attributes

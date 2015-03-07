@@ -35,7 +35,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodedUITestsPS7", "CodedUIT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetGUI", "SpreadsheetGUI\SpreadsheetGUI.csproj", "{D7835600-FC3E-4F2A-9363-919BF9074F0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodedUITestProject", "CodedUITestProject\CodedUITestProject.csproj", "{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -185,12 +191,18 @@ Global
 		{D7835600-FC3E-4F2A-9363-919BF9074F0E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D7835600-FC3E-4F2A-9363-919BF9074F0E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D7835600-FC3E-4F2A-9363-919BF9074F0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7EA12675-E7D9-4AE1-B409-F17BA1693FC9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
