@@ -72,19 +72,22 @@ namespace SS
             // Check to see if data will be lost 
             if (spreadSheet.Changed)
             {
+                // Prompt user to see if save should take plce 
                 if (MessageBox.Show("Save your changes before exit?", "Save changes?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    object sender = new object();
-                    saveAsToolStripMenuItem_Click(sender, e);
-                    return;
+                    // Call method for performing save (Not SaveAs)
+                    Object sender = new Object();
+                    saveToolStripMenuItem_Click(sender, e);
                 }
                 else
                 {
+                    // If user doesn't want to save, return and close form 
                     return;
                 }
             }
             else
             {
+                // If the spreadsheet hasn't changed, return and close form 
                 return;
             }
         }
@@ -98,65 +101,75 @@ namespace SS
         {
             int row;
             int col;
+            // Get cell coordinates 
             spreadsheetPanel1.GetSelection(out col, out row);
 
-            // Get contents to be set as cell contents 
-            String contents = cellContentsValue.Text;
+            String cellValue;
+            Object cellContents;
 
-            // Get name to be set as cell name 
-            cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
+                    spreadsheetPanel1.GetSelection(out col, out row);
 
-            String cellName = cellNameValue.Text;
+                    // Get contents to be set as cell contents 
+                    String contents = cellContentsValue.Text;
 
-            try
-            {
-                // Add cell to spreadsheet
-                IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
+                    // Get name to be set as cell name 
+                    cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
+                     
+                    String cellName = cellNameValue.Text;
 
-                // Recalculate cells 
-                foreach (String cell in recalculate)
-                {
-                    String parsedCol = cell.Substring(0, 1);
-                    String parsedRow = cell.Substring(1, cellName.Length - 1);
+                    try
+                    {
+                        // Add cell to spreadsheet
+                        IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
+                        if (recalculate.Count() == 0)
+                        {
+                            recalculate = spreadSheet.GetNamesOfAllNonemptyCells();
+                        }
+                        // Recalculate cells 
+                        foreach (String cell in recalculate)
+                        {
+                            String parsedCol = cell.Substring(0, 1);
+                            String parsedRow = cell.Substring(1, cellName.Length - 1);
 
-                    Char parsedChar = parsedCol[0];
-                    int colNum = (int)parsedChar - 65;
-                    int rowNum = Convert.ToInt32(parsedRow) - 1;
-                    spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
-                }
+                            Char parsedChar = parsedCol[0];
+                            int colNum = (int)parsedChar - 65;
+                            int rowNum = Convert.ToInt32(parsedRow) - 1;
 
-                // Get value of cell 
-                String CellValue = spreadSheet.GetCellValue(cellName).ToString();
-                String cellValue;
-                Object cellContents;
+                            spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
 
-                // Display value of cell in spreadsheetpanel 
-                spreadsheetPanel1.SetValue(col, row, CellValue);
+                        }
 
-                // Move selection down by one row 
-                spreadsheetPanel1.SetSelection(col, row + 1);
+                        // Get value of cell 
+                        String CellValue = spreadSheet.GetCellValue(cellName).ToString();
 
-                // Update row textbox 
-                rowValue.Text = (row + 2).ToString();
-                // Update cellName textbox
-                cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
-                // Update cellValue textbox
-                spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
-                cellValueBox.Text = cellValue;
-                // Update cellContents textobx 
-                cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
-                cellContentsValue.Text = cellContents.ToString();
-            }
-            catch (Formulas.FormulaFormatException fexception)
-            {
-                statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
-                cellContentsValue.Clear();
-            }
-            catch (CircularException cexception)
-            {
-                statusValue.Text = cexception.Message + "  (" + cellContentsValue.Text + ")";
-                cellContentsValue.Clear();
-            }
+                        // Display value of cell in spreadsheetpanel 
+                        spreadsheetPanel1.SetValue(col, row, CellValue);
+
+                        // Move selection down by one row 
+                        spreadsheetPanel1.SetSelection(col, row + 1);
+
+                        // Update row textbox 
+                        rowValue.Text = (row + 2).ToString();
+                        // Update cellName textbox
+                        cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 2).ToString();
+                        // Update cellValue textbox
+                        spreadsheetPanel1.GetValue(col, row + 1, out cellValue);
+                        cellValueBox.Text = cellValue;
+                        // Update cellContents textobx 
+                        cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
+                        cellContentsValue.Text = cellContents.ToString();
+                        statusValue.Text = "Successful";
+                    }
+                    catch (Formulas.FormulaFormatException fexception )
+                    {
+                        statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
+                        cellContentsValue.Clear();
+                    }
+                    catch (CircularException cexception)
+                    {
+                        statusValue.Text = cexception.Message + "  ("+cellContentsValue.Text + ")";
+                        cellContentsValue.Clear();
+                    }
         }
 
         private void contentsInsert_KeyPress(object sender, KeyPressEventArgs e)
@@ -423,6 +436,7 @@ namespace SS
                    message += "If you insert a formula into a cell that does not contain valid cell names, a FormulaError will be placed as the value of the cell. ";
                    message += "You cannot use the arrow keys to scroll over in a textbox. Using the arrow keys will select a different cell. You must use your mouse show the hidden data. ";
                    message += "Errors that do not appear in the spreadsheet panel will appear below the panel in the Status section. ";
+                   message += "To delete a cell, remove the cell's contents and click Insert or press Enter";
 
             MessageBox.Show(message);
         }
