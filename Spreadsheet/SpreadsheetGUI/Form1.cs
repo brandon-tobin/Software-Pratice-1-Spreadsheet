@@ -166,12 +166,12 @@ namespace SS
             int row;
             int col;
 
-            // Get cell coordinates 
-            spreadsheetPanel1.GetSelection(out col, out row);
-
-            // Create variables for holding the value and contents of the cell 
+            // Create variables for holding the cellValue and cellContents 
             String cellValue;
             Object cellContents;
+
+            // Get the row and column values for the current selection 
+            spreadsheetPanel1.GetSelection(out col, out row);
 
             // Get contents to be set as cell contents 
             String contents = cellContentsValue.Text;
@@ -179,31 +179,29 @@ namespace SS
             // Get name to be set as cell name 
             cellNameValue.Text = Char.ConvertFromUtf32(col + 65) + (row + 1).ToString();
 
-            // Get the cellName from the cellNameValue text box 
+            // Set the cellNameValue textbox to hold the cellName 
             String cellName = cellNameValue.Text;
 
-            // Try to insert the value into the spreadsheet cell 
+            // Try to insert the cell into the spreadsheet 
             try
             {
-                // Add cell to spreadsheet and store the cells that need to be recalculated 
+                // Add cell to spreadsheet
                 IEnumerable<String> recalculate = spreadSheet.SetContentsOfCell(cellName, contents);
-               
-                // Loop through the cells that need to be recalculated recalculating their values 
+                if (recalculate.Count() == 0)
+                {
+                    recalculate = spreadSheet.GetNamesOfAllNonemptyCells();
+                }
+
+                // Recalculate cells 
                 foreach (String cell in recalculate)
                 {
-                    // Parse the column out of the cell name 
                     String parsedCol = cell.Substring(0, 1);
-                    // Parse the row out of the cell name 
                     String parsedRow = cell.Substring(1, cellName.Length - 1);
 
-                    // Convert the column into a char 
                     Char parsedChar = parsedCol[0];
-                    // Convert the column into an int 
                     int colNum = (int)parsedChar - 65;
-                    // Convert the row into an int 
                     int rowNum = Convert.ToInt32(parsedRow) - 1;
 
-                    // Set the value of the cell into the spreadsheet panel 
                     spreadsheetPanel1.SetValue(colNum, rowNum, spreadSheet.GetCellValue(cell).ToString());
                 }
 
@@ -226,16 +224,15 @@ namespace SS
                 // Update cellContents textobx 
                 cellContents = spreadSheet.GetCellContents(cellNameValue.Text);
                 cellContentsValue.Text = cellContents.ToString();
-                // Set the spreadsheet status to successful since the cell was successfully inserted 
                 statusValue.Text = "Successful";
             }
-            // Catch any FormulaFormatExceptions and set the spreadsheet status to the exception 
+            // Catch any FormulaFormatExceptions and set the spreadsheet status to show the error 
             catch (Formulas.FormulaFormatException fexception)
             {
                 statusValue.Text = fexception.Message + "  (" + cellContentsValue.Text + ")";
                 cellContentsValue.Clear();
             }
-            // Catch any CircularExceptions and set the spreadsheet status to the exception 
+            // Catch any CircularExceptions and set the spreadsheet status to show the error 
             catch (CircularException cexception)
             {
                 statusValue.Text = cexception.Message + "  (" + cellContentsValue.Text + ")";

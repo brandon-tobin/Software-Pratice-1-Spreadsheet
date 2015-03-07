@@ -6,6 +6,10 @@ using System.Windows.Forms;
 
 namespace SS
 {
+    /// <summary>
+    /// This class controls whether the program should stop executing or not. 
+    /// This class was implemented from Professor Zachary's example. 
+    /// </summary>
      class Program : ApplicationContext
     {
          // Instance variable used to keep track of how many spreadsheet windows are currently open. 

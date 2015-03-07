@@ -65,6 +65,808 @@ namespace CodedUITestProject
             Mouse.Click(uISpreadsheetPanel1Client, new Point(68, 39));
         }
         
+        /// <summary>
+        /// Inserted 5 into A1 and A2 and inserted =a1+a2 in a3
+        /// </summary>
+        public void RecordedMethod2()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod2Params.UISpreadsheetWindowExePath, this.RecordedMethod2Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod2Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod2Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Type '5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod2Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod2Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+
+            // Type '=a1+a2' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod2Params.UICellContentsValueEditText2;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod2Params.UICellContentsValueEditSendKeys2, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(91, 78));
+        }
+        
+        /// <summary>
+        /// Check if cell contents equals cell contents value text box
+        /// </summary>
+        public void AssertMethod2()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'cellContentsValue' text box equals '=A1+A2'
+            Assert.AreEqual(this.AssertMethod2ExpectedValues.UICellContentsValueEditText, uICellContentsValueEdit.Text, "Cell contents do not equal cell contents value text box");
+        }
+        
+        /// <summary>
+        /// Add 5 into A1 and remove it
+        /// </summary>
+        public void RecordedMethod3()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod3Params.UISpreadsheetWindowExePath, this.RecordedMethod3Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod3Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod3Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(66, 35));
+
+            // Type '' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod3Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod3Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// Check the removal of a cell
+        /// </summary>
+        public void AssertMethod3()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinEdit uICellValueBoxEdit = this.UISpreadsheetWindow.UICellValueBoxWindow.UICellValueBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'cellContentsValue' text box equals ''
+            Assert.AreEqual(this.AssertMethod3ExpectedValues.UICellContentsValueEditText, uICellContentsValueEdit.Text, "Cell contents do not equal cell contents text box");
+
+            // Verify that the 'Text' property of 'cellValueBox' text box equals ''
+            Assert.AreEqual(this.AssertMethod3ExpectedValues.UICellValueBoxEditText, uICellValueBoxEdit.Text, "Cell value does not equal cell value text box");
+        }
+        
+        /// <summary>
+        /// Opening a file
+        /// </summary>
+        public void RecordedMethod4()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinTreeItem uIDesktopTreeItem = this.UIOpenWindow.UITreeViewWindow.UITreeViewTree.UIFavoritesTreeItem.UIDesktopTreeItem;
+            WinEdit uINameEdit = this.UIOpenWindow.UIItemWindow.UITesting213ListItem.UINameEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod4Params.UISpreadsheetWindowExePath, this.RecordedMethod4Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(44, 11));
+
+            // Click 'Favorites' -> 'Desktop' tree item
+            Mouse.Click(uIDesktopTreeItem, new Point(4, 5));
+
+            // Double-Click 'Name' text box
+            Mouse.DoubleClick(uINameEdit, new Point(61, 15));
+        }
+        
+        /// <summary>
+        /// See if text in A1 is correct
+        /// </summary>
+        public void AssertMethod4()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'cellContentsValue' text box equals 'hello world'
+            Assert.AreEqual(this.AssertMethod4ExpectedValues.UICellContentsValueEditText, uICellContentsValueEdit.Text, "File did not open correctly");
+        }
+        
+        /// <summary>
+        /// Testing the save as process
+        /// </summary>
+        public void RecordedMethod5()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uIYesButton = this.UISavechangesWindow.UIYesWindow.UIYesButton;
+            WinComboBox uIFilenameComboBox = this.UISaveAsWindow.UIDetailsPanePane.UIFilenameComboBox;
+            WinButton uISaveButton = this.UISaveAsWindow.UISaveWindow.UISaveButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod5Params.UISpreadsheetWindowExePath, this.RecordedMethod5Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '55' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod5Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod5Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Type '333' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod5Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod5Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(31, 11));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(29, 20));
+
+            // Select 'hello22' in 'File name:' combo box
+            uIFilenameComboBox.EditableItem = this.RecordedMethod5Params.UIFilenameComboBoxEditableItem;
+
+            // Click '&Save' button
+            Mouse.Click(uISaveButton, new Point(33, 13));
+        }
+        
+        /// <summary>
+        /// Testing the opening of a file
+        /// </summary>
+        public void RecordedMethod6()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinListItem uIHello22ListItem = this.UIOpenWindow.UIItemWindow.UIItemsViewList.UIHello22ListItem;
+            WinSplitButton uIOpenSplitButton = this.UIOpenWindow.UIOpenWindow1.UIOpenSplitButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod6Params.UISpreadsheetWindowExePath, this.RecordedMethod6Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(46, 12));
+
+            // Click 'hello22' list item
+            Mouse.Click(uIHello22ListItem, new Point(39, 13));
+
+            // Click '&Open' split button
+            Mouse.Click(uIOpenSplitButton, new Point(41, 8));
+        }
+        
+        /// <summary>
+        /// Opening, writing text, saving without using Save AS
+        /// </summary>
+        public void RecordedMethod7()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinEdit uISizeEdit = this.UIOpenWindow.UIItemWindow.UITesting213ListItem.UISizeEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uIYesButton = this.UISavechangesWindow.UIYesWindow.UIYesButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod7Params.UISpreadsheetWindowExePath, this.RecordedMethod7Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(28, 12));
+
+            // Double-Click 'Size' text box
+            Mouse.DoubleClick(uISizeEdit, new Point(26, 4));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(167, 73));
+
+            // Type 'inserted text' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod7Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod7Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(213, 42));
+
+            // Type '=a1+b3' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod7Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod7Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(21, 2));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(44, 15));
+        }
+        
+        /// <summary>
+        /// Opening and saving file without using save as
+        /// </summary>
+        public void RecordedMethod8()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinEdit uISizeEdit = this.UIOpenWindow.UIItemWindow.UITesting213ListItem.UISizeEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uIYesButton = this.UISavechangesWindow.UIYesWindow.UIYesButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod8Params.UISpreadsheetWindowExePath, this.RecordedMethod8Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(41, 5));
+
+            // Double-Click 'Size' text box
+            Mouse.DoubleClick(uISizeEdit, new Point(44, 6));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(74, 130));
+
+            // Type '3456' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod8Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod8Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(15, 17));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(54, 7));
+        }
+        
+        /// <summary>
+        /// Open file and close it using open and close click boxes
+        /// </summary>
+        public void RecordedMethod9()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinEdit uITypeEdit = this.UIOpenWindow.UIItemWindow.UIHello22ListItem.UITypeEdit;
+            WinMenuItem uICloseMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UICloseMenuItem;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod9Params.UISpreadsheetWindowExePath, this.RecordedMethod9Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(71, 3));
+
+            // Double-Click 'Type' text box
+            Mouse.DoubleClick(uITypeEdit, new Point(10, 12));
+
+            // Click 'File' -> 'Close' menu item
+            Mouse.Click(uICloseMenuItem, new Point(58, 10));
+        }
+        
+        /// <summary>
+        /// Open write and close using red X
+        /// </summary>
+        public void RecordedMethod10()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinListItem uITesting213ListItem = this.UIOpenWindow.UIItemWindow.UIItemsViewList.UITesting213ListItem;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinMenuItem uISaveMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveMenuItem;
+            WinMenuBar uIMenuStrip1MenuBar = this.UISpreadsheetWindow.UIMenuStrip1Window.UIMenuStrip1MenuBar;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uIYesButton = this.UISavechangesWindow.UIYesWindow.UIYesButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod10Params.UISpreadsheetWindowExePath, this.RecordedMethod10Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(27, 10));
+
+            // Double-Click 'testing213' list item
+            Mouse.DoubleClick(uITesting213ListItem, new Point(53, 34));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(236, 123));
+
+            // Type 'how is it going' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod10Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod10Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Move 'File' -> 'Save' menu item to 'menuStrip1' menu bar
+            uIMenuStrip1MenuBar.EnsureClickable(new Point(506, 10));
+            Mouse.StartDragging(uISaveMenuItem, new Point(66, 8));
+            Mouse.StopDragging(uIMenuStrip1MenuBar, new Point(506, 10));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(36, 16));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(62, 12));
+        }
+        
+        /// <summary>
+        /// Open file -- save file -- close file using the buttons
+        /// </summary>
+        public void RecordedMethod11()
+        {
+            #region Variable Declarations
+            WinMenuItem uIOpenMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UIOpenMenuItem;
+            WinEdit uINameEdit = this.UIOpenWindow.UIItemWindow.UIHello22ListItem.UINameEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinMenuItem uISaveMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveMenuItem;
+            WinMenuItem uICloseMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UICloseMenuItem;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod11Params.UISpreadsheetWindowExePath, this.RecordedMethod11Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'File' -> 'Open...' menu item
+            Mouse.Click(uIOpenMenuItem, new Point(47, 12));
+
+            // Double-Click 'Name' text box
+            Mouse.DoubleClick(uINameEdit, new Point(2, 14));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(158, 68));
+
+            // Type 'this is a test' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod11Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod11Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(83, 104));
+
+            // Type '=a1+a2' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod11Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod11Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+
+            // Click 'File' -> 'Save' menu item
+            Mouse.Click(uISaveMenuItem, new Point(31, 6));
+
+            // Click 'File' -> 'Close' menu item
+            Mouse.Click(uICloseMenuItem, new Point(48, 9));
+        }
+        
+        /// <summary>
+        /// Creating circular dependency
+        /// </summary>
+        public void RecordedMethod12()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod12Params.UISpreadsheetWindowExePath, this.RecordedMethod12Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '=b2' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod12Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod12Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(146, 62));
+
+            // Type '=a1' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod12Params.UICellContentsValueEditText1;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod12Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// Check for circular dependencies
+        /// </summary>
+        public void AssertMethod5()
+        {
+            #region Variable Declarations
+            WinText uIExceptionoftypeSSCirText = this.UISpreadsheetWindow.UIStatusStrip1StatusBar.UIExceptionoftypeSSCirText;
+            #endregion
+
+            // Verify that the 'Name' property of 'Exception of type 'SS.CircularException' was throw...' label equals 'Exception of type 'SS.CircularException' was thrown.  (=a1)'
+            Assert.AreEqual(this.AssertMethod5ExpectedValues.UIExceptionoftypeSSCirTextName, uIExceptionoftypeSSCirText.Name, "Incorrect error thrown ");
+        }
+        
+        /// <summary>
+        /// Inserting invalid formula
+        /// </summary>
+        public void RecordedMethod13()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod13Params.UISpreadsheetWindowExePath, this.RecordedMethod13Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '=*9)(' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod13Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod13Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// Invalid formula detection
+        /// </summary>
+        public void AssertMethod6()
+        {
+            #region Variable Declarations
+            WinText uIClosingparengreatertText = this.UISpreadsheetWindow.UIStatusStrip1StatusBar.UIClosingparengreatertText;
+            #endregion
+
+            // Verify that the 'Name' property of 'Closing paren greater than opening paren -- not en...' label equals 'Closing paren greater than opening paren -- not enough opening parens  (=*9)()'
+            Assert.AreEqual(this.AssertMethod6ExpectedValues.UIClosingparengreatertTextName, uIClosingparengreatertText.Name, "Did not correctly detect invalid formula");
+        }
+        
+        /// <summary>
+        /// Testing arrow keys
+        /// </summary>
+        public void RecordedMethod14()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod14Params.UISpreadsheetWindowExePath, this.RecordedMethod14Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod14Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Type '{Down}{Down}{Down}{Down}{Down}{Down}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod14Params.UICellContentsValueEditSendKeys1, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// Opening help menu
+        /// </summary>
+        public void RecordedMethod15()
+        {
+            #region Variable Declarations
+            WinMenuItem uIControlsMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIHelpMenuItem.UIControlsMenuItem;
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod15Params.UISpreadsheetWindowExePath, this.RecordedMethod15Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'Help' -> 'Controls' menu item
+            Mouse.Click(uIControlsMenuItem, new Point(44, 3));
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(38, 10));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(22, 5));
+        }
+        
+        /// <summary>
+        /// circular dependnecy using insert button
+        /// </summary>
+        public void RecordedMethod16()
+        {
+            #region Variable Declarations
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uIInsertButton = this.UISpreadsheetWindow.UIInsertWindow.UIInsertButton;
+            WinClient uISpreadsheetClient = this.UISpreadsheetWindow.UISpreadsheetClient;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod16Params.UISpreadsheetWindowExePath, this.RecordedMethod16Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(176, 122));
+
+            // Type '=d5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod16Params.UICellContentsValueEditText;
+
+            // Click 'Insert' button
+            Mouse.Click(uIInsertButton, new Point(24, 17));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(303, 123));
+
+            // Click 'Spreadsheet' client
+            Mouse.Click(uISpreadsheetClient, new Point(184, 84));
+
+            // Type '=g5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod16Params.UICellContentsValueEditText1;
+
+            // Click 'Insert' button
+            Mouse.Click(uIInsertButton, new Point(16, 13));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(538, 122));
+
+            // Type '=b5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod16Params.UICellContentsValueEditText2;
+
+            // Click 'Insert' button
+            Mouse.Click(uIInsertButton, new Point(38, 8));
+        }
+        
+        /// <summary>
+        /// Check for circular dependency using insert button
+        /// </summary>
+        public void AssertMethod7()
+        {
+            #region Variable Declarations
+            WinText uIExceptionoftypeSSCirText1 = this.UISpreadsheetWindow.UIStatusStrip1StatusBar.UIExceptionoftypeSSCirText1;
+            #endregion
+
+            // Verify that the 'Name' property of 'Exception of type 'SS.CircularException' was throw...' label equals 'Exception of type 'SS.CircularException' was thrown.  (=b5)'
+            Assert.AreEqual(this.AssertMethod7ExpectedValues.UIExceptionoftypeSSCirText1Name, uIExceptionoftypeSSCirText1.Name, "Circular dependency not thrown correctly");
+        }
+        
+        /// <summary>
+        /// Close spreadsheet without saving
+        /// </summary>
+        public void RecordedMethod17()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uINOButton = this.UISavechangesWindow.UINOWindow.UINOButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod17Params.UISpreadsheetWindowExePath, this.RecordedMethod17Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '5' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod17Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod17Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(30, 10));
+
+            // Click '&No' button
+            Mouse.Click(uINOButton, new Point(41, 14));
+        }
+        
+        /// <summary>
+        /// Open new spreadsheet windows
+        /// </summary>
+        public void RecordedMethod18()
+        {
+            #region Variable Declarations
+            WinMenuItem uISystemMenuItem = this.UISpreadsheetWindow.UIForm1MenuBar.UISystemMenuItem;
+            WinMenuItem uINewMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UINewMenuItem;
+            WinMenuItem uINewMenuItem1 = this.UISpreadsheetWindow1.UIMenuStrip1MenuBar.UIFileMenuItem.UINewMenuItem;
+            WinMenuItem uINewMenuItem2 = this.UISpreadsheetWindow2.UIMenuStrip1MenuBar.UIFileMenuItem.UINewMenuItem;
+            WinTitleBar uISpreadsheetTitleBar = this.UISpreadsheetWindow.UISpreadsheetTitleBar;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinTitleBar uISpreadsheetTitleBar1 = this.UISpreadsheetWindow1.UISpreadsheetTitleBar;
+            WinButton uICloseButton1 = this.UISpreadsheetWindow1.UISpreadsheetTitleBar.UICloseButton;
+            WinTitleBar uISpreadsheetTitleBar2 = this.UISpreadsheetWindow2.UISpreadsheetTitleBar;
+            WinButton uICloseButton2 = this.UISpreadsheetWindow2.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uICloseButton3 = this.UISpreadsheetWindow3.UISpreadsheetTitleBar.UICloseButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod18Params.UISpreadsheetWindowExePath, this.RecordedMethod18Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'System' menu item
+            Mouse.Click(uISystemMenuItem, new Point(12, 20));
+
+            // Click 'File' -> 'New' menu item
+            Mouse.Click(uINewMenuItem, new Point(26, 9));
+
+            // Click 'File' -> 'New' menu item
+            Mouse.Click(uINewMenuItem1, new Point(36, 14));
+
+            // Click 'File' -> 'New' menu item
+            Mouse.Click(uINewMenuItem2, new Point(27, 15));
+
+            // Click 'Spreadsheet' title bar
+            Mouse.Click(uISpreadsheetTitleBar, new Point(500, 3));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(20, 11));
+
+            // Click 'Spreadsheet' title bar
+            Mouse.Click(uISpreadsheetTitleBar1, new Point(781, 10));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton1, new Point(14, 11));
+
+            // Click 'Spreadsheet' title bar
+            Mouse.Click(uISpreadsheetTitleBar2, new Point(795, 12));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton2, new Point(34, 8));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton3, new Point(31, 7));
+        }
+        
+        /// <summary>
+        /// Formula  Format exception using insert button
+        /// </summary>
+        public void RecordedMethod19()
+        {
+            #region Variable Declarations
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinButton uIInsertButton = this.UISpreadsheetWindow.UIInsertWindow.UIInsertButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod19Params.UISpreadsheetWindowExePath, this.RecordedMethod19Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(116, 72));
+
+            // Type '=*trufhrf55()_' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod19Params.UICellContentsValueEditText;
+
+            // Click 'Insert' button
+            Mouse.Click(uIInsertButton, new Point(27, 8));
+        }
+        
+        /// <summary>
+        /// Test for formula format exception using insert button
+        /// </summary>
+        public void AssertMethod8()
+        {
+            #region Variable Declarations
+            WinText uITokenfollowingoroperText = this.UISpreadsheetWindow.UIStatusStrip1StatusBar.UITokenfollowingoroperText;
+            #endregion
+
+            // Verify that the 'Name' property of 'Token following ) or operator is invalid (=*trufhr...' label equals 'Token following ) or operator is invalid  (=*trufhrf55()_)'
+            Assert.AreEqual(this.AssertMethod8ExpectedValues.UITokenfollowingoroperTextName, uITokenfollowingoroperText.Name, "Wrong status error ");
+        }
+        
+        /// <summary>
+        /// Testing save as dialog box
+        /// </summary>
+        public void RecordedMethod20()
+        {
+            #region Variable Declarations
+            WinClient uISpreadsheetPanel1Client = this.UISpreadsheetWindow.UIItemWindow.UISpreadsheetPanel1Client;
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinMenuItem uISaveAsMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveAsMenuItem;
+            WinComboBox uIFilenameComboBox = this.UISaveAsWindow.UIDetailsPanePane.UIFilenameComboBox;
+            WinButton uISaveButton = this.UISaveAsWindow.UISaveWindow.UISaveButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod20Params.UISpreadsheetWindowExePath, this.RecordedMethod20Params.UISpreadsheetWindowAlternateExePath);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(152, 113));
+
+            // Type '45675' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod20Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod20Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'File' -> 'Save As...' menu item
+            Mouse.Click(uISaveAsMenuItem, new Point(64, 9));
+
+            // Select 'helloworld232' in 'File name:' combo box
+            uIFilenameComboBox.EditableItem = this.RecordedMethod20Params.UIFilenameComboBoxEditableItem;
+
+            // Click '&Save' button
+            Mouse.Click(uISaveButton, new Point(25, 14));
+        }
+        
+        /// <summary>
+        /// close to save as
+        /// </summary>
+        public void RecordedMethod21()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinList uIItemList = this.UIItemWindow.UIFolderViewWindow.UIItemList;
+            WinButton uICloseButton = this.UISpreadsheetWindow.UISpreadsheetTitleBar.UICloseButton;
+            WinButton uIYesButton = this.UISavechangesWindow.UIYesWindow.UIYesButton;
+            WinComboBox uIFilenameComboBox = this.UISaveAsWindow.UIDetailsPanePane.UIFilenameComboBox;
+            WinEdit uIFilenameEdit = this.UISaveAsWindow.UIItemWindow.UIFilenameEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod21Params.UISpreadsheetWindowExePath, this.RecordedMethod21Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type '5434444' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod21Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod21Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click list box
+            Mouse.Click(uIItemList, new Point(1158, 194));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(35, 5));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(47, 9));
+
+            // Select 'testing22222' in 'File name:' combo box
+            uIFilenameComboBox.EditableItem = this.RecordedMethod21Params.UIFilenameComboBoxEditableItem;
+
+            // Type '{Enter}' in 'File name:' text box
+            Keyboard.SendKeys(uIFilenameEdit, this.RecordedMethod21Params.UIFilenameEditSendKeys, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// save to save as
+        /// </summary>
+        public void RecordedMethod22()
+        {
+            #region Variable Declarations
+            WinEdit uICellContentsValueEdit = this.UISpreadsheetWindow.UICellContentsValueWindow.UICellContentsValueEdit;
+            WinMenuItem uISaveMenuItem = this.UISpreadsheetWindow.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveMenuItem;
+            WinComboBox uIFilenameComboBox = this.UISaveAsWindow.UIDetailsPanePane.UIFilenameComboBox;
+            WinEdit uIFilenameEdit = this.UISaveAsWindow.UIItemWindow.UIFilenameEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uISpreadsheetWindow = ApplicationUnderTest.Launch(this.RecordedMethod22Params.UISpreadsheetWindowExePath, this.RecordedMethod22Params.UISpreadsheetWindowAlternateExePath);
+
+            // Type 'aewfaewfaew' in 'cellContentsValue' text box
+            uICellContentsValueEdit.Text = this.RecordedMethod22Params.UICellContentsValueEditText;
+
+            // Type '{Enter}' in 'cellContentsValue' text box
+            Keyboard.SendKeys(uICellContentsValueEdit, this.RecordedMethod22Params.UICellContentsValueEditSendKeys, ModifierKeys.None);
+
+            // Click 'File' -> 'Save' menu item
+            Mouse.Click(uISaveMenuItem, new Point(34, 2));
+
+            // Select 'testing44444' in 'File name:' combo box
+            uIFilenameComboBox.EditableItem = this.RecordedMethod22Params.UIFilenameComboBoxEditableItem;
+
+            // Type '{Enter}' in 'File name:' text box
+            Keyboard.SendKeys(uIFilenameEdit, this.RecordedMethod22Params.UIFilenameEditSendKeys, ModifierKeys.None);
+        }
+        
         #region Properties
         public virtual AssertMethod1ExpectedValues AssertMethod1ExpectedValues
         {
@@ -90,6 +892,342 @@ namespace CodedUITestProject
             }
         }
         
+        public virtual RecordedMethod2Params RecordedMethod2Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod2Params == null))
+                {
+                    this.mRecordedMethod2Params = new RecordedMethod2Params();
+                }
+                return this.mRecordedMethod2Params;
+            }
+        }
+        
+        public virtual AssertMethod2ExpectedValues AssertMethod2ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod2ExpectedValues == null))
+                {
+                    this.mAssertMethod2ExpectedValues = new AssertMethod2ExpectedValues();
+                }
+                return this.mAssertMethod2ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod3Params RecordedMethod3Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod3Params == null))
+                {
+                    this.mRecordedMethod3Params = new RecordedMethod3Params();
+                }
+                return this.mRecordedMethod3Params;
+            }
+        }
+        
+        public virtual AssertMethod3ExpectedValues AssertMethod3ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod3ExpectedValues == null))
+                {
+                    this.mAssertMethod3ExpectedValues = new AssertMethod3ExpectedValues();
+                }
+                return this.mAssertMethod3ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod4Params RecordedMethod4Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod4Params == null))
+                {
+                    this.mRecordedMethod4Params = new RecordedMethod4Params();
+                }
+                return this.mRecordedMethod4Params;
+            }
+        }
+        
+        public virtual AssertMethod4ExpectedValues AssertMethod4ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod4ExpectedValues == null))
+                {
+                    this.mAssertMethod4ExpectedValues = new AssertMethod4ExpectedValues();
+                }
+                return this.mAssertMethod4ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod5Params RecordedMethod5Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod5Params == null))
+                {
+                    this.mRecordedMethod5Params = new RecordedMethod5Params();
+                }
+                return this.mRecordedMethod5Params;
+            }
+        }
+        
+        public virtual RecordedMethod6Params RecordedMethod6Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod6Params == null))
+                {
+                    this.mRecordedMethod6Params = new RecordedMethod6Params();
+                }
+                return this.mRecordedMethod6Params;
+            }
+        }
+        
+        public virtual RecordedMethod7Params RecordedMethod7Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod7Params == null))
+                {
+                    this.mRecordedMethod7Params = new RecordedMethod7Params();
+                }
+                return this.mRecordedMethod7Params;
+            }
+        }
+        
+        public virtual RecordedMethod8Params RecordedMethod8Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod8Params == null))
+                {
+                    this.mRecordedMethod8Params = new RecordedMethod8Params();
+                }
+                return this.mRecordedMethod8Params;
+            }
+        }
+        
+        public virtual RecordedMethod9Params RecordedMethod9Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod9Params == null))
+                {
+                    this.mRecordedMethod9Params = new RecordedMethod9Params();
+                }
+                return this.mRecordedMethod9Params;
+            }
+        }
+        
+        public virtual RecordedMethod10Params RecordedMethod10Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod10Params == null))
+                {
+                    this.mRecordedMethod10Params = new RecordedMethod10Params();
+                }
+                return this.mRecordedMethod10Params;
+            }
+        }
+        
+        public virtual RecordedMethod11Params RecordedMethod11Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod11Params == null))
+                {
+                    this.mRecordedMethod11Params = new RecordedMethod11Params();
+                }
+                return this.mRecordedMethod11Params;
+            }
+        }
+        
+        public virtual RecordedMethod12Params RecordedMethod12Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod12Params == null))
+                {
+                    this.mRecordedMethod12Params = new RecordedMethod12Params();
+                }
+                return this.mRecordedMethod12Params;
+            }
+        }
+        
+        public virtual AssertMethod5ExpectedValues AssertMethod5ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod5ExpectedValues == null))
+                {
+                    this.mAssertMethod5ExpectedValues = new AssertMethod5ExpectedValues();
+                }
+                return this.mAssertMethod5ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod13Params RecordedMethod13Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod13Params == null))
+                {
+                    this.mRecordedMethod13Params = new RecordedMethod13Params();
+                }
+                return this.mRecordedMethod13Params;
+            }
+        }
+        
+        public virtual AssertMethod6ExpectedValues AssertMethod6ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod6ExpectedValues == null))
+                {
+                    this.mAssertMethod6ExpectedValues = new AssertMethod6ExpectedValues();
+                }
+                return this.mAssertMethod6ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod14Params RecordedMethod14Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod14Params == null))
+                {
+                    this.mRecordedMethod14Params = new RecordedMethod14Params();
+                }
+                return this.mRecordedMethod14Params;
+            }
+        }
+        
+        public virtual RecordedMethod15Params RecordedMethod15Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod15Params == null))
+                {
+                    this.mRecordedMethod15Params = new RecordedMethod15Params();
+                }
+                return this.mRecordedMethod15Params;
+            }
+        }
+        
+        public virtual RecordedMethod16Params RecordedMethod16Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod16Params == null))
+                {
+                    this.mRecordedMethod16Params = new RecordedMethod16Params();
+                }
+                return this.mRecordedMethod16Params;
+            }
+        }
+        
+        public virtual AssertMethod7ExpectedValues AssertMethod7ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod7ExpectedValues == null))
+                {
+                    this.mAssertMethod7ExpectedValues = new AssertMethod7ExpectedValues();
+                }
+                return this.mAssertMethod7ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod17Params RecordedMethod17Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod17Params == null))
+                {
+                    this.mRecordedMethod17Params = new RecordedMethod17Params();
+                }
+                return this.mRecordedMethod17Params;
+            }
+        }
+        
+        public virtual RecordedMethod18Params RecordedMethod18Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod18Params == null))
+                {
+                    this.mRecordedMethod18Params = new RecordedMethod18Params();
+                }
+                return this.mRecordedMethod18Params;
+            }
+        }
+        
+        public virtual RecordedMethod19Params RecordedMethod19Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod19Params == null))
+                {
+                    this.mRecordedMethod19Params = new RecordedMethod19Params();
+                }
+                return this.mRecordedMethod19Params;
+            }
+        }
+        
+        public virtual AssertMethod8ExpectedValues AssertMethod8ExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMethod8ExpectedValues == null))
+                {
+                    this.mAssertMethod8ExpectedValues = new AssertMethod8ExpectedValues();
+                }
+                return this.mAssertMethod8ExpectedValues;
+            }
+        }
+        
+        public virtual RecordedMethod20Params RecordedMethod20Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod20Params == null))
+                {
+                    this.mRecordedMethod20Params = new RecordedMethod20Params();
+                }
+                return this.mRecordedMethod20Params;
+            }
+        }
+        
+        public virtual RecordedMethod21Params RecordedMethod21Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod21Params == null))
+                {
+                    this.mRecordedMethod21Params = new RecordedMethod21Params();
+                }
+                return this.mRecordedMethod21Params;
+            }
+        }
+        
+        public virtual RecordedMethod22Params RecordedMethod22Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod22Params == null))
+                {
+                    this.mRecordedMethod22Params = new RecordedMethod22Params();
+                }
+                return this.mRecordedMethod22Params;
+            }
+        }
+        
         public UISpreadsheetWindow UISpreadsheetWindow
         {
             get
@@ -101,6 +1239,102 @@ namespace CodedUITestProject
                 return this.mUISpreadsheetWindow;
             }
         }
+        
+        public UIOpenWindow UIOpenWindow
+        {
+            get
+            {
+                if ((this.mUIOpenWindow == null))
+                {
+                    this.mUIOpenWindow = new UIOpenWindow();
+                }
+                return this.mUIOpenWindow;
+            }
+        }
+        
+        public UISavechangesWindow UISavechangesWindow
+        {
+            get
+            {
+                if ((this.mUISavechangesWindow == null))
+                {
+                    this.mUISavechangesWindow = new UISavechangesWindow();
+                }
+                return this.mUISavechangesWindow;
+            }
+        }
+        
+        public UISaveAsWindow UISaveAsWindow
+        {
+            get
+            {
+                if ((this.mUISaveAsWindow == null))
+                {
+                    this.mUISaveAsWindow = new UISaveAsWindow();
+                }
+                return this.mUISaveAsWindow;
+            }
+        }
+        
+        public UIOKWindow UIOKWindow
+        {
+            get
+            {
+                if ((this.mUIOKWindow == null))
+                {
+                    this.mUIOKWindow = new UIOKWindow();
+                }
+                return this.mUIOKWindow;
+            }
+        }
+        
+        public UISpreadsheetWindow1 UISpreadsheetWindow1
+        {
+            get
+            {
+                if ((this.mUISpreadsheetWindow1 == null))
+                {
+                    this.mUISpreadsheetWindow1 = new UISpreadsheetWindow1();
+                }
+                return this.mUISpreadsheetWindow1;
+            }
+        }
+        
+        public UISpreadsheetWindow2 UISpreadsheetWindow2
+        {
+            get
+            {
+                if ((this.mUISpreadsheetWindow2 == null))
+                {
+                    this.mUISpreadsheetWindow2 = new UISpreadsheetWindow2();
+                }
+                return this.mUISpreadsheetWindow2;
+            }
+        }
+        
+        public UISpreadsheetWindow3 UISpreadsheetWindow3
+        {
+            get
+            {
+                if ((this.mUISpreadsheetWindow3 == null))
+                {
+                    this.mUISpreadsheetWindow3 = new UISpreadsheetWindow3();
+                }
+                return this.mUISpreadsheetWindow3;
+            }
+        }
+        
+        public UIItemWindow3 UIItemWindow
+        {
+            get
+            {
+                if ((this.mUIItemWindow == null))
+                {
+                    this.mUIItemWindow = new UIItemWindow3();
+                }
+                return this.mUIItemWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -108,7 +1342,79 @@ namespace CodedUITestProject
         
         private RecordedMethod1Params mRecordedMethod1Params;
         
+        private RecordedMethod2Params mRecordedMethod2Params;
+        
+        private AssertMethod2ExpectedValues mAssertMethod2ExpectedValues;
+        
+        private RecordedMethod3Params mRecordedMethod3Params;
+        
+        private AssertMethod3ExpectedValues mAssertMethod3ExpectedValues;
+        
+        private RecordedMethod4Params mRecordedMethod4Params;
+        
+        private AssertMethod4ExpectedValues mAssertMethod4ExpectedValues;
+        
+        private RecordedMethod5Params mRecordedMethod5Params;
+        
+        private RecordedMethod6Params mRecordedMethod6Params;
+        
+        private RecordedMethod7Params mRecordedMethod7Params;
+        
+        private RecordedMethod8Params mRecordedMethod8Params;
+        
+        private RecordedMethod9Params mRecordedMethod9Params;
+        
+        private RecordedMethod10Params mRecordedMethod10Params;
+        
+        private RecordedMethod11Params mRecordedMethod11Params;
+        
+        private RecordedMethod12Params mRecordedMethod12Params;
+        
+        private AssertMethod5ExpectedValues mAssertMethod5ExpectedValues;
+        
+        private RecordedMethod13Params mRecordedMethod13Params;
+        
+        private AssertMethod6ExpectedValues mAssertMethod6ExpectedValues;
+        
+        private RecordedMethod14Params mRecordedMethod14Params;
+        
+        private RecordedMethod15Params mRecordedMethod15Params;
+        
+        private RecordedMethod16Params mRecordedMethod16Params;
+        
+        private AssertMethod7ExpectedValues mAssertMethod7ExpectedValues;
+        
+        private RecordedMethod17Params mRecordedMethod17Params;
+        
+        private RecordedMethod18Params mRecordedMethod18Params;
+        
+        private RecordedMethod19Params mRecordedMethod19Params;
+        
+        private AssertMethod8ExpectedValues mAssertMethod8ExpectedValues;
+        
+        private RecordedMethod20Params mRecordedMethod20Params;
+        
+        private RecordedMethod21Params mRecordedMethod21Params;
+        
+        private RecordedMethod22Params mRecordedMethod22Params;
+        
         private UISpreadsheetWindow mUISpreadsheetWindow;
+        
+        private UIOpenWindow mUIOpenWindow;
+        
+        private UISavechangesWindow mUISavechangesWindow;
+        
+        private UISaveAsWindow mUISaveAsWindow;
+        
+        private UIOKWindow mUIOKWindow;
+        
+        private UISpreadsheetWindow1 mUISpreadsheetWindow1;
+        
+        private UISpreadsheetWindow2 mUISpreadsheetWindow2;
+        
+        private UISpreadsheetWindow3 mUISpreadsheetWindow3;
+        
+        private UIItemWindow3 mUIItemWindow;
         #endregion
     }
     
@@ -156,6 +1462,838 @@ namespace CodedUITestProject
         /// Type '{Enter}' in 'cellContentsValue' text box
         /// </summary>
         public string UICellContentsValueEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod2'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod2Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "5";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "5";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        
+        /// <summary>
+        /// Type '=a1+a2' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText2 = "=a1+a2";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys2 = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod2'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod2ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'cellContentsValue' text box equals '=A1+A2'
+        /// </summary>
+        public string UICellContentsValueEditText = "=A1+A2";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod3'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod3Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "5";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod3'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod3ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'cellContentsValue' text box equals ''
+        /// </summary>
+        public string UICellContentsValueEditText = "";
+        
+        /// <summary>
+        /// Verify that the 'Text' property of 'cellValueBox' text box equals ''
+        /// </summary>
+        public string UICellValueBoxEditText = "";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod4'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod4Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod4'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod4ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'cellContentsValue' text box equals 'hello world'
+        /// </summary>
+        public string UICellContentsValueEditText = "hello world";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod5'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod5Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '55' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "55";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '333' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "333";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        
+        /// <summary>
+        /// Select 'hello22' in 'File name:' combo box
+        /// </summary>
+        public string UIFilenameComboBoxEditableItem = "hello22";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod6'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod6Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod7'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod7Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type 'inserted text' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "inserted text";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '=a1+b3' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "=a1+b3";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod8'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod8Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '3456' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "3456";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod9'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod9Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod10'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod10Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type 'how is it going' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "how is it going";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod11'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod11Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type 'this is a test' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "this is a test";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '=a1+a2' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "=a1+a2";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod12'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod12Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '=b2' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "=b2";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '=a1' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "=a1";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod5'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod5ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Exception of type 'SS.CircularException' was throw...' label equals 'Exception of type 'SS.CircularException' was thrown.  (=a1)'
+        /// </summary>
+        public string UIExceptionoftypeSSCirTextName = "Exception of type \'SS.CircularException\' was thrown.  (=a1)";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod13'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod13Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '=*9)(' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "=*9)(";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod6'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod6ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Closing paren greater than opening paren -- not en...' label equals 'Closing paren greater than opening paren -- not enough opening parens  (=*9)()'
+        /// </summary>
+        public string UIClosingparengreatertTextName = "Closing paren greater than opening paren -- not enough opening parens  (=*9)()";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod14'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod14Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = @"{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Right}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Left}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}";
+        
+        /// <summary>
+        /// Type '{Down}{Down}{Down}{Down}{Down}{Down}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys1 = @"{Down}{Down}{Down}{Down}{Down}{Down}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod15'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod15Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod16'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod16Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '=d5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "=d5";
+        
+        /// <summary>
+        /// Type '=g5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText1 = "=g5";
+        
+        /// <summary>
+        /// Type '=b5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText2 = "=b5";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod7'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod7ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Exception of type 'SS.CircularException' was throw...' label equals 'Exception of type 'SS.CircularException' was thrown.  (=b5)'
+        /// </summary>
+        public string UIExceptionoftypeSSCirText1Name = "Exception of type \'SS.CircularException\' was thrown.  (=b5)";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod17'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod17Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '5' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "5";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod18'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod18Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod19'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod19Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '=*trufhrf55()_' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "=*trufhrf55()_";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMethod8'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class AssertMethod8ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Token following ) or operator is invalid (=*trufhr...' label equals 'Token following ) or operator is invalid  (=*trufhrf55()_)'
+        /// </summary>
+        public string UITokenfollowingoroperTextName = "Token following ) or operator is invalid  (=*trufhrf55()_)";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod20'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod20Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '45675' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "45675";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Select 'helloworld232' in 'File name:' combo box
+        /// </summary>
+        public string UIFilenameComboBoxEditableItem = "helloworld232";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod21'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod21Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type '5434444' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "5434444";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Select 'testing22222' in 'File name:' combo box
+        /// </summary>
+        public string UIFilenameComboBoxEditableItem = "testing22222";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'File name:' text box
+        /// </summary>
+        public string UIFilenameEditSendKeys = "{Enter}";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod22'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class RecordedMethod22Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowExePath = "C:\\Users\\tobin\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshe" +
+            "etGUI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\cs3500\Spreadsheet\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UISpreadsheetWindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\cs3500\\Spreadsheet\\SpreadsheetGUI\\bin\\Debug\\Spreadshee" +
+            "tGUI.exe";
+        
+        /// <summary>
+        /// Type 'aewfaewfaew' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditText = "aewfaewfaew";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'cellContentsValue' text box
+        /// </summary>
+        public string UICellContentsValueEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Select 'testing44444' in 'File name:' combo box
+        /// </summary>
+        public string UIFilenameComboBoxEditableItem = "testing44444";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'File name:' text box
+        /// </summary>
+        public string UIFilenameEditSendKeys = "{Enter}";
         #endregion
     }
     
@@ -232,6 +2370,94 @@ namespace CodedUITestProject
                 return this.mUIItem1Window;
             }
         }
+        
+        public UIMenuStrip1MenuBar UIMenuStrip1MenuBar
+        {
+            get
+            {
+                if ((this.mUIMenuStrip1MenuBar == null))
+                {
+                    this.mUIMenuStrip1MenuBar = new UIMenuStrip1MenuBar(this);
+                }
+                return this.mUIMenuStrip1MenuBar;
+            }
+        }
+        
+        public UISpreadsheetTitleBar UISpreadsheetTitleBar
+        {
+            get
+            {
+                if ((this.mUISpreadsheetTitleBar == null))
+                {
+                    this.mUISpreadsheetTitleBar = new UISpreadsheetTitleBar(this);
+                }
+                return this.mUISpreadsheetTitleBar;
+            }
+        }
+        
+        public UIMenuStrip1Window UIMenuStrip1Window
+        {
+            get
+            {
+                if ((this.mUIMenuStrip1Window == null))
+                {
+                    this.mUIMenuStrip1Window = new UIMenuStrip1Window(this);
+                }
+                return this.mUIMenuStrip1Window;
+            }
+        }
+        
+        public UIStatusStrip1StatusBar UIStatusStrip1StatusBar
+        {
+            get
+            {
+                if ((this.mUIStatusStrip1StatusBar == null))
+                {
+                    this.mUIStatusStrip1StatusBar = new UIStatusStrip1StatusBar(this);
+                }
+                return this.mUIStatusStrip1StatusBar;
+            }
+        }
+        
+        public UIInsertWindow UIInsertWindow
+        {
+            get
+            {
+                if ((this.mUIInsertWindow == null))
+                {
+                    this.mUIInsertWindow = new UIInsertWindow(this);
+                }
+                return this.mUIInsertWindow;
+            }
+        }
+        
+        public WinClient UISpreadsheetClient
+        {
+            get
+            {
+                if ((this.mUISpreadsheetClient == null))
+                {
+                    this.mUISpreadsheetClient = new WinClient(this);
+                    #region Search Criteria
+                    this.mUISpreadsheetClient.SearchProperties[WinControl.PropertyNames.Name] = "Spreadsheet";
+                    this.mUISpreadsheetClient.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUISpreadsheetClient;
+            }
+        }
+        
+        public UIForm1MenuBar UIForm1MenuBar
+        {
+            get
+            {
+                if ((this.mUIForm1MenuBar == null))
+                {
+                    this.mUIForm1MenuBar = new UIForm1MenuBar(this);
+                }
+                return this.mUIForm1MenuBar;
+            }
+        }
         #endregion
         
         #region Fields
@@ -244,6 +2470,20 @@ namespace CodedUITestProject
         private UIAWindow mUIAWindow;
         
         private UIItem1Window mUIItem1Window;
+        
+        private UIMenuStrip1MenuBar mUIMenuStrip1MenuBar;
+        
+        private UISpreadsheetTitleBar mUISpreadsheetTitleBar;
+        
+        private UIMenuStrip1Window mUIMenuStrip1Window;
+        
+        private UIStatusStrip1StatusBar mUIStatusStrip1StatusBar;
+        
+        private UIInsertWindow mUIInsertWindow;
+        
+        private WinClient mUISpreadsheetClient;
+        
+        private UIForm1MenuBar mUIForm1MenuBar;
         #endregion
     }
     
@@ -424,6 +2664,1612 @@ namespace CodedUITestProject
         
         #region Fields
         private WinEdit mUIRowValueEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIMenuStrip1MenuBar : WinMenuBar
+    {
+        
+        public UIMenuStrip1MenuBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenu.PropertyNames.Name] = "menuStrip1";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UIFileMenuItem UIFileMenuItem
+        {
+            get
+            {
+                if ((this.mUIFileMenuItem == null))
+                {
+                    this.mUIFileMenuItem = new UIFileMenuItem(this);
+                }
+                return this.mUIFileMenuItem;
+            }
+        }
+        
+        public UIHelpMenuItem UIHelpMenuItem
+        {
+            get
+            {
+                if ((this.mUIHelpMenuItem == null))
+                {
+                    this.mUIHelpMenuItem = new UIHelpMenuItem(this);
+                }
+                return this.mUIHelpMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFileMenuItem mUIFileMenuItem;
+        
+        private UIHelpMenuItem mUIHelpMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIFileMenuItem : WinMenuItem
+    {
+        
+        public UIFileMenuItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "File";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UIOpenMenuItem
+        {
+            get
+            {
+                if ((this.mUIOpenMenuItem == null))
+                {
+                    this.mUIOpenMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIOpenMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Open...";
+                    this.mUIOpenMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIOpenMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIOpenMenuItem;
+            }
+        }
+        
+        public WinMenuItem UICloseMenuItem
+        {
+            get
+            {
+                if ((this.mUICloseMenuItem == null))
+                {
+                    this.mUICloseMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUICloseMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Close";
+                    this.mUICloseMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUICloseMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUICloseMenuItem;
+            }
+        }
+        
+        public WinMenuItem UISaveMenuItem
+        {
+            get
+            {
+                if ((this.mUISaveMenuItem == null))
+                {
+                    this.mUISaveMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUISaveMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Save";
+                    this.mUISaveMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUISaveMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUISaveMenuItem;
+            }
+        }
+        
+        public WinMenuItem UINewMenuItem
+        {
+            get
+            {
+                if ((this.mUINewMenuItem == null))
+                {
+                    this.mUINewMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUINewMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "New";
+                    this.mUINewMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUINewMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUINewMenuItem;
+            }
+        }
+        
+        public WinMenuItem UISaveAsMenuItem
+        {
+            get
+            {
+                if ((this.mUISaveAsMenuItem == null))
+                {
+                    this.mUISaveAsMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUISaveAsMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Save As...";
+                    this.mUISaveAsMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUISaveAsMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUISaveAsMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUIOpenMenuItem;
+        
+        private WinMenuItem mUICloseMenuItem;
+        
+        private WinMenuItem mUISaveMenuItem;
+        
+        private WinMenuItem mUINewMenuItem;
+        
+        private WinMenuItem mUISaveAsMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIHelpMenuItem : WinMenuItem
+    {
+        
+        public UIHelpMenuItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "Help";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UIControlsMenuItem
+        {
+            get
+            {
+                if ((this.mUIControlsMenuItem == null))
+                {
+                    this.mUIControlsMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIControlsMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Controls";
+                    this.mUIControlsMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIControlsMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIControlsMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUIControlsMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetTitleBar : WinTitleBar
+    {
+        
+        public UISpreadsheetTitleBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UICloseButton
+        {
+            get
+            {
+                if ((this.mUICloseButton == null))
+                {
+                    this.mUICloseButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUICloseButton.SearchProperties[WinButton.PropertyNames.Name] = "Close";
+                    this.mUICloseButton.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUICloseButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUICloseButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIMenuStrip1Window : WinWindow
+    {
+        
+        public UIMenuStrip1Window(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlName] = "menuStrip1";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuBar UIMenuStrip1MenuBar
+        {
+            get
+            {
+                if ((this.mUIMenuStrip1MenuBar == null))
+                {
+                    this.mUIMenuStrip1MenuBar = new WinMenuBar(this);
+                    #region Search Criteria
+                    this.mUIMenuStrip1MenuBar.SearchProperties[WinMenu.PropertyNames.Name] = "menuStrip1";
+                    this.mUIMenuStrip1MenuBar.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIMenuStrip1MenuBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuBar mUIMenuStrip1MenuBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIStatusStrip1StatusBar : WinStatusBar
+    {
+        
+        public UIStatusStrip1StatusBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinStatusBar.PropertyNames.Name] = "statusStrip1";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UIExceptionoftypeSSCirText
+        {
+            get
+            {
+                if ((this.mUIExceptionoftypeSSCirText == null))
+                {
+                    this.mUIExceptionoftypeSSCirText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIExceptionoftypeSSCirText.SearchProperties[WinText.PropertyNames.Name] = "Exception of type \'SS.CircularException\' was thrown.  (=a1)";
+                    this.mUIExceptionoftypeSSCirText.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIExceptionoftypeSSCirText;
+            }
+        }
+        
+        public WinText UIClosingparengreatertText
+        {
+            get
+            {
+                if ((this.mUIClosingparengreatertText == null))
+                {
+                    this.mUIClosingparengreatertText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIClosingparengreatertText.SearchProperties[WinText.PropertyNames.Name] = "Closing paren greater than opening paren -- not enough opening parens  (=*9)()";
+                    this.mUIClosingparengreatertText.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIClosingparengreatertText;
+            }
+        }
+        
+        public WinText UIExceptionoftypeSSCirText1
+        {
+            get
+            {
+                if ((this.mUIExceptionoftypeSSCirText1 == null))
+                {
+                    this.mUIExceptionoftypeSSCirText1 = new WinText(this);
+                    #region Search Criteria
+                    this.mUIExceptionoftypeSSCirText1.SearchProperties[WinText.PropertyNames.Name] = "Exception of type \'SS.CircularException\' was thrown.  (=b5)";
+                    this.mUIExceptionoftypeSSCirText1.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIExceptionoftypeSSCirText1;
+            }
+        }
+        
+        public WinText UITokenfollowingoroperText
+        {
+            get
+            {
+                if ((this.mUITokenfollowingoroperText == null))
+                {
+                    this.mUITokenfollowingoroperText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITokenfollowingoroperText.SearchProperties[WinText.PropertyNames.Name] = "Token following ) or operator is invalid  (=*trufhrf55()_)";
+                    this.mUITokenfollowingoroperText.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUITokenfollowingoroperText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUIExceptionoftypeSSCirText;
+        
+        private WinText mUIClosingparengreatertText;
+        
+        private WinText mUIExceptionoftypeSSCirText1;
+        
+        private WinText mUITokenfollowingoroperText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIInsertWindow : WinWindow
+    {
+        
+        public UIInsertWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlName] = "contentsInsert";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UIInsertButton
+        {
+            get
+            {
+                if ((this.mUIInsertButton == null))
+                {
+                    this.mUIInsertButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUIInsertButton.SearchProperties[WinButton.PropertyNames.Name] = "Insert";
+                    this.mUIInsertButton.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUIInsertButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUIInsertButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIForm1MenuBar : WinMenuBar
+    {
+        
+        public UIForm1MenuBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenu.PropertyNames.Name] = "System";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UISystemMenuItem
+        {
+            get
+            {
+                if ((this.mUISystemMenuItem == null))
+                {
+                    this.mUISystemMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUISystemMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "System";
+                    this.mUISystemMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUISystemMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUISystemMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIOpenWindow : WinWindow
+    {
+        
+        public UIOpenWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Open";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "#32770";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public UITreeViewWindow UITreeViewWindow
+        {
+            get
+            {
+                if ((this.mUITreeViewWindow == null))
+                {
+                    this.mUITreeViewWindow = new UITreeViewWindow(this);
+                }
+                return this.mUITreeViewWindow;
+            }
+        }
+        
+        public UIItemWindow1 UIItemWindow
+        {
+            get
+            {
+                if ((this.mUIItemWindow == null))
+                {
+                    this.mUIItemWindow = new UIItemWindow1(this);
+                }
+                return this.mUIItemWindow;
+            }
+        }
+        
+        public UIOpenWindow1 UIOpenWindow1
+        {
+            get
+            {
+                if ((this.mUIOpenWindow1 == null))
+                {
+                    this.mUIOpenWindow1 = new UIOpenWindow1(this);
+                }
+                return this.mUIOpenWindow1;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UITreeViewWindow mUITreeViewWindow;
+        
+        private UIItemWindow1 mUIItemWindow;
+        
+        private UIOpenWindow1 mUIOpenWindow1;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UITreeViewWindow : WinWindow
+    {
+        
+        public UITreeViewWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "100";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public UITreeViewTree UITreeViewTree
+        {
+            get
+            {
+                if ((this.mUITreeViewTree == null))
+                {
+                    this.mUITreeViewTree = new UITreeViewTree(this);
+                }
+                return this.mUITreeViewTree;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UITreeViewTree mUITreeViewTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UITreeViewTree : WinTree
+    {
+        
+        public UITreeViewTree(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinTree.PropertyNames.Name] = "Namespace Tree Control";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public UIFavoritesTreeItem UIFavoritesTreeItem
+        {
+            get
+            {
+                if ((this.mUIFavoritesTreeItem == null))
+                {
+                    this.mUIFavoritesTreeItem = new UIFavoritesTreeItem(this);
+                }
+                return this.mUIFavoritesTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFavoritesTreeItem mUIFavoritesTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIFavoritesTreeItem : WinTreeItem
+    {
+        
+        public UIFavoritesTreeItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinTreeItem.PropertyNames.Name] = "Favorites";
+            this.SearchProperties["Value"] = "0";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public WinTreeItem UIDesktopTreeItem
+        {
+            get
+            {
+                if ((this.mUIDesktopTreeItem == null))
+                {
+                    this.mUIDesktopTreeItem = new WinTreeItem(this);
+                    #region Search Criteria
+                    this.mUIDesktopTreeItem.SearchProperties[WinTreeItem.PropertyNames.Name] = "Desktop";
+                    this.mUIDesktopTreeItem.SearchProperties["Value"] = "1";
+                    this.mUIDesktopTreeItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIDesktopTreeItem.SearchConfigurations.Add(SearchConfiguration.NextSibling);
+                    this.mUIDesktopTreeItem.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUIDesktopTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinTreeItem mUIDesktopTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIItemWindow1 : WinWindow
+    {
+        
+        public UIItemWindow1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.AccessibleName] = "Items View";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "DirectUIHWND";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public UITesting213ListItem UITesting213ListItem
+        {
+            get
+            {
+                if ((this.mUITesting213ListItem == null))
+                {
+                    this.mUITesting213ListItem = new UITesting213ListItem(this);
+                }
+                return this.mUITesting213ListItem;
+            }
+        }
+        
+        public UIItemsViewList UIItemsViewList
+        {
+            get
+            {
+                if ((this.mUIItemsViewList == null))
+                {
+                    this.mUIItemsViewList = new UIItemsViewList(this);
+                }
+                return this.mUIItemsViewList;
+            }
+        }
+        
+        public UIHello22ListItem UIHello22ListItem
+        {
+            get
+            {
+                if ((this.mUIHello22ListItem == null))
+                {
+                    this.mUIHello22ListItem = new UIHello22ListItem(this);
+                }
+                return this.mUIHello22ListItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UITesting213ListItem mUITesting213ListItem;
+        
+        private UIItemsViewList mUIItemsViewList;
+        
+        private UIHello22ListItem mUIHello22ListItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UITesting213ListItem : WinListItem
+    {
+        
+        public UITesting213ListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinListItem.PropertyNames.Name] = "testing213";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public WinEdit UINameEdit
+        {
+            get
+            {
+                if ((this.mUINameEdit == null))
+                {
+                    this.mUINameEdit = new WinEdit(this);
+                    #region Search Criteria
+                    this.mUINameEdit.SearchProperties[WinEdit.PropertyNames.Name] = "Name";
+                    this.mUINameEdit.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUINameEdit;
+            }
+        }
+        
+        public WinEdit UISizeEdit
+        {
+            get
+            {
+                if ((this.mUISizeEdit == null))
+                {
+                    this.mUISizeEdit = new WinEdit(this);
+                    #region Search Criteria
+                    this.mUISizeEdit.SearchProperties[WinEdit.PropertyNames.Name] = "Size";
+                    this.mUISizeEdit.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUISizeEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinEdit mUINameEdit;
+        
+        private WinEdit mUISizeEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIItemsViewList : WinList
+    {
+        
+        public UIItemsViewList(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinList.PropertyNames.Name] = "Items View";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public WinListItem UIHello22ListItem
+        {
+            get
+            {
+                if ((this.mUIHello22ListItem == null))
+                {
+                    this.mUIHello22ListItem = new WinListItem(this);
+                    #region Search Criteria
+                    this.mUIHello22ListItem.SearchProperties[WinListItem.PropertyNames.Name] = "hello22";
+                    this.mUIHello22ListItem.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUIHello22ListItem;
+            }
+        }
+        
+        public WinListItem UITesting213ListItem
+        {
+            get
+            {
+                if ((this.mUITesting213ListItem == null))
+                {
+                    this.mUITesting213ListItem = new WinListItem(this);
+                    #region Search Criteria
+                    this.mUITesting213ListItem.SearchProperties[WinListItem.PropertyNames.Name] = "testing213";
+                    this.mUITesting213ListItem.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUITesting213ListItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinListItem mUIHello22ListItem;
+        
+        private WinListItem mUITesting213ListItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIHello22ListItem : WinListItem
+    {
+        
+        public UIHello22ListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinListItem.PropertyNames.Name] = "hello22";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public WinEdit UITypeEdit
+        {
+            get
+            {
+                if ((this.mUITypeEdit == null))
+                {
+                    this.mUITypeEdit = new WinEdit(this);
+                    #region Search Criteria
+                    this.mUITypeEdit.SearchProperties[WinEdit.PropertyNames.Name] = "Type";
+                    this.mUITypeEdit.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUITypeEdit;
+            }
+        }
+        
+        public WinEdit UINameEdit
+        {
+            get
+            {
+                if ((this.mUINameEdit == null))
+                {
+                    this.mUINameEdit = new WinEdit(this);
+                    #region Search Criteria
+                    this.mUINameEdit.SearchProperties[WinEdit.PropertyNames.Name] = "Name";
+                    this.mUINameEdit.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUINameEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinEdit mUITypeEdit;
+        
+        private WinEdit mUINameEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIOpenWindow1 : WinWindow
+    {
+        
+        public UIOpenWindow1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "1";
+            this.WindowTitles.Add("Open");
+            #endregion
+        }
+        
+        #region Properties
+        public WinSplitButton UIOpenSplitButton
+        {
+            get
+            {
+                if ((this.mUIOpenSplitButton == null))
+                {
+                    this.mUIOpenSplitButton = new WinSplitButton(this);
+                    #region Search Criteria
+                    this.mUIOpenSplitButton.SearchProperties[WinButton.PropertyNames.Name] = "Open";
+                    this.mUIOpenSplitButton.WindowTitles.Add("Open");
+                    #endregion
+                }
+                return this.mUIOpenSplitButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinSplitButton mUIOpenSplitButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISavechangesWindow : WinWindow
+    {
+        
+        public UISavechangesWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Save changes?";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "#32770";
+            this.WindowTitles.Add("Save changes?");
+            #endregion
+        }
+        
+        #region Properties
+        public UIYesWindow UIYesWindow
+        {
+            get
+            {
+                if ((this.mUIYesWindow == null))
+                {
+                    this.mUIYesWindow = new UIYesWindow(this);
+                }
+                return this.mUIYesWindow;
+            }
+        }
+        
+        public UINOWindow UINOWindow
+        {
+            get
+            {
+                if ((this.mUINOWindow == null))
+                {
+                    this.mUINOWindow = new UINOWindow(this);
+                }
+                return this.mUINOWindow;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIYesWindow mUIYesWindow;
+        
+        private UINOWindow mUINOWindow;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIYesWindow : WinWindow
+    {
+        
+        public UIYesWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "6";
+            this.WindowTitles.Add("Save changes?");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UIYesButton
+        {
+            get
+            {
+                if ((this.mUIYesButton == null))
+                {
+                    this.mUIYesButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUIYesButton.SearchProperties[WinButton.PropertyNames.Name] = "Yes";
+                    this.mUIYesButton.WindowTitles.Add("Save changes?");
+                    #endregion
+                }
+                return this.mUIYesButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUIYesButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UINOWindow : WinWindow
+    {
+        
+        public UINOWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "7";
+            this.WindowTitles.Add("Save changes?");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UINOButton
+        {
+            get
+            {
+                if ((this.mUINOButton == null))
+                {
+                    this.mUINOButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUINOButton.SearchProperties[WinButton.PropertyNames.Name] = "No";
+                    this.mUINOButton.WindowTitles.Add("Save changes?");
+                    #endregion
+                }
+                return this.mUINOButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUINOButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISaveAsWindow : WinWindow
+    {
+        
+        public UISaveAsWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Save As";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "#32770";
+            this.WindowTitles.Add("Save As");
+            #endregion
+        }
+        
+        #region Properties
+        public UIDetailsPanePane UIDetailsPanePane
+        {
+            get
+            {
+                if ((this.mUIDetailsPanePane == null))
+                {
+                    this.mUIDetailsPanePane = new UIDetailsPanePane(this);
+                }
+                return this.mUIDetailsPanePane;
+            }
+        }
+        
+        public UISaveWindow UISaveWindow
+        {
+            get
+            {
+                if ((this.mUISaveWindow == null))
+                {
+                    this.mUISaveWindow = new UISaveWindow(this);
+                }
+                return this.mUISaveWindow;
+            }
+        }
+        
+        public UIItemWindow2 UIItemWindow
+        {
+            get
+            {
+                if ((this.mUIItemWindow == null))
+                {
+                    this.mUIItemWindow = new UIItemWindow2(this);
+                }
+                return this.mUIItemWindow;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIDetailsPanePane mUIDetailsPanePane;
+        
+        private UISaveWindow mUISaveWindow;
+        
+        private UIItemWindow2 mUIItemWindow;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIDetailsPanePane : WinPane
+    {
+        
+        public UIDetailsPanePane(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinControl.PropertyNames.Name] = "Details Pane";
+            this.WindowTitles.Add("Save As");
+            #endregion
+        }
+        
+        #region Properties
+        public WinComboBox UIFilenameComboBox
+        {
+            get
+            {
+                if ((this.mUIFilenameComboBox == null))
+                {
+                    this.mUIFilenameComboBox = new WinComboBox(this);
+                    #region Search Criteria
+                    this.mUIFilenameComboBox.SearchProperties[WinComboBox.PropertyNames.Name] = "File name:";
+                    this.mUIFilenameComboBox.WindowTitles.Add("Save As");
+                    #endregion
+                }
+                return this.mUIFilenameComboBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinComboBox mUIFilenameComboBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISaveWindow : WinWindow
+    {
+        
+        public UISaveWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "1";
+            this.WindowTitles.Add("Save As");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UISaveButton
+        {
+            get
+            {
+                if ((this.mUISaveButton == null))
+                {
+                    this.mUISaveButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUISaveButton.SearchProperties[WinButton.PropertyNames.Name] = "Save";
+                    this.mUISaveButton.WindowTitles.Add("Save As");
+                    #endregion
+                }
+                return this.mUISaveButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUISaveButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIItemWindow2 : WinWindow
+    {
+        
+        public UIItemWindow2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "1001";
+            this.WindowTitles.Add("Save As");
+            #endregion
+        }
+        
+        #region Properties
+        public WinEdit UIFilenameEdit
+        {
+            get
+            {
+                if ((this.mUIFilenameEdit == null))
+                {
+                    this.mUIFilenameEdit = new WinEdit(this);
+                    #region Search Criteria
+                    this.mUIFilenameEdit.SearchProperties[WinEdit.PropertyNames.Name] = "File name:";
+                    this.mUIFilenameEdit.WindowTitles.Add("Save As");
+                    #endregion
+                }
+                return this.mUIFilenameEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinEdit mUIFilenameEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIOKWindow : WinWindow
+    {
+        
+        public UIOKWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "OK";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Button";
+            this.WindowTitles.Add("OK");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UIOKButton
+        {
+            get
+            {
+                if ((this.mUIOKButton == null))
+                {
+                    this.mUIOKButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUIOKButton.SearchProperties[WinButton.PropertyNames.Name] = "OK";
+                    this.mUIOKButton.WindowTitles.Add("OK");
+                    #endregion
+                }
+                return this.mUIOKButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUIOKButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetWindow1 : WinWindow
+    {
+        
+        public UISpreadsheetWindow1()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Spreadsheet";
+            this.SearchProperties.Add(new PropertyExpression(WinWindow.PropertyNames.ClassName, "WindowsForms10.Window", PropertyExpressionOperator.Contains));
+            this.FilterProperties[WinWindow.PropertyNames.OrderOfInvocation] = "2";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UIMenuStrip1MenuBar1 UIMenuStrip1MenuBar
+        {
+            get
+            {
+                if ((this.mUIMenuStrip1MenuBar == null))
+                {
+                    this.mUIMenuStrip1MenuBar = new UIMenuStrip1MenuBar1(this);
+                }
+                return this.mUIMenuStrip1MenuBar;
+            }
+        }
+        
+        public UISpreadsheetTitleBar1 UISpreadsheetTitleBar
+        {
+            get
+            {
+                if ((this.mUISpreadsheetTitleBar == null))
+                {
+                    this.mUISpreadsheetTitleBar = new UISpreadsheetTitleBar1(this);
+                }
+                return this.mUISpreadsheetTitleBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIMenuStrip1MenuBar1 mUIMenuStrip1MenuBar;
+        
+        private UISpreadsheetTitleBar1 mUISpreadsheetTitleBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIMenuStrip1MenuBar1 : WinMenuBar
+    {
+        
+        public UIMenuStrip1MenuBar1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenu.PropertyNames.Name] = "menuStrip1";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UIFileMenuItem1 UIFileMenuItem
+        {
+            get
+            {
+                if ((this.mUIFileMenuItem == null))
+                {
+                    this.mUIFileMenuItem = new UIFileMenuItem1(this);
+                }
+                return this.mUIFileMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFileMenuItem1 mUIFileMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIFileMenuItem1 : WinMenuItem
+    {
+        
+        public UIFileMenuItem1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "File";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UINewMenuItem
+        {
+            get
+            {
+                if ((this.mUINewMenuItem == null))
+                {
+                    this.mUINewMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUINewMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "New";
+                    this.mUINewMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUINewMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUINewMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUINewMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetTitleBar1 : WinTitleBar
+    {
+        
+        public UISpreadsheetTitleBar1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UICloseButton
+        {
+            get
+            {
+                if ((this.mUICloseButton == null))
+                {
+                    this.mUICloseButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUICloseButton.SearchProperties[WinButton.PropertyNames.Name] = "Close";
+                    this.mUICloseButton.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUICloseButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUICloseButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetWindow2 : WinWindow
+    {
+        
+        public UISpreadsheetWindow2()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Spreadsheet";
+            this.SearchProperties.Add(new PropertyExpression(WinWindow.PropertyNames.ClassName, "WindowsForms10.Window", PropertyExpressionOperator.Contains));
+            this.FilterProperties[WinWindow.PropertyNames.OrderOfInvocation] = "3";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UIMenuStrip1MenuBar2 UIMenuStrip1MenuBar
+        {
+            get
+            {
+                if ((this.mUIMenuStrip1MenuBar == null))
+                {
+                    this.mUIMenuStrip1MenuBar = new UIMenuStrip1MenuBar2(this);
+                }
+                return this.mUIMenuStrip1MenuBar;
+            }
+        }
+        
+        public UISpreadsheetTitleBar2 UISpreadsheetTitleBar
+        {
+            get
+            {
+                if ((this.mUISpreadsheetTitleBar == null))
+                {
+                    this.mUISpreadsheetTitleBar = new UISpreadsheetTitleBar2(this);
+                }
+                return this.mUISpreadsheetTitleBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIMenuStrip1MenuBar2 mUIMenuStrip1MenuBar;
+        
+        private UISpreadsheetTitleBar2 mUISpreadsheetTitleBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIMenuStrip1MenuBar2 : WinMenuBar
+    {
+        
+        public UIMenuStrip1MenuBar2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenu.PropertyNames.Name] = "menuStrip1";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UIFileMenuItem2 UIFileMenuItem
+        {
+            get
+            {
+                if ((this.mUIFileMenuItem == null))
+                {
+                    this.mUIFileMenuItem = new UIFileMenuItem2(this);
+                }
+                return this.mUIFileMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFileMenuItem2 mUIFileMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIFileMenuItem2 : WinMenuItem
+    {
+        
+        public UIFileMenuItem2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "File";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UINewMenuItem
+        {
+            get
+            {
+                if ((this.mUINewMenuItem == null))
+                {
+                    this.mUINewMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUINewMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "New";
+                    this.mUINewMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUINewMenuItem.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUINewMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUINewMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetTitleBar2 : WinTitleBar
+    {
+        
+        public UISpreadsheetTitleBar2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UICloseButton
+        {
+            get
+            {
+                if ((this.mUICloseButton == null))
+                {
+                    this.mUICloseButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUICloseButton.SearchProperties[WinButton.PropertyNames.Name] = "Close";
+                    this.mUICloseButton.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUICloseButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUICloseButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetWindow3 : WinWindow
+    {
+        
+        public UISpreadsheetWindow3()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Spreadsheet";
+            this.SearchProperties.Add(new PropertyExpression(WinWindow.PropertyNames.ClassName, "WindowsForms10.Window", PropertyExpressionOperator.Contains));
+            this.FilterProperties[WinWindow.PropertyNames.OrderOfInvocation] = "4";
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public UISpreadsheetTitleBar3 UISpreadsheetTitleBar
+        {
+            get
+            {
+                if ((this.mUISpreadsheetTitleBar == null))
+                {
+                    this.mUISpreadsheetTitleBar = new UISpreadsheetTitleBar3(this);
+                }
+                return this.mUISpreadsheetTitleBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UISpreadsheetTitleBar3 mUISpreadsheetTitleBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UISpreadsheetTitleBar3 : WinTitleBar
+    {
+        
+        public UISpreadsheetTitleBar3(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.WindowTitles.Add("Spreadsheet");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UICloseButton
+        {
+            get
+            {
+                if ((this.mUICloseButton == null))
+                {
+                    this.mUICloseButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUICloseButton.SearchProperties[WinButton.PropertyNames.Name] = "Close";
+                    this.mUICloseButton.WindowTitles.Add("Spreadsheet");
+                    #endregion
+                }
+                return this.mUICloseButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUICloseButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIItemWindow3 : WinWindow
+    {
+        
+        public UIItemWindow3()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.AccessibleName] = "Desktop";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "#32769";
+            #endregion
+        }
+        
+        #region Properties
+        public UIFolderViewWindow UIFolderViewWindow
+        {
+            get
+            {
+                if ((this.mUIFolderViewWindow == null))
+                {
+                    this.mUIFolderViewWindow = new UIFolderViewWindow(this);
+                }
+                return this.mUIFolderViewWindow;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFolderViewWindow mUIFolderViewWindow;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "12.0.31101.0")]
+    public class UIFolderViewWindow : WinWindow
+    {
+        
+        public UIFolderViewWindow(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.ControlId] = "1";
+            #endregion
+        }
+        
+        #region Properties
+        public WinList UIItemList
+        {
+            get
+            {
+                if ((this.mUIItemList == null))
+                {
+                    this.mUIItemList = new WinList(this);
+                }
+                return this.mUIItemList;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinList mUIItemList;
         #endregion
     }
 }
